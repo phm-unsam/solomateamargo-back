@@ -10,5 +10,7 @@ class User {
 	String lastName
 	int age
 	List <User>friends = new ArrayList()
+	String username
+	String password
 	
 }
