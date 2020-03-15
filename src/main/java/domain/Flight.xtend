@@ -24,13 +24,14 @@ class Flight {
 	String planeType
 	List<Seat> seats = new ArrayList
 	Double baseCost
+	Airline airline
 
 	def seatsAvaliable() {
 		seats.filter(seat|seat.avaliable)
 	}
 
 	def cost() {
-		0.0
+		airline.seatPrice + baseCost
 	}
 
 	def getFlightDuration() {
@@ -47,8 +48,8 @@ class FlightWithStopover extends Flight {
 		baseCost * 0.90
 	}
 
-	override getFlightDuration() {
-		stopovers.fold(0.0, [total, route|total + route.flightDuration])
-	}
+	/*override getFlightDuration() {
+		stopovers.fold(0.0, [total, route|total + route.travelDuration])
+	}*/
 
 }

@@ -9,7 +9,7 @@ interface SeatType {
 	
 }
 
-class FirstClass implements SeatType{
+class First implements SeatType{
 	
 	override price(){
 		0.0
@@ -18,4 +18,24 @@ class FirstClass implements SeatType{
 	override typeName(){
 		"First"
 	}
+}
+
+class Business implements SeatType{
+	
+	override price() {
+	}
+	
+	override typeName() {
+	}
+	
+}
+
+class Economy implements SeatType{
+	
+	override price() {
+	}
+	
+	override typeName() {
+	}
+	
 }

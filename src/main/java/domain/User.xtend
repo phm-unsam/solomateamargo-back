@@ -9,7 +9,7 @@ class User {
 	String name
 	String lastName
 	int age
-	List <User>friends = new ArrayList()
+	List <User> friends = new ArrayList()
 	String username
 	String password
 	
