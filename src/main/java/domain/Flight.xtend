@@ -13,7 +13,7 @@ class Route {
 	LocalDateTime departure
 	LocalDateTime arrival
 
-	def travelDuraion() {
+	def travelDuration() {
 		ChronoUnit.HOURS.between(departure, arrival)
 	}
 }
@@ -34,7 +34,7 @@ class Flight {
 	}
 
 	def getFlightDuration() {
-		route.travelDuraion
+		route.travelDuration
 	}
 
 }
