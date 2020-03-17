@@ -8,6 +8,6 @@ class Reservation {
 	Seat seat
 	
 	def totalCost(){
-		flight.cost + seat.cost
+		flight.getBaseCost + flight.seatCost(seat)
 	}
 }

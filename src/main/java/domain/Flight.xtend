@@ -26,16 +26,24 @@ class Flight {
 	Double baseCost
 	Airline airline
 
-	def seatsAvaliable() {
+	def getSeatsAvaliable() {
 		seats.filter(seat|seat.avaliable)
 	}
-
-	def cost() {
-		airline.seatPrice + baseCost
+	
+	def seatCost(Seat seat){
+		twoOrLessSeatsAvaliable ? seat.getCost * 1.15 : seat.getCost
+	}
+	
+	def twoOrLessSeatsAvaliable(){
+		getSeatsAvaliable.size<=2
 	}
 
 	def getFlightDuration() {
 		route.travelDuration
+	}
+	
+	def stopoversAmount(){
+		0
 	}
 
 }
@@ -44,12 +52,23 @@ class Flight {
 class FlightWithStopover extends Flight {
 	List<Route> stopovers = new ArrayList
 
-	override cost() {
-		baseCost * 0.90
+	override stopoversAmount(){
+		stopovers.size
 	}
-
-	/*override getFlightDuration() {
-		stopovers.fold(0.0, [total, route|total + route.travelDuration])
-	}*/
-
+	override getBaseCost()
+	{
+		baseCost*0.90
+	}
+	override getFlightDuration() {
+		ChronoUnit.HOURS.between(getMinimalDeparture, getMaximalArrival)
+	}
+	
+	def getMinimalDeparture(){
+		stopovers.fold(LocalDateTime.MAX,[minDate , stopover| minDate < stopover.departure ? minDate :stopover.departure])
+	}
+	
+	def getMaximalArrival(){
+		stopovers.fold(LocalDateTime.MIN,[maxDate , stopover| maxDate > stopover.arrival ? maxDate :stopover.arrival])
+	}
+	
 }

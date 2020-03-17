@@ -9,12 +9,9 @@ class Seat {
 	boolean avaliable
 	
 	
-	def price(){
+	def getCost(){
 		type.price
 	}
 	
-	def cost() {
-		0
-	}
 	
 }
