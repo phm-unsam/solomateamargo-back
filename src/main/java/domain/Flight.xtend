@@ -19,13 +19,22 @@ class Route {
 }
 
 @Accessors
-class Flight {
+class Flight implements Entidad{
 	Route route
 	String planeType
 	List<Seat> seats = new ArrayList
 	Double baseCost
 	Airline airline
+	String flightId
 
+	override getID() {
+		flightId
+	}
+	
+	override setID(String id) {
+		flightId = id
+	}
+	
 	def getSeatsAvaliable() {
 		seats.filter(seat|seat.avaliable)
 	}
@@ -45,7 +54,6 @@ class Flight {
 	def stopoversAmount(){
 		0
 	}
-
 }
 
 @Accessors
