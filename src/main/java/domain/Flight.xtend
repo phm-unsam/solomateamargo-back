@@ -31,6 +31,7 @@ class Flight implements Entidad{
 		flightId
 	}
 	
+	
 	override setID(String id) {
 		flightId = id
 	}
@@ -53,6 +54,18 @@ class Flight implements Entidad{
 	
 	def stopoversAmount(){
 		0
+	}
+	
+	def from(){
+		route.from
+	}
+	
+	def to(){
+		route.to
+	}
+	
+	def airportName(){
+		airline.name
 	}
 }
 

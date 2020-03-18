@@ -9,7 +9,7 @@ import domain.User
 import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class Repository <T extends Entidad>{
-	Set<T> elementos = new HashSet<T>
+	@Accessors protected Set<T> elementos = new HashSet<T>
 	int id = 0
 
 	def void create(T element) {
@@ -53,14 +53,42 @@ abstract class Repository <T extends Entidad>{
 class FlightRepository extends Repository<Flight> {
 	@Accessors String tipo = "F"
 	
+	private new() {
+	}
+	
+	static FlightRepository instance
+	
+	static def getInstance() {
+		if (instance === null) {
+			instance = new FlightRepository()
+		}
+		instance
+	}
+	
 	override condicionDeBusqueda(Flight el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	
+
 }
 
 class UserRepository extends Repository<User> {
 	@Accessors String tipo = "U"
+	
+	private new() {
+		
+		
+	}
+	
+	static UserRepository instance
+	
+	static def getInstance() {
+		if (instance === null) {
+			instance = new UserRepository()
+		}
+		instance
+	}
+	
 	
 	override condicionDeBusqueda(User el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
