@@ -67,6 +67,12 @@ class Flight implements Entidad{
 	def airportName(){
 		airline.name
 	}
+	
+	def addSeat(Seat seat){
+		seats.add(seat)
+	}
+	
+	
 }
 
 @Accessors

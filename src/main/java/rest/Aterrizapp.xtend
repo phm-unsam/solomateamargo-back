@@ -1,5 +1,0 @@
-package rest
-
-class Aterrizapp {
-	
-}

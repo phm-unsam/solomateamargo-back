@@ -1,41 +1,64 @@
 package domain
 
+import org.eclipse.xtend.lib.annotations.Accessors
 
 interface SeatType {
 
 	def Double price()
-	
-	def String typeName() 
-	
+
+	def String typeName()
+
+	def String getId()
+
 }
 
-class First implements SeatType{
-	
-	override price(){
-		0.0
+@Accessors
+class First implements SeatType {
+	Double price
+
+	override price() {
 	}
-	
-	override typeName(){
+
+	override typeName() {
 		"First"
 	}
+
+	override getId() {
+		"F"
+	}
+
 }
 
-class Business implements SeatType{
-	
+@Accessors
+class Business implements SeatType {
+	Double price
+
 	override price() {
 	}
-	
+
 	override typeName() {
+		"Businnes"
 	}
-	
+
+	override getId() {
+		"B"
+	}
+
 }
 
-class Economy implements SeatType{
-	
+@Accessors
+class Economy implements SeatType {
+	Double price
+
 	override price() {
 	}
-	
+
 	override typeName() {
+		"Economy"
 	}
-	
+
+	override getId() {
+		"E"
+	}
+
 }

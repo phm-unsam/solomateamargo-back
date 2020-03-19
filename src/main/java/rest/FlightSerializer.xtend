@@ -23,12 +23,13 @@ class FlightSerializer extends StdSerializer<Flight> {
 		gen.writeStringField("airportName", value.airportName)
 		gen.writeNumberField("baseCost",value.baseCost)
 		gen.writeNumberField("flightDuration", value.getFlightDuration)
+		gen.writeObjectField("seat",value.seats)
 		gen.writeEndObject()
 	}
 	
-	static def String toJson(List<Flight> items) {
-		if(items===null || items.empty){return "[ ]"}
-		mapper().writeValueAsString(items)
+	static def String toJson(List<Flight> flight) {
+		if(flight===null || flight.empty){return "[ ]"}
+		mapper().writeValueAsString(flight)
 	}
 	static def mapper(){
 		val ObjectMapper mapper = new ObjectMapper()

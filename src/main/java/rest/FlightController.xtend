@@ -17,7 +17,9 @@ class FlightController {
 			val vueloDisponible = flightRepository.getElementos
 			ok(FlightSerializer.toJson(vueloDisponible.toList)) 
 		}	catch (Exception e) {
+			internalServerError(e.message)
 		}
 		
 	}
+	
 }

@@ -7,10 +7,11 @@ import domain.Entidad
 import domain.Flight
 import domain.User
 import org.eclipse.xtend.lib.annotations.Accessors
+import domain.Seat
 
-abstract class Repository <T extends Entidad>{
+abstract class Repository<T extends Entidad> {
 	@Accessors protected Set<T> elementos = new HashSet<T>
-	int id = 0
+	protected int id = 0
 
 	def void create(T element) {
 		if (element.getID === null) {
@@ -52,46 +53,74 @@ abstract class Repository <T extends Entidad>{
 
 class FlightRepository extends Repository<Flight> {
 	@Accessors String tipo = "F"
-	
+
 	private new() {
 	}
-	
+
 	static FlightRepository instance
-	
+
 	static def getInstance() {
 		if (instance === null) {
 			instance = new FlightRepository()
 		}
 		instance
 	}
-	
+
 	override condicionDeBusqueda(Flight el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
+	
+	
+
 	
 
 }
 
 class UserRepository extends Repository<User> {
 	@Accessors String tipo = "U"
-	
+
 	private new() {
-		
-		
 	}
-	
+
 	static UserRepository instance
-	
+
 	static def getInstance() {
 		if (instance === null) {
 			instance = new UserRepository()
 		}
 		instance
 	}
-	
-	
+
 	override condicionDeBusqueda(User el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
+
+}
+
+class SeatRepository extends Repository<Seat> {
+	@Accessors String tipo
+
+	private new() {
+	}
+
+	override newID() {
+		id.toString()
+	}
+
+	static SeatRepository instance
+
+	static def getInstance() {
+		if (instance === null) {
+			instance = new SeatRepository()
+		}
+		instance
+	}
+	
+	
+	
+	override condicionDeBusqueda(Seat el, String value) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
 	
 }
