@@ -1,9 +1,7 @@
 package rest
 
 import domain.Flight
-import domain.Route
 import java.time.LocalDateTime
-import domain.Airline
 import domain.First
 import domain.Business
 import domain.Economy
@@ -13,19 +11,7 @@ class GenObjects {
 
 	def static addToRepo() {
 		val repoFlight = FlightRepository.instance
-		val repoSeat =  SeatRepository.instance
-
-		val rutaArgentina = new Route() => [
-			from = "buenosAires"
-			to = "salta"
-			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
-			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
-		]
-
-		val aerolineaArgentina = new Airline() => [
-			name = "argentina"
-			baseCost = 2.2
-		]
+		val repoSeat = SeatRepository.instance
 
 		val first = new First() => [
 			setPrice(20.0)
@@ -57,28 +43,37 @@ class GenObjects {
 		]
 
 		val vueloA = new Flight() => [
-			setRoute(rutaArgentina)
+			from = "buenosAires"
+			to = "salta"
+			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
+			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "barato"
 			baseCost = 2.2
-			setAirline(aerolineaArgentina)
-			addSeat(economySeat)
-			addSeat(businessSeat)
-			addSeat(firstSeat)
+			setAirline("aerolineaArgentina")
+			seats.add(economySeat)
+			seats.add(businessSeat)
+			seats.add(firstSeat)
 		]
 		val vueloB = new Flight() => [
-			setRoute(rutaArgentina)
+			from = "buenosAires"
+			to = "salta"
+			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
+			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "sds"
 			baseCost = 222.2
-			setAirline(aerolineaArgentina)
-			addSeat(economySeat)
-			addSeat(businessSeat)
+			setAirline("aerolineaArgentina")
+			seats.add(economySeat)
+			seats.add(businessSeat)
 		]
 		val vueloC = new Flight() => [
-			setRoute(rutaArgentina)
+			from = "buenosAires"
+			to = "salta"
+			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
+			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "acs"
 			baseCost = 23123.2
-			setAirline(aerolineaArgentina)
-			addSeat(firstSeat)
+			setAirline("aerolineaArgentina")
+			seats.add(firstSeat)
 		]
 
 		repoFlight => [
@@ -86,7 +81,7 @@ class GenObjects {
 			create(vueloB)
 			create(vueloC)
 		]
-		
+
 		repoSeat => [
 			create(firstSeat)
 			create(economySeat)

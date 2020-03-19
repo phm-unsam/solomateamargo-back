@@ -20,7 +20,7 @@ class FlightSerializer extends StdSerializer<Flight> {
 		gen.writeStringField("id", value.flightId)
 		gen.writeStringField("from", value.from)
 		gen.writeStringField("to", value.to)
-		gen.writeStringField("airportName", value.airportName)
+		gen.writeStringField("airlineName", value.airline)
 		gen.writeNumberField("baseCost",value.baseCost)
 		gen.writeNumberField("flightDuration", value.getFlightDuration)
 		gen.writeObjectField("seat",value.seats)

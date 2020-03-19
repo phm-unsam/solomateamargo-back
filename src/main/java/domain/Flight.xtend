@@ -6,26 +6,18 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 
+
 @Accessors
-class Route {
+class Flight implements Entidad{
+	String planeType
+	List<Seat> seats = new ArrayList
+	Double baseCost
+	String airline
+	String flightId
 	String from
 	String to
 	LocalDateTime departure
 	LocalDateTime arrival
-
-	def travelDuration() {
-		ChronoUnit.HOURS.between(departure, arrival)
-	}
-}
-
-@Accessors
-class Flight implements Entidad{
-	Route route
-	String planeType
-	List<Seat> seats = new ArrayList
-	Double baseCost
-	Airline airline
-	String flightId
 
 	override getID() {
 		flightId
@@ -49,53 +41,26 @@ class Flight implements Entidad{
 	}
 
 	def getFlightDuration() {
-		route.travelDuration
+		ChronoUnit.HOURS.between(departure, arrival)
 	}
 	
 	def stopoversAmount(){
 		0
 	}
 	
-	def from(){
-		route.from
-	}
-	
-	def to(){
-		route.to
-	}
-	
-	def airportName(){
-		airline.name
-	}
-	
-	def addSeat(Seat seat){
-		seats.add(seat)
-	}
-	
-	
 }
 
 @Accessors
 class FlightWithStopover extends Flight {
-	List<Route> stopovers = new ArrayList
+	List<Flight> stopovers = new ArrayList
 
 	override stopoversAmount(){
 		stopovers.size
 	}
+	
 	override getBaseCost()
 	{
 		baseCost*0.90
-	}
-	override getFlightDuration() {
-		ChronoUnit.HOURS.between(getMinimalDeparture, getMaximalArrival)
-	}
-	
-	def getMinimalDeparture(){
-		stopovers.fold(LocalDateTime.MAX,[minDate , stopover| minDate < stopover.departure ? minDate :stopover.departure])
-	}
-	
-	def getMaximalArrival(){
-		stopovers.fold(LocalDateTime.MIN,[maxDate , stopover| maxDate > stopover.arrival ? maxDate :stopover.arrival])
 	}
 	
 }
