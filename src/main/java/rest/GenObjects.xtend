@@ -2,9 +2,6 @@ package rest
 
 import domain.Flight
 import java.time.LocalDateTime
-import domain.First
-import domain.Business
-import domain.Economy
 import domain.Seat
 
 class GenObjects {
@@ -13,31 +10,16 @@ class GenObjects {
 		val repoFlight = FlightRepository.instance
 		val repoSeat = SeatRepository.instance
 
-		val first = new First() => [
-			setPrice(20.0)
-		]
-
-		val business = new Business() => [
-			setPrice(40.0)
-		]
-
-		val economy = new Economy() => [
-			setPrice(80.0)
-		]
-
 		val economySeat = new Seat() => [
-			setType(economy)
 			nextoWindow = true
 		]
 
 		val businessSeat = new Seat() => [
-			setType(business)
 			nextoWindow = true
 			avaliable = true
 		]
 
 		val firstSeat = new Seat() => [
-			setType(first)
 			nextoWindow = false
 			avaliable = true
 		]

@@ -6,8 +6,5 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Purchases {
 	Flight flight
 	Seat seat
-	
-	def totalCost(){
-		flight.getBaseCost + flight.seatCost(seat)
-	}
+	double amount
 }

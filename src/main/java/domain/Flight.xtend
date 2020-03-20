@@ -27,6 +27,10 @@ class Flight implements Entidad{
 		flightId = id
 	}
 	
+	def flightCost(Seat seat){
+		getBaseCost + seatCost(seat)
+	}
+	
 	def getSeatsAvaliable() {
 		seats.filter(seat|seat.avaliable)
 	}
