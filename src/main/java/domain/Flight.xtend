@@ -1,7 +1,6 @@
 package domain
 
 import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -17,7 +16,7 @@ class Flight implements Entidad{
 	String from
 	String to
 	LocalDateTime departure
-	LocalDateTime arrival
+	double flightDuration
 
 	override getID() {
 		flightId
@@ -39,10 +38,6 @@ class Flight implements Entidad{
 	def twoOrLessSeatsAvaliable(){
 		getSeatsAvaliable.size<=2
 	}
-
-	def getFlightDuration() {
-		ChronoUnit.HOURS.between(departure, arrival) // al fornt
-	}
 	
 	def stopoversAmount(){
 		0
@@ -56,6 +51,10 @@ class FlightWithStopover extends Flight {
 
 	override stopoversAmount(){
 		stopovers.size
+	}
+	
+	override getFlightDuration(){
+		stopovers.fold(0.0,[totalDuration,stopover | totalDuration + stopover.flightDuration])
 	}
 	
 	override getBaseCost()

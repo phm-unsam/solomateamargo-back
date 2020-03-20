@@ -46,7 +46,6 @@ class GenObjects {
 			from = "buenosAires"
 			to = "salta"
 			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
-			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "barato"
 			baseCost = 2.2
 			setAirline("aerolineaArgentina")
@@ -58,7 +57,6 @@ class GenObjects {
 			from = "buenosAires"
 			to = "salta"
 			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
-			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "sds"
 			baseCost = 222.2
 			setAirline("aerolineaArgentina")
@@ -69,7 +67,6 @@ class GenObjects {
 			from = "buenosAires"
 			to = "salta"
 			departure = LocalDateTime.of(2019, 11, 22, 12, 13)
-			arrival = LocalDateTime.of(2019, 11, 24, 12, 13)
 			planeType = "acs"
 			baseCost = 23123.2
 			setAirline("aerolineaArgentina")
