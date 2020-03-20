@@ -41,7 +41,7 @@ class Flight implements Entidad{
 	}
 
 	def getFlightDuration() {
-		ChronoUnit.HOURS.between(departure, arrival)
+		ChronoUnit.HOURS.between(departure, arrival) // al fornt
 	}
 	
 	def stopoversAmount(){
