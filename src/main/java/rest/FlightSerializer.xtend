@@ -28,9 +28,10 @@ class FlightSerializer extends StdSerializer<Flight> {
 	}
 	
 	static def String toJson(List<Flight> flight) {
-		if(flight===null || flight.empty){return "[ ]"}
+		if(flight === null || flight.empty){ return "[ ]" }
 		mapper().writeValueAsString(flight)
 	}
+	
 	static def mapper(){
 		val ObjectMapper mapper = new ObjectMapper()
 		val SimpleModule module = new SimpleModule()
@@ -38,6 +39,4 @@ class FlightSerializer extends StdSerializer<Flight> {
 		mapper.registerModule(module)
 		mapper
 	}
-	
-	
 }

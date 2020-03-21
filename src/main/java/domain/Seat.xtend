@@ -7,6 +7,8 @@ class Seat implements Entidad{
 	boolean nextoWindow
 	boolean avaliable
 	double cost
+	String number
+	String type
 	String seatId
 	
 	override getID() {

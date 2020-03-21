@@ -7,19 +7,19 @@ import domain.Entidad
 import domain.Flight
 import domain.User
 import org.eclipse.xtend.lib.annotations.Accessors
-import domain.Seat
+import domain.ShoppingCart
 
 abstract class Repository<T extends Entidad> {
-	@Accessors protected Set<T> elementos = new HashSet<T>
+	@Accessors protected Set<T> elements = new HashSet<T>
 	protected int id = 0
 
 	def void create(T element) {
 		if (element.getID === null) {
 			id++
 			element.setID(newID)
-			elementos.add(element)
+			elements.add(element)
 		} else {
-			elementos.add(element)
+			elements.add(element)
 		}
 	}
 
@@ -28,7 +28,7 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def delete(T element) {
-		elementos.remove(element)
+		elements.remove(element)
 	}
 
 	def update(T elementoNuevo) {
@@ -39,11 +39,11 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def searchByID(String id) {
-		elementos.findFirst(element|element.getID == id)
+		elements.findFirst(element|element.getID == id)
 	}
 
 	def List<T> search(String value) {
-		elementos.filter[condicionDeBusqueda(it, value)].toList
+		elements.filter[condicionDeBusqueda(it, value)].toList
 	}
 
 	def boolean condicionDeBusqueda(T el, String value)
@@ -69,11 +69,6 @@ class FlightRepository extends Repository<Flight> {
 	override condicionDeBusqueda(Flight el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-	
-	
-
-	
-
 }
 
 class UserRepository extends Repository<User> {
@@ -90,35 +85,20 @@ class UserRepository extends Repository<User> {
 		}
 		instance
 	}
+	
+	def match(User userToLog){
+		elements.findFirst(user | user.isThisYou(userToLog))
+	}
 
 	override condicionDeBusqueda(User el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-
 }
 
-class SeatRepository extends Repository<Seat> {
-	@Accessors String tipo
-
-	private new() {
-	}
-
-	override newID() {
-		id.toString()
-	}
-
-	static SeatRepository instance
-
-	static def getInstance() {
-		if (instance === null) {
-			instance = new SeatRepository()
-		}
-		instance
-	}
+class ShoppingCartRepository extends Repository<ShoppingCart> {
+	@Accessors String tipo = "R"
 	
-	
-	
-	override condicionDeBusqueda(Seat el, String value) {
+	override condicionDeBusqueda(ShoppingCart el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	

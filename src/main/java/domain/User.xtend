@@ -9,10 +9,11 @@ class User implements Entidad{
 	String name
 	String lastName
 	int age
-	List <User> friends = new ArrayList()
 	String username
 	String password
 	String userId
+	List <User> friends = new ArrayList()
+	List <Purchase> purchases = new ArrayList() 
 	
 	override getID() {
 		userId
@@ -20,6 +21,18 @@ class User implements Entidad{
 	
 	override setID(String id) {
 		userId = id
+	}
+	
+	def isThisYou(User user) {
+		checkUsername(user) && checkPassword(user)
+	}
+	
+	def checkPassword(User user) {
+		user.username == username
+	}
+	
+	def checkUsername(User user) {
+		user.password == password
 	}
 	
 }
