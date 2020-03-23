@@ -4,6 +4,7 @@ import java.time.LocalDateTime
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
+import serializers.NotFoundException
 
 @Accessors
 class Flight implements Entidad{
@@ -31,7 +32,11 @@ class Flight implements Entidad{
 	}
 	
 	def getSeatsAvailiables() {
-		seats.filter(seat|seat.avaliable)
+		val results = seats.filter(seat|seat.avaliable)
+		if(results.empty){
+			throw new NotFoundException("No hay asientos disponibles")
+		}
+		results
 	}
 	
 	def seatCost(Seat seat){
@@ -47,7 +52,10 @@ class Flight implements Entidad{
 	}
 	
 	def hasSeatsAvaliables(){
-		seats.exists(seat|seat.isAvaliable)
+		val result = seats.exists(seat|seat.isAvaliable)
+		if (!result)
+			throw new NotFoundException("Este vuelo no tiene asientos disponibles")
+		result
 	}
 }
 

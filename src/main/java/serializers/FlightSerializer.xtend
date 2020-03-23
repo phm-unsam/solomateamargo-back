@@ -24,14 +24,13 @@ class FlightSerializer extends StdSerializer<Flight> {
 		gen.writeNumberField("baseCost",value.baseCost)
 		gen.writeNumberField("stopoversAmount",value.stopoversAmount)		
 		gen.writeNumberField("flightDuration", value.getFlightDuration)
-		gen.writeStringField("DepartureDate", Parsers.getStringDateFromLocalDateTime(value.departure))
-		gen.writeStringField("DepartureTime", Parsers.getStringTimeFromLocalDateTime(value.departure))
+		gen.writeStringField("DepartureDate", Consts.getStringDateFromLocalDateTime(value.departure))
+		gen.writeStringField("DepartureTime", Consts.getStringTimeFromLocalDateTime(value.departure))
 		gen.writeEndObject()
 	}
 	
 	static def String toJson(List<Flight> flights) {
-		flights.empty ? return Parsers.errorToJson("No existen vuelos con el criterio seleccionado")
-		 : mapper().writeValueAsString(flights)
+		 mapper().writeValueAsString(flights)
 	}
 	
 	static def mapper(){

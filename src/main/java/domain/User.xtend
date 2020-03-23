@@ -1,8 +1,9 @@
 package domain
 
-import org.eclipse.xtend.lib.annotations.Accessors
-import java.util.List
 import java.util.ArrayList
+import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Accessors
 class User implements Entidad{
@@ -12,9 +13,10 @@ class User implements Entidad{
 	String username
 	String password
 	String userId
-	List <User> friends = new ArrayList()
-	List <Purchase> purchases = new ArrayList()
+	@JsonIgnore List <User> friends = new ArrayList()
+	@JsonIgnore List <Purchase> purchases = new ArrayList()
 	String profilePhoto
+	double cash
 	
 	override getID() {
 		userId
@@ -34,6 +36,10 @@ class User implements Entidad{
 	
 	def checkUsername(User user) {
 		user.password == password
+	}
+	
+	def setCash(double newAmount){
+		cash += newAmount
 	}
 	
 }

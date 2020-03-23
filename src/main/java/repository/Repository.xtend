@@ -8,6 +8,8 @@ import java.util.HashSet
 import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
+import serializers.BusinessException
+import serializers.NotFoundException
 
 abstract class Repository<T extends Entidad> {
 	@Accessors protected Set<T> elements = new HashSet<T>
@@ -39,10 +41,7 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def searchByID(String id) {
-		val result = elements.findFirst[it.ID.contains(id)]
-		if(result===null)
-			throw new Exception ("No existen vuelos con ese id")
-		result
+		exceptionCatcher(elements.findFirst[it.ID.contains(id)])
 	}
 
 	def List<T> search(String value) {
@@ -52,6 +51,14 @@ abstract class Repository<T extends Entidad> {
 	def boolean condicionDeBusqueda(T el, String value)
 
 	def String getTipo()
+
+	def exceptionCatcher(T result) {
+		if (result === null)
+			throw new NotFoundException(exceptionMsg)
+		result
+	}
+	
+	def String exceptionMsg()
 }
 
 class FlightRepository extends Repository<Flight> {
@@ -79,7 +86,13 @@ class FlightRepository extends Repository<Flight> {
 	
 	def getAvaliableFlights(){
 		elements.filter(flight|flight.hasSeatsAvaliables)
+		
 	}
+	
+	override exceptionMsg() {
+		"No existen vuelos diponibles"
+	}
+	
 }
 
 class UserRepository extends Repository<User> {
@@ -104,6 +117,18 @@ class UserRepository extends Repository<User> {
 	override condicionDeBusqueda(User el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
+	
+	override exceptionMsg() {
+		"Usuario no encontrado"
+	}
+	
+	def addCash(String userId, double cashToAdd) {
+		if(cashToAdd<= 0){
+			throw new BusinessException("La suma de dinero ingresada es incorrecta")
+		}
+		searchByID(userId).setCash(cashToAdd)
+	}
+	
 }
 
 class ShoppingCartRepository extends Repository<ShoppingCart> {
@@ -111,6 +136,10 @@ class ShoppingCartRepository extends Repository<ShoppingCart> {
 
 	override condicionDeBusqueda(ShoppingCart el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	override exceptionMsg() {
+		"Carrito de compras no encontrado"
 	}
 
 }
