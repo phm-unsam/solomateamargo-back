@@ -16,7 +16,7 @@ class Flight implements Entidad{
 	String from
 	String to
 	LocalDateTime departure
-	double flightDuration
+	int flightDuration
 
 	override getID() {
 		flightId
@@ -54,16 +54,16 @@ class FlightWithStopover extends Flight {
 	List<Flight> stopovers = new ArrayList
 
 	override stopoversAmount(){
-		stopovers.size
+		stopovers.size - 1
 	}
 	
 	override getFlightDuration(){
-		stopovers.fold(0.0,[totalDuration,stopover | totalDuration + stopover.flightDuration])
+		stopovers.fold(0,[totalDuration,stopover | totalDuration + stopover.flightDuration])
 	}
 	
 	override getBaseCost()
 	{
-		baseCost*0.90
+		stopovers.fold(0.0,[baseCost, stopover | baseCost + stopover.baseCost]) *0.90
 	}
 	
 }

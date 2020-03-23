@@ -6,7 +6,7 @@ import org.uqbar.xtrest.api.XTRest
 
 class Aterrizapp {
 	def static void main(String[] args) {
-		GenObjects.addToRepo
+		GenObjects.generateAll
 		XTRest.startInstance(
 			16000,
 			new FlightController(),

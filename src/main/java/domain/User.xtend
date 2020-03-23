@@ -13,7 +13,8 @@ class User implements Entidad{
 	String password
 	String userId
 	List <User> friends = new ArrayList()
-	List <Purchase> purchases = new ArrayList() 
+	List <Purchase> purchases = new ArrayList()
+	String profilePhoto
 	
 	override getID() {
 		userId
