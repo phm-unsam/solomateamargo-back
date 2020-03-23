@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import domain.User
 import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
+import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.UserRepository
@@ -26,6 +27,19 @@ class UserController {
 				return notFound("Username o password incorrectos")
 			}
 			return ok(UserSerializer.toJson(user))
+			
+		} catch (Exception e) {
+			internalServerError(Parsers.errorToJson(e.message))
+		}
+	}
+	@Get("/user/:userId/profile")
+	def profile(@Body String body) {
+		try {
+			val user = this.userRepository.searchByID(userId)
+			if (user === null) {
+				return notFound(Parsers.errorToJson("Usuario no encontrado"))
+			}
+			return ok(user.toJson)
 			
 		} catch (Exception e) {
 			internalServerError(Parsers.errorToJson(e.message))

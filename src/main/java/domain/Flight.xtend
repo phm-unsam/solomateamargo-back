@@ -5,7 +5,6 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 
-
 @Accessors
 class Flight implements Entidad{
 	String planeType
@@ -31,7 +30,7 @@ class Flight implements Entidad{
 		getBaseCost + seatCost(seat)
 	}
 	
-	def getSeatsAvaliable() {
+	def getSeatsAvailiables() {
 		seats.filter(seat|seat.avaliable)
 	}
 	
@@ -40,13 +39,16 @@ class Flight implements Entidad{
 	}
 	
 	def twoOrLessSeatsAvaliable(){
-		getSeatsAvaliable.size<=2
+		getSeatsAvailiables.size<=2
 	}
 	
 	def stopoversAmount(){
 		0
 	}
 	
+	def hasSeatsAvaliables(){
+		seats.exists(seat|seat.isAvaliable)
+	}
 }
 
 @Accessors

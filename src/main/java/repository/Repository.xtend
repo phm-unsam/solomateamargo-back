@@ -1,13 +1,13 @@
 package repository
 
-import java.util.Set
-import java.util.HashSet
-import java.util.List
 import domain.Entidad
 import domain.Flight
-import domain.User
-import org.eclipse.xtend.lib.annotations.Accessors
 import domain.ShoppingCart
+import domain.User
+import java.util.HashSet
+import java.util.List
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
 
 abstract class Repository<T extends Entidad> {
 	@Accessors protected Set<T> elements = new HashSet<T>
@@ -39,7 +39,10 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def searchByID(String id) {
-		elements.findFirst(element|element.getID == id)
+		val result = elements.findFirst[it.ID.contains(id)]
+		if(result===null)
+			throw new Exception ("No existen vuelos con ese id")
+		result
 	}
 
 	def List<T> search(String value) {
@@ -69,6 +72,14 @@ class FlightRepository extends Repository<Flight> {
 	override condicionDeBusqueda(Flight el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
+
+	def getSeatsByFlightId(String flightId) {
+		searchByID(flightId).getSeatsAvailiables.toList
+	}
+	
+	def getAvaliableFlights(){
+		elements.filter(flight|flight.hasSeatsAvaliables)
+	}
 }
 
 class UserRepository extends Repository<User> {
@@ -85,9 +96,9 @@ class UserRepository extends Repository<User> {
 		}
 		instance
 	}
-	
-	def match(User userToLog){
-		elements.findFirst(user | user.isThisYou(userToLog))
+
+	def match(User userToLog) {
+		elements.findFirst(user|user.isThisYou(userToLog))
 	}
 
 	override condicionDeBusqueda(User el, String value) {
@@ -97,10 +108,9 @@ class UserRepository extends Repository<User> {
 
 class ShoppingCartRepository extends Repository<ShoppingCart> {
 	@Accessors String tipo = "R"
-	
+
 	override condicionDeBusqueda(ShoppingCart el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-	
-	
+
 }
