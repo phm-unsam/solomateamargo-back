@@ -2,7 +2,9 @@ package domain
 
 import java.util.ArrayList
 import java.util.List
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class ShoppingCart implements Entidad{
 	List <Ticket> tickets = new ArrayList()
 	String repositoryId
@@ -32,7 +34,6 @@ class ShoppingCart implements Entidad{
 		tickets.clear()
 	}
 	
-
 	
 	
 }

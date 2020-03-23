@@ -1,9 +1,11 @@
-package rest
+package app
 
 import domain.Flight
-import java.time.LocalDateTime
 import domain.Seat
 import domain.User
+import java.time.LocalDateTime
+import repository.FlightRepository
+import repository.UserRepository
 
 class GenObjects {
 

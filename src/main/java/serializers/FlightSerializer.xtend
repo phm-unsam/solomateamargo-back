@@ -1,13 +1,13 @@
-package rest
+package serializers
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import domain.Flight
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.SerializerProvider
 import java.io.IOException
 import java.util.List
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleModule
 
 class FlightSerializer extends StdSerializer<Flight> {
 	
@@ -23,13 +23,12 @@ class FlightSerializer extends StdSerializer<Flight> {
 		gen.writeStringField("airlineName", value.airline)
 		gen.writeNumberField("baseCost",value.baseCost)
 		gen.writeNumberField("flightDuration", value.getFlightDuration)
-		gen.writeObjectField("seat",value.seats)
 		gen.writeEndObject()
 	}
 	
-	static def String toJson(List<Flight> flight) {
-		if(flight === null || flight.empty){ return "[ ]" }
-		mapper().writeValueAsString(flight)
+	static def String toJson(List<Flight> flights) {
+		flights.empty ? return Parsers.errorToJson("No existen vuelos con el criterio seleccionado")
+		 : mapper().writeValueAsString(flights)
 	}
 	
 	static def mapper(){
