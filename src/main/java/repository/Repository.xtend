@@ -57,7 +57,7 @@ abstract class Repository<T extends Entidad> {
 			throw new NotFoundException(exceptionMsg)
 		result
 	}
-	
+
 	def String exceptionMsg()
 }
 
@@ -83,16 +83,16 @@ class FlightRepository extends Repository<Flight> {
 	def getSeatsByFlightId(String flightId) {
 		searchByID(flightId).getSeatsAvailiables.toList
 	}
-	
-	def getAvaliableFlights(){
+
+	def getAvaliableFlights() {
 		elements.filter(flight|flight.hasSeatsAvaliables)
-		
+
 	}
-	
+
 	override exceptionMsg() {
 		"No existen vuelos diponibles"
 	}
-	
+
 }
 
 class UserRepository extends Repository<User> {
@@ -109,8 +109,8 @@ class UserRepository extends Repository<User> {
 		}
 		instance
 	}
-	
-	override update(User user){ //PROB ESTO CAMBIE 
+
+	override update(User user) { // PROB ESTO CAMBIE 
 		var elementoViejo = searchByID(user.getID())
 		user.friends = elementoViejo.friends
 		user.purchases = elementoViejo.purchases
@@ -125,32 +125,37 @@ class UserRepository extends Repository<User> {
 	override condicionDeBusqueda(User el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-	
+
 	override exceptionMsg() {
 		"Usuario no encontrado"
 	}
-	
+
 	def addCash(String userId, double cashToAdd) {
-		if(cashToAdd<= 0){
+		if (cashToAdd <= 0) {
 			throw new BusinessException("La suma de dinero ingresada es incorrecta")
 		}
 		searchByID(userId).setCash(cashToAdd)
 	}
-	
-	def addFriend(String userId, String friendId){
+
+	def addFriend(String userId, String friendId) {
 		val user = searchByID(userId)
 		val friend = searchByID(friendId)
-		
+
 		user.addFriend(friend)
 	}
-	
-	def deleteFriend(String userId, String friendId){
+
+	def deleteFriend(String userId, String friendId) {
 		val user = searchByID(userId)
 		val friend = searchByID(friendId)
-		
+
 		user.deleteFriend(friend)
 	}
-	
+
+	def getPossibleFriends(String userId) {
+		val friendList = searchByID(userId).friends
+		elements.filter(user|!friendList.contains(us er) && user.getID != userId).toSet
+	}
+
 }
 
 class ShoppingCartRepository extends Repository<ShoppingCart> {
@@ -159,7 +164,7 @@ class ShoppingCartRepository extends Repository<ShoppingCart> {
 	override condicionDeBusqueda(ShoppingCart el, String value) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-	
+
 	override exceptionMsg() {
 		"Carrito de compras no encontrado"
 	}

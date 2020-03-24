@@ -237,6 +237,7 @@ class GenObjects {
 			username = "benjaxxx"
 			password = "tequiero" 
 			profilePhoto = "https://ep01.epimg.net/deportes/imagenes/2019/10/10/actualidad/1570703137_141070_1570812202_noticia_normal.jpg"
+			friends.add(userA)
 		]
 		val userD = new User() => [
 			name = "Florencia"

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import domain.User
 import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
+import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.api.annotation.Put
@@ -60,6 +61,17 @@ class UserController {
 			internalServerError(Consts.errorToJson(e.message))
 		}
 	}
+	@Get("/user/:userId/possiblefriends")
+	def possibleFriends() {
+		try {
+			val possibleFriends = this.userRepository.getPossibleFriends(userId)
+			return ok(UserSerializer.toJson(possibleFriends))
+		} catch (NotFoundException e) {
+			notFound(Consts.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Consts.errorToJson(e.message))
+		}
+	}
 	
 	@Put("/user/:userId/addcash")
 	def addCash(@Body String body) {
@@ -99,7 +111,7 @@ class UserController {
 		}
 	}
 	
-	@Put("/user/:userId/deletefriend/")
+	@Delete("/user/:userId/deletefriend/")
 	def deleteFriend(@Body String body) {
 		try {
 			this.userRepository.deleteFriend(userId, body)
