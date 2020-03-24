@@ -153,7 +153,7 @@ class UserRepository extends Repository<User> {
 
 	def getPossibleFriends(String userId) {
 		val friendList = searchByID(userId).friends
-		elements.filter(user|!friendList.contains(us er) && user.getID != userId).toSet
+		elements.filter(user|!friendList.contains(user) && user.getID != userId).toSet
 	}
 
 }
