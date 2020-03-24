@@ -34,3 +34,9 @@ class BusinessException extends Exception {
 	}
 }
 
+class FriendAlreadyInFriendList extends Exception {
+	
+	new(String msg){
+		super(msg)
+	}
+}

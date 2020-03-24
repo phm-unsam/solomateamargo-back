@@ -48,6 +48,7 @@ class UserController {
 			internalServerError(Consts.errorToJson(e.message))
 		}
 	}
+	
 	@Get("/user/:userId/friends")
 	def friends() {
 		try {
@@ -59,6 +60,7 @@ class UserController {
 			internalServerError(Consts.errorToJson(e.message))
 		}
 	}
+	
 	@Put("/user/:userId/addcash")
 	def addCash(@Body String body) {
 		try {
@@ -73,4 +75,39 @@ class UserController {
 		}
 	}
 	
+	@Post("/user/update")
+	def updateProfile(@Body String body) {
+		try {
+			val userBody = body.fromJson(User)
+			this.userRepository.update(userBody)
+			return ok("{status : ok}")
+			
+		} catch (Exception e) {
+			internalServerError(Consts.errorToJson(e.message))
+		}
+	}
+	
+	@Put("/user/:userId/addfriend")
+	def addFriend(@Body String body) {
+		try {
+			this.userRepository.addFriend(userId, body)
+			return ok("{status : ok}")
+		} catch (BusinessException e) {
+			notFound(Consts.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Consts.errorToJson(e.message))
+		}
+	}
+	
+	@Put("/user/:userId/deletefriend/")
+	def deleteFriend(@Body String body) {
+		try {
+			this.userRepository.deleteFriend(userId, body)
+			return ok("{status : ok}")
+		} catch (BusinessException e) {
+			notFound(Consts.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Consts.errorToJson(e.message))
+		}
+	}
 }

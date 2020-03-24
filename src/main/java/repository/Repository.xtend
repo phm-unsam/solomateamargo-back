@@ -109,6 +109,14 @@ class UserRepository extends Repository<User> {
 		}
 		instance
 	}
+	
+	override update(User user){ //PROB ESTO CAMBIE 
+		var elementoViejo = searchByID(user.getID())
+		user.friends = elementoViejo.friends
+		user.purchases = elementoViejo.purchases
+		delete(elementoViejo)
+		create(user)
+	}
 
 	def match(User userToLog) {
 		elements.findFirst(user|user.isThisYou(userToLog))
@@ -127,6 +135,20 @@ class UserRepository extends Repository<User> {
 			throw new BusinessException("La suma de dinero ingresada es incorrecta")
 		}
 		searchByID(userId).setCash(cashToAdd)
+	}
+	
+	def addFriend(String userId, String friendId){
+		val user = searchByID(userId)
+		val friend = searchByID(friendId)
+		
+		user.addFriend(friend)
+	}
+	
+	def deleteFriend(String userId, String friendId){
+		val user = searchByID(userId)
+		val friend = searchByID(friendId)
+		
+		user.deleteFriend(friend)
 	}
 	
 }

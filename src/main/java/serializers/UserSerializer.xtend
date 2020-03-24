@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 import domain.User
 import java.io.IOException
-import java.util.List
+import java.util.Set
 
 class UserSerializer extends StdSerializer<User> {
 
@@ -26,7 +26,7 @@ class UserSerializer extends StdSerializer<User> {
 	static def String toJson(User user) {
 		mapper().writeValueAsString(user)
 	}
-	static def String toJson(List<User> user) {
+	static def String toJson(Set<User> user) {
 		mapper().writeValueAsString(user)
 	}
 
