@@ -12,9 +12,9 @@ import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.UserRepository
 import serializers.BusinessException
-import serializers.Consts
 import serializers.NotFoundException
 import serializers.UserSerializer
+import serializers.Parse
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -33,7 +33,7 @@ class UserController {
 			return ok(UserSerializer.toJson(user))
 
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 
@@ -44,9 +44,9 @@ class UserController {
 			return ok(user.toJson)
 
 		} catch (NotFoundException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
@@ -56,9 +56,9 @@ class UserController {
 			val user = this.userRepository.searchByID(userId)
 			return ok(UserSerializer.toJson(user.friends))
 		} catch (NotFoundException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	@Get("/user/:userId/possiblefriends")
@@ -67,9 +67,9 @@ class UserController {
 			val possibleFriends = this.userRepository.getPossibleFriends(userId)
 			return ok(UserSerializer.toJson(possibleFriends))
 		} catch (NotFoundException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
@@ -81,9 +81,9 @@ class UserController {
 			
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
@@ -95,7 +95,7 @@ class UserController {
 			return ok("{status : ok}")
 			
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
@@ -105,9 +105,9 @@ class UserController {
 			this.userRepository.addFriend(userId, body)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
@@ -117,9 +117,9 @@ class UserController {
 			this.userRepository.deleteFriend(userId, body)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
-			notFound(Consts.errorToJson(e.message))
+			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Consts.errorToJson(e.message))
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 }

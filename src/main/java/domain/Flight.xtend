@@ -1,6 +1,6 @@
 package domain
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -15,7 +15,7 @@ class Flight implements Entidad{
 	String flightId
 	String from
 	String to
-	LocalDateTime departure
+	LocalDate departure
 	int flightDuration
 
 	override getID() {
@@ -56,6 +56,10 @@ class Flight implements Entidad{
 		if (!result)
 			throw new NotFoundException("Este vuelo no tiene asientos disponibles")
 		result
+	}
+	
+	def isBetweenTheDates(LocalDate from,LocalDate to){
+		departure.isBefore(to) && departure.isAfter(from)
 	}
 }
 

@@ -9,6 +9,7 @@ import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
+import serializers.Filter
 import serializers.NotFoundException
 
 abstract class Repository<T extends Entidad> {
@@ -63,7 +64,7 @@ abstract class Repository<T extends Entidad> {
 
 class FlightRepository extends Repository<Flight> {
 	@Accessors String tipo = "F"
-
+	
 	private new() {
 	}
 
@@ -91,6 +92,19 @@ class FlightRepository extends Repository<Flight> {
 
 	override exceptionMsg() {
 		"No existen vuelos diponibles"
+	}
+	//beta
+	def getFlightsFiltered(Filter filters) {
+		var filtered = elements.filter(elem | true)
+		if(filters.hasDatesToFilter)
+			filtered = filtered.filter(flight|flight.isBetweenTheDates(filters.dateFrom,filters.dateTo))
+		if(!filters.departure.nullOrEmpty)
+			filtered = filtered.filter(flight|flight.from.contains(filters.departure))
+		if(!filters.arrival.nullOrEmpty)
+			filtered = filtered.filter(flight|flight.to.contains(filters.arrival))
+		//if(filters.seatClass.nullOrEmpty)
+		
+		filtered.toList
 	}
 
 }

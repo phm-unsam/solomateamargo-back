@@ -4,7 +4,7 @@ import domain.Flight
 import domain.FlightWithStopover
 import domain.Seat
 import domain.User
-import java.time.LocalDateTime
+import java.time.LocalDate
 import repository.FlightRepository
 import repository.UserRepository
 
@@ -68,9 +68,9 @@ class GenObjects {
 |--------------------------------------------------------------------------*/
 
 		val vuelo1 = new Flight() => [
-			from = "Ezeiza"
+			from = "Buenos Aires"
 			to = "Salta"
-			departure = LocalDateTime.of(2020, 5, 22, 12, 15)
+			departure = LocalDate.of(2020, 5, 22)
 			planeType = "Embraer 190"
 			baseCost = 5000.0
 			flightDuration = 3
@@ -85,9 +85,9 @@ class GenObjects {
 		]
 		
 		val vuelo2 = new Flight() => [
-			from = "Palomar"
+			from = "Buenos Aires"
 			to = "Bariloche"
-			departure = LocalDateTime.of(2020, 7, 11, 22, 30)
+			departure = LocalDate.of(2020, 7, 11)
 			planeType = "Avioneta"
 			baseCost = 3000.0
 			flightDuration = 4
@@ -102,10 +102,10 @@ class GenObjects {
 		]
 		
 		val vuelo3 = new Flight() => [
-			from = "Ezeiza"
+			from = "Buenos Aires"
 			to = "Montevideo"
 			flightDuration = 1
-			departure = LocalDateTime.of(2020, 11, 22, 12, 00)
+			departure = LocalDate.of(2020, 11, 22)
 			planeType = "Boeing 737 MAX"
 			baseCost = 23123.2
 			setAirline("Aerolineas Argentinas")
@@ -118,10 +118,10 @@ class GenObjects {
 			]
 		]
 		val vuelo4 = new Flight() => [
-			from = "Aeroparque"
+			from = "Buenos Aires"
 			to = "Comodoro Rivadavia"
 			flightDuration = 5
-			departure = LocalDateTime.of(2020, 09, 22, 12, 13)
+			departure = LocalDate.of(2020, 09, 22)
 			planeType = "Airbus 340"
 			baseCost = 7000.0
 			setAirline("Aerolineas Argentinas")
@@ -137,7 +137,7 @@ class GenObjects {
 			from = "Cordoba"
 			to = "Mendoza"
 			flightDuration = 2
-			departure = LocalDateTime.of(2021, 1, 30, 14, 50)
+			departure = LocalDate.of(2021, 1, 30)
 			planeType = "Airbus 300"
 			baseCost = 3000.0
 			setAirline("Norwegian")
@@ -153,7 +153,7 @@ class GenObjects {
 			from = "Rio de janeiro"
 			to = "Panama"
 			flightDuration = 7
-			departure = LocalDateTime.of(2020, 11, 11, 16, 25)
+			departure = LocalDate.of(2020, 11, 11)
 			planeType = "Boeing 747"
 			baseCost = 10000.0
 			setAirline("American Airlines")
@@ -167,7 +167,7 @@ class GenObjects {
 			from = "Panama"
 			to = "Los Angeles"
 			flightDuration = 9
-			departure = LocalDateTime.of(2021, 1, 14, 05, 45)
+			departure = LocalDate.of(2021, 1, 14)
 			planeType = "Boeing 747"
 			baseCost = 14000.0
 			setAirline("American Airlines")
@@ -180,7 +180,7 @@ class GenObjects {
 		val vuelo8 = new FlightWithStopover() => [
 			from = "Rio de janeiro"
 			to = "Los Angeles"
-			departure = LocalDateTime.of(2021, 3, 16, 00, 24)
+			departure = LocalDate.of(2021, 3, 16)
 			planeType = "Boeing 747"
 			stopovers => [
 				add(vuelo6)
