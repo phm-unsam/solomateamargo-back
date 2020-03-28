@@ -1,6 +1,7 @@
 package repository
 
 import domain.Entidad
+import domain.Filter
 import domain.Flight
 import domain.User
 import java.util.HashSet
@@ -8,7 +9,6 @@ import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
-import serializers.Filter
 import serializers.NotFoundException
 
 abstract class Repository<T extends Entidad> {

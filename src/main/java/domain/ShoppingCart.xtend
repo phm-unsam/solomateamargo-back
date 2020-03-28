@@ -23,13 +23,8 @@ class ShoppingCart {
 	}
 
 	def clearCart() {
+		tickets.forEach[it.quitReservation]
 		tickets.clear()
-	}
-
-	def purchaseCart() {
-		val purchases = tickets.map(ticket|new Purchase(ticket))
-		clearCart
-		return purchases.toList
 	}
 
 }

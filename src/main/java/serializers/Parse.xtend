@@ -2,7 +2,6 @@ package serializers
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import org.eclipse.xtend.lib.annotations.Accessors
 
 class Parse {
 	static val DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -30,29 +29,6 @@ class Parse {
 			throw new BadDateFormatException("La fecha ingresada es incorrecta")
 		}
 	}
-
-}
-
-@Accessors
-class Filter {
-	LocalDate dateFrom
-	LocalDate dateTo
-	String departure
-	String arrival
-	String seatClass
-
-	new(String _dateFrom, String _dateTo, String _seatClass, String _departure, String _arrival) {
-		dateFrom = Parse.stringToLocalDateTime(_dateFrom)
-		dateTo = Parse.stringToLocalDateTime(_dateTo)
-		seatClass = _seatClass
-		arrival = _arrival
-		departure = _departure
-	}
-
-	def hasDatesToFilter() {
-		return dateFrom !== null && dateTo !== null
-	}
-	
 
 }
 
