@@ -2,7 +2,6 @@ package repository
 
 import domain.Entidad
 import domain.Flight
-import domain.ShoppingCart
 import domain.User
 import java.util.HashSet
 import java.util.List
@@ -17,9 +16,9 @@ abstract class Repository<T extends Entidad> {
 	protected int id = 0
 
 	def void create(T element) {
-		if (element.getID === null) {
+		if (element.getId === null) {
 			id++
-			element.setID(newID)
+			element.setId(newID)
 			elements.add(element)
 		} else {
 			elements.add(element)
@@ -35,14 +34,14 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def update(T elementoNuevo) {
-		var id = elementoNuevo.getID()
+		var id = elementoNuevo.getId()
 		var elementoViejo = searchByID(id)
 		delete(elementoViejo)
 		create(elementoNuevo)
 	}
 
 	def searchByID(String id) {
-		exceptionCatcher(elements.findFirst[it.ID.contains(id)])
+		exceptionCatcher(elements.findFirst[it.id.contains(id)])
 	}
 
 	def List<T> search(String value) {
@@ -125,7 +124,7 @@ class UserRepository extends Repository<User> {
 	}
 
 	override update(User user) { // PROB ESTO CAMBIE 
-		var elementoViejo = searchByID(user.getID())
+		var elementoViejo = searchByID(user.getId())
 		user.friends = elementoViejo.friends
 		user.purchases = elementoViejo.purchases
 		delete(elementoViejo)
@@ -167,20 +166,7 @@ class UserRepository extends Repository<User> {
 
 	def getPossibleFriends(String userId) {
 		val friendList = searchByID(userId).friends
-		elements.filter(user|!friendList.contains(user) && user.getID != userId).toSet
-	}
-
-}
-
-class ShoppingCartRepository extends Repository<ShoppingCart> {
-	@Accessors String tipo = "R"
-
-	override condicionDeBusqueda(ShoppingCart el, String value) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-
-	override exceptionMsg() {
-		"Carrito de compras no encontrado"
+		elements.filter(user|!friendList.contains(user) && user.getId != userId).toSet
 	}
 
 }

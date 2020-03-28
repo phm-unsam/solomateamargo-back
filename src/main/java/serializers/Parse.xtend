@@ -10,6 +10,9 @@ class Parse {
 	static def errorToJson(String message) {
 		'{ "error": "' + message + '" }'
 	}
+	static def statusOkJson() {
+		'{ "status": "ok" }'
+	}
 
 	static def getStringDateFromLocalDate(LocalDate date) {
 		date.format(formatter)

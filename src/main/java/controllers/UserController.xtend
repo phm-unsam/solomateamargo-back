@@ -15,6 +15,7 @@ import serializers.BusinessException
 import serializers.NotFoundException
 import serializers.UserSerializer
 import serializers.Parse
+import serializers.PurchaseSerializer
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -117,6 +118,17 @@ class UserController {
 			this.userRepository.deleteFriend(userId, body)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
+			notFound(Parse.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
+	@Get("/user/:userId/purchases")
+	def purchases() {
+		try {
+			val purchases = this.userRepository.searchByID(userId).purchases
+			return ok(PurchaseSerializer.toJson(purchases))
+		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))

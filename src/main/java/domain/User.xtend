@@ -1,33 +1,28 @@
 package domain
 
-import java.util.ArrayList
-import java.util.List
-import org.eclipse.xtend.lib.annotations.Accessors
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.util.Set
+import java.util.ArrayList
 import java.util.HashSet
+import java.util.List
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
+import serializers.BusinessException
 import serializers.NotFoundException
 
 @Accessors
 class User implements Entidad{
 	String name
 	String lastName
-	int age
+	String id
 	String username
 	String password
-	String userId
+	int age
 	@JsonIgnore Set <User> friends = new HashSet()
 	@JsonIgnore List <Purchase> purchases = new ArrayList()
 	String profilePhoto
-	double cash
+	double cash =20000000
+	@JsonIgnore ShoppingCart shoppingCart = new ShoppingCart
 	
-	override getID() {
-		userId
-	}
-	
-	override setID(String id) {
-		userId = id
-	}
 	
 	def isThisYou(User user) {
 		checkUsername(user) && checkPassword(user)
@@ -55,8 +50,21 @@ class User implements Entidad{
 	
 	def isMyFriend(User user) {
 		friends.contains(user)
+	}	
+	
+	def addTicketToCart(Ticket ticket){
+		shoppingCart.addTicket(ticket)
 	}
 	
+	def removeTicketFromCart(Ticket ticket){
+		shoppingCart.removeTicket(ticket)
+	}
 	
-	
+	def purchaseCartTickets(){
+		if(shoppingCart.totalCost > cash)
+			throw new BusinessException("Dinero insuficiente para realizar la compra")
+		cash -= shoppingCart.totalCost
+		shoppingCart.tickets.forEach[purchases.add(new Purchase(it))]
+		shoppingCart.clearCart
+	}
 }

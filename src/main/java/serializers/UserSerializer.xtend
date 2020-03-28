@@ -17,7 +17,7 @@ class UserSerializer extends StdSerializer<User> {
 
 	override serialize(User value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		gen.writeStartObject()
-		gen.writeStringField("id", value.userId)
+		gen.writeStringField("id", value.id)
 		gen.writeStringField("name", value.name)
 		gen.writeStringField("lastName", value.lastName)
 		gen.writeEndObject()

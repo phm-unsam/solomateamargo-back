@@ -7,6 +7,7 @@ import domain.User
 import java.time.LocalDate
 import repository.FlightRepository
 import repository.UserRepository
+import domain.Ticket
 
 class GenObjects {
 
@@ -255,6 +256,10 @@ class GenObjects {
 			username = "juanita"
 			password = "123" 
 			profilePhoto = "https://mott.pe/noticias/wp-content/uploads/2018/03/10-trucos-para-saber-c%C3%B3mo-tomar-fotos-profesionales-con-el-celular-portada.jpg"
+			friends =>[
+				add(userA)
+				add(userB)
+			]
 		]
 		
 		repoUser => [
@@ -264,6 +269,9 @@ class GenObjects {
 			create(userD)
 			create(userE)
 		]
+		
+		val ticketA = new Ticket(vuelo1,seat14)
+		userA.addTicketToCart(ticketA)
 	
 	}
 

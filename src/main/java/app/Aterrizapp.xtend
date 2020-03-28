@@ -1,5 +1,6 @@
 package app
 
+import controllers.CartController
 import controllers.FlightController
 import controllers.UserController
 import org.uqbar.xtrest.api.XTRest
@@ -10,7 +11,8 @@ class Aterrizapp {
 		XTRest.startInstance(
 			16000,
 			new FlightController(),
-			new UserController()
+			new UserController(),
+			new CartController()
 		)
 
 	}

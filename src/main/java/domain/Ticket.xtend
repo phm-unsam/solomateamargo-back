@@ -1,10 +1,27 @@
 package domain
 
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
 class Ticket {
 	Flight flight
 	Seat seat
-	
-	def cost(){
+
+	new(Flight _flight, Seat _seat) {
+		flight = _flight
+		seat = _seat
+	}
+
+	def cost() {
 		flight.flightCost(seat)
 	}
+
+	def reserve() {
+		flight.reserve(seat)
+	}
+
+	def quitReservation() {
+		flight.quitReservation(seat)
+	}
+
 }

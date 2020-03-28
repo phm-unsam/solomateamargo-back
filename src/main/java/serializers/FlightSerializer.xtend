@@ -17,7 +17,7 @@ class FlightSerializer extends StdSerializer<Flight> {
 	
 	override serialize(Flight value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		gen.writeStartObject()
-		gen.writeStringField("id", value.flightId)
+		gen.writeStringField("id", value.id)
 		gen.writeStringField("from", value.from)
 		gen.writeStringField("to", value.to)
 		gen.writeStringField("airlineName", value.airline)

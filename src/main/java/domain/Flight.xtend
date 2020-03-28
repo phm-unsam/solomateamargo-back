@@ -12,20 +12,11 @@ class Flight implements Entidad{
 	List<Seat> seats = new ArrayList
 	Double baseCost
 	String airline
-	String flightId
 	String from
 	String to
+	String id
 	LocalDate departure
 	int flightDuration
-
-	override getID() {
-		flightId
-	}
-	
-	
-	override setID(String id) {
-		flightId = id
-	}
 	
 	def flightCost(Seat seat){
 		getBaseCost + seatCost(seat)
@@ -60,6 +51,18 @@ class Flight implements Entidad{
 	
 	def isBetweenTheDates(LocalDate from,LocalDate to){
 		departure.isBefore(to) && departure.isAfter(from)
+	}
+	
+	def reserve(Seat seat) {
+		seat.reserve
+	}
+	
+	def quitReservation(Seat seat) {
+		seat.quitReservation
+	}
+	
+	def getSeatByNumber(String seatNumber) {
+		seats.findFirst[it.number == seatNumber]
 	}
 }
 

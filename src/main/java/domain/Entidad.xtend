@@ -1,7 +1,8 @@
 package domain
 
 interface Entidad {
-	def String getID()
+	
+	def String getId()
 
-	def String setID(String id)
+	def void setId(String id)
 }
