@@ -262,6 +262,13 @@ class GenObjects {
 			]
 		]
 		
+		userA.addFriend(userB)
+		userA.addFriend(userC)
+		userB.addFriend(userA)
+		userC.addFriend(userB)
+		userD.addFriend(userA)
+		userE.addFriend(userC)
+		
 		repoUser => [
 			create(userA)
 			create(userB)
