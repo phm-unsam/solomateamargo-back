@@ -269,9 +269,45 @@ class GenObjects {
 			create(userD)
 			create(userE)
 		]
+/*
+|---------------------------------------------------------------------------|
+| 					BUYING TICKETS ...								|
+|--------------------------------------------------------------------------*/
 		
-		val ticketA = new Ticket(vuelo1,seat14)
-		userA.addTicketToCart(ticketA)
+		var ticket = new Ticket(vuelo1,seat14)
+		userB.addTicketToCart(ticket)
+		ticket = new Ticket(vuelo1,seat15)
+		userA.addTicketToCart(ticket)
+		
+		ticket = new Ticket(vuelo2,seat24)
+		userA.addTicketToCart(ticket)
+		ticket = new Ticket(vuelo2,seat25)
+		userC.addTicketToCart(ticket)
+		
+		
+		ticket = new Ticket(vuelo3,seat35)
+		userD.addTicketToCart(ticket)
+		ticket = new Ticket(vuelo3,seat34)
+		userB.addTicketToCart(ticket)
+		
+		
+		ticket = new Ticket(vuelo4,seat44)
+		userC.addTicketToCart(ticket)
+		ticket = new Ticket(vuelo4,seat45)
+		userE.addTicketToCart(ticket)
+		
+		
+		ticket = new Ticket(vuelo5,seat54)
+		userE.addTicketToCart(ticket)
+		ticket = new Ticket(vuelo5,seat55)
+		userD.addTicketToCart(ticket)
+		
+		userA.purchaseCartTickets
+		userB.purchaseCartTickets
+		userC.purchaseCartTickets
+		userD.purchaseCartTickets
+		userE.purchaseCartTickets
+		
 	
 	}
 
