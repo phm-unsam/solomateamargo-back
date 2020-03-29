@@ -65,6 +65,6 @@ class User implements Entidad{
 			throw new BusinessException("Dinero insuficiente para realizar la compra")
 		cash -= shoppingCart.totalCost
 		shoppingCart.tickets.forEach[purchases.add(new Purchase(it))]
-		shoppingCart.clearCart
+		shoppingCart.purchaseCart()
 	}
 }

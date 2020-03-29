@@ -50,7 +50,9 @@ class Flight implements Entidad{
 	}
 	
 	def isBetweenTheDates(LocalDate from,LocalDate to){
-		departure.isBefore(to) && departure.isAfter(from)
+		(departure.isBefore(to) && departure.isAfter(from) )||
+		departure.equals(from) || 
+		departure.equals(to)  
 	}
 	
 	def reserve(Seat seat) {

@@ -26,5 +26,9 @@ class ShoppingCart {
 		tickets.forEach[it.quitReservation]
 		tickets.clear()
 	}
+	
+	def purchaseCart(){ 
+		tickets.clear
+	}
 
 }

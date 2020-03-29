@@ -1,11 +1,10 @@
 package repository
 
 import domain.Entidad
-import domain.Filter
 import domain.Flight
+import domain.FlightFilter
 import domain.User
 import java.util.HashSet
-import java.util.List
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
@@ -44,12 +43,6 @@ abstract class Repository<T extends Entidad> {
 		exceptionCatcher(elements.findFirst[it.id.contains(id)])
 	}
 
-	def List<T> search(String value) {
-		elements.filter[condicionDeBusqueda(it, value)].toList
-	}
-
-	def boolean condicionDeBusqueda(T el, String value)
-
 	def String getTipo()
 
 	def exceptionCatcher(T result) {
@@ -76,10 +69,6 @@ class FlightRepository extends Repository<Flight> {
 		instance
 	}
 
-	override condicionDeBusqueda(Flight el, String value) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-
 	def getSeatsByFlightId(String flightId) {
 		searchByID(flightId).getSeatsAvailiables.toList
 	}
@@ -92,19 +81,15 @@ class FlightRepository extends Repository<Flight> {
 	override exceptionMsg() {
 		"No existen vuelos diponibles"
 	}
-	//beta
-	def getFlightsFiltered(Filter filters) {
-		var filtered = elements.filter(elem | true)
-		if(filters.hasDatesToFilter)
-			filtered = filtered.filter(flight|flight.isBetweenTheDates(filters.dateFrom,filters.dateTo))
-		if(!filters.departure.nullOrEmpty)
-			filtered = filtered.filter(flight|flight.from.contains(filters.departure))
-		if(!filters.arrival.nullOrEmpty)
-			filtered = filtered.filter(flight|flight.to.contains(filters.arrival))
-		//if(filters.seatClass.nullOrEmpty)
-		
-		filtered.toList
+	
+	def getFlightsFiltered(FlightFilter filters) {	
+		elements.filter[filters.flightMatchCriteria(it)].toList
 	}
+	
+//	def getSeatsFiltered(String flightId){
+//		var seats = searchByID(flightId).seats
+//		flight.seats
+//	}
 
 }
 
@@ -133,10 +118,6 @@ class UserRepository extends Repository<User> {
 
 	def match(User userToLog) {
 		elements.findFirst(user|user.isThisYou(userToLog))
-	}
-
-	override condicionDeBusqueda(User el, String value) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 
 	override exceptionMsg() {
