@@ -1,17 +1,19 @@
 package repository
 
 import domain.Entidad
+import domain.Filters
 import domain.Flight
 import domain.FlightFilter
+import domain.SeatFilter
 import domain.User
-import java.util.HashSet
-import java.util.Set
+import java.util.ArrayList
+import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.NotFoundException
 
 abstract class Repository<T extends Entidad> {
-	@Accessors protected Set<T> elements = new HashSet<T>
+	@Accessors protected List<T> elements = new ArrayList<T>
 	protected int id = 0
 
 	def void create(T element) {
@@ -52,11 +54,15 @@ abstract class Repository<T extends Entidad> {
 	}
 
 	def String exceptionMsg()
+
+	def <E> filterList(List<E> list, Filters<E> filters) {
+		list.filter[filters.matchesCriteria(it)].toList
+	}
 }
 
 class FlightRepository extends Repository<Flight> {
 	@Accessors String tipo = "F"
-	
+
 	private new() {
 	}
 
@@ -70,7 +76,7 @@ class FlightRepository extends Repository<Flight> {
 	}
 
 	def getSeatsByFlightId(String flightId) {
-		searchByID(flightId).getSeatsAvailiables.toList
+		searchByID(flightId).getSeatsAvailiables
 	}
 
 	def getAvaliableFlights() {
@@ -81,15 +87,15 @@ class FlightRepository extends Repository<Flight> {
 	override exceptionMsg() {
 		"No existen vuelos diponibles"
 	}
-	
-	def getFlightsFiltered(FlightFilter filters) {	
-		elements.filter[filters.flightMatchCriteria(it)].toList
+
+	def getFlightsFiltered(FlightFilter filters) {
+		filterList(elements, filters)
 	}
-	
-//	def getSeatsFiltered(String flightId){
-//		var seats = searchByID(flightId).seats
-//		flight.seats
-//	}
+
+	def getSeatsFiltered(SeatFilter filters, String flightId) {
+		var seats = getSeatsByFlightId(flightId).toList
+		filterList(seats, filters)
+	}
 
 }
 

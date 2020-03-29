@@ -2,6 +2,8 @@ package controllers
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
+import domain.FlightFilter
+import domain.SeatFilter
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
@@ -11,7 +13,6 @@ import serializers.FlightSerializer
 import serializers.NotFoundException
 import serializers.Parse
 import serializers.SeatSerializer
-import domain.FlightFilter
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -34,9 +35,10 @@ class FlightController {
 	}
 
 	@Get("/flight/:flightId/seats")
-	def Result seats() {
+	def Result seats(String seatType, String nextoWindow) {
 		try {
-			val seatsAvaliables = flightRepository.getSeatsByFlightId(flightId)
+			val filters = new SeatFilter(seatType,nextoWindow)
+			val seatsAvaliables = flightRepository.getSeatsFiltered(filters,flightId)
 			ok(SeatSerializer.toJson(seatsAvaliables))
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))

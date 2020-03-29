@@ -3,7 +3,17 @@ package domain
 import java.time.LocalDate
 import serializers.Parse
 
-class FlightFilter {
+
+abstract class Filters <T extends Object>{
+	
+	def boolean matchesCriteria(T value)
+	
+	def matches(String actualValue, String valueToCompare){
+		valueToCompare.nullOrEmpty || actualValue.contains(valueToCompare)
+	}	
+}
+
+class FlightFilter extends Filters<Flight>{
 	LocalDate dateFrom
 	LocalDate dateTo
 	String departure
@@ -16,7 +26,7 @@ class FlightFilter {
 		departure = _departure
 	}
 	
-	def flightMatchCriteria(Flight flight){
+	override matchesCriteria(Flight flight){
 		matches(flight.to,arrival) &&
 		matches(flight.from,departure)  &&
 		filterDates(flight)
@@ -31,12 +41,31 @@ class FlightFilter {
 		!hasDatesToFilter || flight.isBetweenTheDates(dateFrom,dateTo)
 	} 
 	
-	def matches(String actualValue, String valueToCompare){
-		valueToCompare.nullOrEmpty || actualValue.contains(valueToCompare)
-	}
 
 }
 
-class SeatsFilter{
+class SeatFilter extends Filters <Seat>{
+	String seatType
+	boolean nextoWindow
+	boolean filterNextoWindowNull
 	
+	new(String _seatType, String _nextoWindow){
+		seatType = _seatType
+		nextoWindow = Boolean.getBoolean(_nextoWindow)
+		filterNextoWindowNull = _nextoWindow.isNullOrEmpty
+	}
+	
+	override matchesCriteria(Seat seat){
+		matches(seat.type,seatType) &&
+		filterSeatPosition(seat.nextoWindow)
+	}
+	
+	def filterSeatPosition(boolean seatIsNextoWindow){
+		filterNextoWindowNull || nextoWindow == seatIsNextoWindow
+	}
 }
+
+
+
+
+
