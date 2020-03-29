@@ -1,7 +1,6 @@
 package repository
 
 import domain.Entidad
-import domain.Filters
 import domain.Flight
 import domain.FlightFilter
 import domain.SeatFilter
@@ -11,6 +10,7 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.NotFoundException
+import domain.Filter
 
 abstract class Repository<T extends Entidad> {
 	@Accessors protected List<T> elements = new ArrayList<T>
@@ -55,7 +55,7 @@ abstract class Repository<T extends Entidad> {
 
 	def String exceptionMsg()
 
-	def <E> filterList(List<E> list, Filters<E> filters) {
+	def <E> filterList(List<E> list, Filter<E> filters) {
 		list.filter[filters.matchesCriteria(it)].toList
 	}
 }

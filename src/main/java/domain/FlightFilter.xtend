@@ -4,7 +4,7 @@ import java.time.LocalDate
 import serializers.Parse
 
 
-abstract class Filters <T extends Object>{
+abstract class Filter <T extends Object>{
 	
 	def boolean matchesCriteria(T value)
 	
@@ -13,7 +13,7 @@ abstract class Filters <T extends Object>{
 	}	
 }
 
-class FlightFilter extends Filters<Flight>{
+class FlightFilter extends Filter<Flight>{
 	LocalDate dateFrom
 	LocalDate dateTo
 	String departure
@@ -44,14 +44,14 @@ class FlightFilter extends Filters<Flight>{
 
 }
 
-class SeatFilter extends Filters <Seat>{
+class SeatFilter extends Filter <Seat>{
 	String seatType
 	boolean nextoWindow
 	boolean filterNextoWindowNull
 	
 	new(String _seatType, String _nextoWindow){
 		seatType = _seatType
-		nextoWindow = Boolean.getBoolean(_nextoWindow)
+		nextoWindow = Boolean.parseBoolean(_nextoWindow)
 		filterNextoWindowNull = _nextoWindow.isNullOrEmpty
 	}
 	
@@ -61,7 +61,7 @@ class SeatFilter extends Filters <Seat>{
 	}
 	
 	def filterSeatPosition(boolean seatIsNextoWindow){
-		filterNextoWindowNull || nextoWindow == seatIsNextoWindow
+		filterNextoWindowNull || nextoWindow.equals(seatIsNextoWindow)
 	}
 }
 
