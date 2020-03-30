@@ -77,8 +77,8 @@ class UserController {
 	@Put("/user/:userId/addcash")
 	def addCash(@Body String body) {
 		try {
-			val bodyUser = body.fromJson(User)
-			this.userRepository.addCash(userId, bodyUser.cash)
+			val cash = body.fromJson(Double)
+			this.userRepository.addCash(userId, cash)
 			
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
