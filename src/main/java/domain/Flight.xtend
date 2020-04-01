@@ -64,9 +64,13 @@ class Flight implements Entidad{
 	}
 	
 	def getSeatByNumber(String seatNumber) {
-		seats.findFirst[it.number == seatNumber]
+		val seat = seats.findFirst[it.number == seatNumber]
+		if(seat === null)
+			throw new NotFoundException("El asiento no existe en este vuelo")
+		seat
 	}
 }
+
 
 @Accessors
 class FlightWithStopover extends Flight {
