@@ -75,12 +75,18 @@ class FlightRepository extends Repository<Flight> {
 		instance
 	}
 
-	def getSeatsByFlightId(String flightId) {
-		searchByID(flightId).getSeatsAvailiables
+	def getAvaliableSeatsByFlightId(String flightId) {
+		val flight = searchByID(flightId)
+		if(!flight.hasSeatsAvaliables){
+			throw new NotFoundException("No hay asientos disponibles para el vuelo "+flight.id)
+		}
+			
+		flight.getSeatsAvailiables
 	}
+	
 
 	def getAvaliableFlights() {
-		elements.filter(flight|flight.hasSeatsAvaliables)
+		elements.filter[it.hasSeatsAvaliables].toList
 
 	}
 
@@ -89,11 +95,11 @@ class FlightRepository extends Repository<Flight> {
 	}
 
 	def getFlightsFiltered(FlightFilter filters) {
-		filterList(elements, filters)
+		filterList(getAvaliableFlights, filters)
 	}
 
 	def getSeatsFiltered(SeatFilter filters, String flightId) {
-		var seats = getSeatsByFlightId(flightId).toList
+		var seats = getAvaliableSeatsByFlightId(flightId).toList
 		filterList(seats, filters)
 	}
 

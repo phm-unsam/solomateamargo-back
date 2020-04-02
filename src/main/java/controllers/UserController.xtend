@@ -100,10 +100,10 @@ class UserController {
 		}
 	}
 	
-	@Put("/user/:userId/addfriend")
-	def addFriend(@Body String body) {
+	@Put("/user/:userId/addfriend/:newFriendId")
+	def addFriend() {
 		try {
-			this.userRepository.addFriend(userId, body)
+			this.userRepository.addFriend(userId, newFriendId)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -112,10 +112,10 @@ class UserController {
 		}
 	}
 	
-	@Delete("/user/:userId/deletefriend/")
-	def deleteFriend(@Body String body) {
+	@Delete("/user/:userId/deletefriend/:deletedId")
+	def deleteFriend() {
 		try {
-			this.userRepository.deleteFriend(userId, body)
+			this.userRepository.deleteFriend(userId, deletedId)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))

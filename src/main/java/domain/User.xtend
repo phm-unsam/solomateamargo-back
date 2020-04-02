@@ -20,7 +20,7 @@ class User implements Entidad{
 	@JsonIgnore Set <User> friends = new HashSet()
 	@JsonIgnore List <Purchase> purchases = new ArrayList()
 	String profilePhoto
-	double cash = 40000
+	double cash = 400000
 	@JsonIgnore ShoppingCart shoppingCart = new ShoppingCart
 	
 	
