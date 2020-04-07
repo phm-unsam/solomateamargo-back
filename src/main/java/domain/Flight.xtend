@@ -42,10 +42,6 @@ class Flight implements Entidad {
 		seats.exists[it.isAvaliable]
 	}
 
-	def isBetweenTheDates(LocalDate from, LocalDate to) {
-		(departure.isBefore(to) && departure.isAfter(from) ) || departure.equals(from) || departure.equals(to)
-	}
-
 	def reserve(Seat seat) {
 		seat.reserve
 	}
@@ -67,7 +63,7 @@ class FlightWithStopover extends Flight {
 	List<Flight> stopovers = new ArrayList
 
 	override stopoversAmount() {
-		stopovers.size - 1
+		stopovers.size 
 	}
 
 	override getFlightDuration() {
