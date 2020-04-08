@@ -17,11 +17,7 @@ class Ticket {
 	}
 
 	def reserve() {
-		flight.reserve(seat)
-	}
-
-	def quitReservation() {
-		flight.quitReservation(seat)
+		seat.reserve()
 	}
 
 }

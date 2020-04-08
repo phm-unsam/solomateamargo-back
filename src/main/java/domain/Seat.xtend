@@ -27,10 +27,4 @@ class Seat {
 
 	}
 
-	def quitReservation() {
-		avaliable
-			? throw new BusinessException("El asiento no esta reservado")
-			: avaliable = true
-	}
-
 }

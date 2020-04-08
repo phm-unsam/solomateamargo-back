@@ -42,14 +42,6 @@ class Flight implements Entidad {
 		seats.exists[it.isAvaliable]
 	}
 
-	def reserve(Seat seat) {
-		seat.reserve
-	}
-
-	def quitReservation(Seat seat) {
-		seat.quitReservation
-	}
-
 	def getSeatByNumber(String seatNumber) {
 		val seat = seats.findFirst[it.number == seatNumber]
 		if (seat === null)

@@ -3,11 +3,14 @@ package controllers
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import domain.Ticket
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
+import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
+import org.uqbar.xtrest.json.JSONUtils
 import repository.FlightRepository
 import repository.UserRepository
 import serializers.BusinessException
@@ -19,12 +22,15 @@ import serializers.TicketSerializer
 class CartController {
 	UserRepository userRepository = UserRepository.getInstance
 	FlightRepository flightRepository = FlightRepository.getInstance
-
-	@Post("/user/:userId/cart/add")
-	def Result addToCart(String flightId, String seatNumber) {
+	
+	extension JSONUtils = new JSONUtils
+	
+	@Post("/user/:userId/cart/item")
+	def Result addToCart(@Body String body) {
 		try {
+			val ticket = createTicket(body.fromJson(TicketBody))
 			val user = userRepository.searchByID(userId)
-			user.addTicketToCart(createTicket(flightId,seatNumber))
+			user.addTicketToCart(ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -33,11 +39,12 @@ class CartController {
 		}
 	}
 
-	@Post("/user/:userId/cart/remove")
-	def Result removeFromCart(String flightId, String seatNumber) {
+	@Delete("/user/:userId/cart/item")
+	def Result removeFromCart(@Body String body) {
 		try {
+			val ticket = createTicket(body.fromJson(TicketBody))
 			val user = userRepository.searchByID(userId)
-			user.removeTicketFromCart(createTicket(flightId,seatNumber))
+			user.removeTicketFromCart(ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -58,7 +65,7 @@ class CartController {
 			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
-	@Delete("/user/:userId/cart/clear")
+	@Delete("/user/:userId/cart")
 	def Result removeFromCart() {
 		try {
 			val user = userRepository.searchByID(userId)
@@ -84,11 +91,19 @@ class CartController {
 	}
 	
 
-	def createTicket(String flightId, String seatNumber) {
-		val flight = flightRepository.searchByID(flightId)
-		val seat = flight.getSeatByNumber(seatNumber)
+	def createTicket(TicketBody ticket) {
+		val flight = flightRepository.searchByID(ticket.flightId)
+		val seat = flight.getSeatByNumber(ticket.seatNumber)
 		new Ticket(flight,seat)
 
 	}
 
 }
+
+//TODO:future implementation with id
+@Accessors
+class TicketBody{
+	String seatNumber
+	String flightId
+}
+
