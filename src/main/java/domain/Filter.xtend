@@ -34,7 +34,7 @@ class FlightFilter extends Filter<Flight> {
 	}
 
 	def filterDates(Flight flight) {
-		!hasDatesToFilter || isBetweenTheDates(flight.departure)
+		!hasDatesToFilter || isBetweenTheDates(Parse.stringToLocalDateTime(flight.departure))
 	}
 	
 	def isBetweenTheDates(LocalDate flightDate) {

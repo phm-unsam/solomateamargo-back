@@ -1,6 +1,7 @@
 package domain
 
-import java.time.LocalDate
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -8,21 +9,21 @@ import serializers.NotFoundException
 
 @Accessors
 class Flight implements Entidad {
-	String planeType
-	List<Seat> seats = new ArrayList
-	Double baseCost
-	String airline
+	String id
+	@JsonIgnore String planeType
+	@JsonIgnore List<Seat> seats = new ArrayList
 	String from
 	String to
-	String id
-	LocalDate departure
+	String airline
 	int flightDuration
+	String departure
+	Double baseCost
 
 	def flightCost(Seat seat) {
 		getBaseCost + seatCost(seat)
 	}
 
-	def getSeatsAvailiables() {
+	def seatsAvailiables() {
 		seats.filter(seat|seat.avaliable)
 	}
 
@@ -31,9 +32,10 @@ class Flight implements Entidad {
 	}
 
 	def twoOrLessSeatsAvaliable() {
-		getSeatsAvailiables.size <= 2
+		seatsAvailiables.size <= 2
 	}
 
+	@JsonProperty("stopoversAmount")
 	def stopoversAmount() {
 		0
 	}
@@ -52,18 +54,18 @@ class Flight implements Entidad {
 
 @Accessors
 class FlightWithStopover extends Flight {
-	List<Flight> stopovers = new ArrayList
+	@JsonIgnore List<Flight> stopovers = new ArrayList
+
+	override getBaseCost() {
+		stopovers.fold(0.0, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90
+	}
 
 	override stopoversAmount() {
-		stopovers.size 
+		stopovers.size
 	}
 
 	override getFlightDuration() {
 		stopovers.fold(0, [totalDuration, stopover|totalDuration + stopover.flightDuration])
-	}
-
-	override getBaseCost() {
-		stopovers.fold(0.0, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90
 	}
 
 }

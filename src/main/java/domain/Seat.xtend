@@ -1,12 +1,13 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 
 @Accessors
 class Seat {
 	boolean nextoWindow
-	boolean avaliable
+	@JsonIgnore boolean avaliable
 	double cost
 	String number
 	String type

@@ -20,7 +20,7 @@ class TicketSerializer extends StdSerializer<Ticket> {
 		gen.writeStringField("flightId", value.flight.id)
 		gen.writeStringField("from", value.flight.from)
 		gen.writeStringField("to", value.flight.to)
-		gen.writeStringField("departure",Parse.getStringDateFromLocalDate(value.flight.departure))
+		gen.writeStringField("departure",value.flight.departure)
 		gen.writeStringField("airline", value.flight.airline)
 		gen.writeStringField("seatNumber", value.seat.getNumber)
 		gen.writeStringField("seatType", value.seat.type)

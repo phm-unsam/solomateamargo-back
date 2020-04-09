@@ -7,24 +7,25 @@ import domain.SeatFilter
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
+import org.uqbar.xtrest.json.JSONUtils
 import repository.FlightRepository
 import serializers.BadDateFormatException
-import serializers.FlightSerializer
 import serializers.NotFoundException
 import serializers.Parse
-import serializers.SeatSerializer
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class FlightController {
 	FlightRepository flightRepository = FlightRepository.getInstance
+	
+	extension JSONUtils = new JSONUtils
 
 	@Get("/flights")
 	def Result flightsFiltered(String dateFrom, String dateTo, String departure, String arrival) {
 		try {
 			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival)
 			val filtered = flightRepository.getFlightsFiltered (filters)			
-			ok( FlightSerializer.toJson(filtered))
+			ok(filtered.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (BadDateFormatException e) {
@@ -39,7 +40,7 @@ class FlightController {
 		try {
 			val filters = new SeatFilter(seatType,nextoWindow)
 			val seatsAvaliables = flightRepository.getSeatsFiltered(filters,flightId)
-			ok(SeatSerializer.toJson(seatsAvaliables))
+			ok(seatsAvaliables.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {

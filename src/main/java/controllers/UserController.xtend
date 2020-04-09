@@ -88,7 +88,7 @@ class UserController {
 		}
 	}
 	
-	@Post("/user/profile")
+	@Put("/user/profile")
 	def updateProfile(@Body String body) {
 		try {
 			val userBody = body.fromJson(User)
@@ -100,7 +100,7 @@ class UserController {
 		}
 	}
 	
-	@Put("/user/:userId/friend/:newFriendId")
+	@Post("/user/:userId/friend/:newFriendId")
 	def addFriend() {
 		try {
 			this.userRepository.addFriend(userId, newFriendId)
