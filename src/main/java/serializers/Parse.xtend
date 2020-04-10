@@ -17,16 +17,12 @@ class Parse {
 		date.format(formatter)
 	}
 
-	static def getStringTimeFromLocalDateTime(LocalDate date) {
-		date.format(formatter)
-	}
-
 	static def stringToLocalDateTime(String date) {
 		try {
 			if (!date.nullOrEmpty)
 				LocalDate.parse(date, formatter)
 		} catch (Exception e) {
-			throw new BadDateFormatException("La fecha ingresada es incorrecta")
+			throw new BadDateFormatException(e.message)
 		}
 	}
 

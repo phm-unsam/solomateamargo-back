@@ -6,20 +6,26 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 
 @Accessors
-class ShoppingCart {
+class ShoppingCart{
 	List<Ticket> tickets = new ArrayList()
+	int currentId = 0
+	
 
 	def totalCost() {
 		tickets.fold(0.0, [total, ticket|total + ticket.cost()])
 	}
 
-	def removeTicket(Ticket ticket) {
-		tickets.removeIf[it.seat == ticket.seat]
+	def removeTicket(String id) {
+		if(!tickets.exists[it.id==id])
+			throw new BusinessException("No existe un ticket con ese id para eliminar")
+		tickets.removeIf[it.id == id]
 	}
 
 	def addTicket(Ticket ticket) {
 		if(ticketIsAlreadyAdded(ticket))
 			throw new BusinessException("El ticket ya esta en el carrito")
+		ticket.setId(currentId.toString)
+		currentId++
 		tickets.add(ticket)
 	}
 	

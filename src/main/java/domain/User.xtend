@@ -56,8 +56,8 @@ class User implements Entidad{
 		shoppingCart.addTicket(ticket)
 	}
 	
-	def removeTicketFromCart(Ticket ticket){
-		shoppingCart.removeTicket(ticket)
+	def removeTicketFromCart(String ticketId){
+		shoppingCart.removeTicket(ticketId)
 	}
 	
 	def purchaseCartTickets(){

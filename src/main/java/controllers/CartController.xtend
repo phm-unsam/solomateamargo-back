@@ -39,12 +39,11 @@ class CartController {
 		}
 	}
 
-	@Delete("/user/:userId/cart/item")
-	def Result removeFromCart(@Body String body) {
+	@Delete("/user/:userId/cart/item/:ticketId")
+	def Result removeFromCart() {
 		try {
-			val ticket = createTicket(body.fromJson(TicketBody))
 			val user = userRepository.searchByID(userId)
-			user.removeTicketFromCart(ticket)
+			user.removeTicketFromCart(ticketId)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))

@@ -3,7 +3,8 @@ package domain
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
-class Ticket {
+class Ticket implements Entidad{
+	String id
 	Flight flight
 	Seat seat
 

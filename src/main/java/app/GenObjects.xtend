@@ -87,7 +87,7 @@ class GenObjects {
 		val vuelo2 = new Flight() => [
 			from = "Buenos Aires"
 			to = "Bariloche"
-			departure = "11/7/2020"
+			departure = "11/07/2020"
 			planeType = "Avioneta"
 			baseCost = 3000.0
 			flightDuration = 4
