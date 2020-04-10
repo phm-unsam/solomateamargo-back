@@ -17,7 +17,7 @@ class TicketSerializer extends StdSerializer<Ticket> {
 
 	override serialize(Ticket value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		gen.writeStartObject()
-		gen.writeStringField("ticketId", value.id)
+		gen.writeStringField("id", value.id)
 		gen.writeStringField("flightId", value.flight.id)
 		gen.writeStringField("from", value.flight.from)
 		gen.writeStringField("to", value.flight.to)
