@@ -26,6 +26,7 @@ class TicketSerializer extends StdSerializer<Ticket> {
 		gen.writeStringField("seatNumber", value.seat.getNumber)
 		gen.writeStringField("seatType", value.seat.type)
 		gen.writeNumberField("cost", value.cost)
+		gen.writeBooleanField("avaliable", value.seat.isAvaliable)
 		gen.writeEndObject()
 	}
 

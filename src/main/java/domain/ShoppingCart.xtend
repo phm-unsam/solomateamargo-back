@@ -40,6 +40,8 @@ class ShoppingCart{
 	def purchaseCart(){ 
 		if(tickets.isEmpty)
 			throw new BusinessException ("El carrito esta vacio")
+		if(tickets.exists[!it.seat.avaliable])
+			throw new BusinessException ("Hay tickets en el carrito no disponibles")
 		tickets.forEach[it.reserve]
 		clearCart
 	}

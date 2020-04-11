@@ -17,7 +17,7 @@ class Flight implements Entidad {
 	String airline
 	int flightDuration
 	String departure
-	Double baseCost
+	@JsonIgnore Double baseCost
 
 	def flightCost(Seat seat) {
 		getBaseCost + seatCost(seat)
@@ -50,6 +50,16 @@ class Flight implements Entidad {
 			throw new NotFoundException("El asiento no existe en este vuelo")
 		seat
 	}
+	
+	def cheapestSeat(){
+		seatsAvailiables.minBy[it.cost]
+	}
+	
+	@JsonProperty("baseCost")
+	def priceFrom(){
+		getBaseCost + cheapestSeat.cost
+	}
+	
 }
 
 @Accessors
