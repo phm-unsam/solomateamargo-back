@@ -82,7 +82,7 @@ class UserController {
 			
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
