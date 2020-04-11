@@ -15,7 +15,6 @@ import repository.FlightRepository
 import repository.UserRepository
 import serializers.BusinessException
 import serializers.Parse
-import serializers.TicketSerializer
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -81,7 +80,7 @@ class CartController {
 	def Result getShoppingCart() {
 		try {
 			val cart = userRepository.searchByID(userId).shoppingCart
-			ok(TicketSerializer.toJson(cart.tickets))
+			ok(cart.toJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
