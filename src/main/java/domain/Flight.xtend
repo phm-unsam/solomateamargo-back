@@ -17,7 +17,7 @@ class Flight implements Entidad {
 	String airline
 	int flightDuration
 	String departure
-	@JsonIgnore Double baseCost
+	Double baseCost
 
 	def flightCost(Seat seat) {
 		getBaseCost + seatCost(seat)
@@ -55,7 +55,7 @@ class Flight implements Entidad {
 		seatsAvailiables.minBy[it.cost]
 	}
 	
-	@JsonProperty("baseCost")
+	@JsonProperty("priceFrom")
 	def priceFrom(){
 		getBaseCost + cheapestSeat.cost
 	}
