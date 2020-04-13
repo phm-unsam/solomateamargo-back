@@ -36,9 +36,9 @@ class FlightController {
 	}
 
 	@Get("/flight/:flightId/seats")
-	def Result seats(String seatType, String nextoWindow) {
+	def Result seats(String seatType, String nextToWindow) {
 		try {
-			val filters = new SeatFilter(seatType,nextoWindow)
+			val filters = new SeatFilter(seatType,nextToWindow)
 			val seatsAvaliables = flightRepository.getSeatsFiltered(filters,flightId)
 			ok(seatsAvaliables.toJson)
 		} catch (NotFoundException e) {
