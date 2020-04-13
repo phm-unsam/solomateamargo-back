@@ -15,7 +15,6 @@ import repository.FlightRepository
 import repository.UserRepository
 import serializers.BusinessException
 import serializers.Parse
-import serializers.TicketSerializer
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -33,7 +32,7 @@ class CartController {
 			user.addTicketToCart(ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
@@ -46,7 +45,7 @@ class CartController {
 			user.removeTicketFromCart(ticketId)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
@@ -59,7 +58,7 @@ class CartController {
 			user.purchaseCartTickets()
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
@@ -71,7 +70,7 @@ class CartController {
 			user.shoppingCart.clearCart
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
@@ -81,9 +80,9 @@ class CartController {
 	def Result getShoppingCart() {
 		try {
 			val cart = userRepository.searchByID(userId).shoppingCart
-			ok(TicketSerializer.toJson(cart.tickets))
+			ok(cart.toJson)
 		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
+			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}

@@ -50,6 +50,16 @@ class Flight implements Entidad {
 			throw new NotFoundException("El asiento no existe en este vuelo")
 		seat
 	}
+	
+	def cheapestSeat(){
+		seatsAvailiables.minBy[it.cost]
+	}
+	
+	@JsonProperty("priceFrom")
+	def priceFrom(){
+		getBaseCost + cheapestSeat.cost
+	}
+	
 }
 
 @Accessors
