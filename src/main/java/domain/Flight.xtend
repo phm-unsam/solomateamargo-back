@@ -57,7 +57,7 @@ class Flight implements Entidad {
 	
 	@JsonProperty("priceFrom")
 	def priceFrom(){
-		getBaseCost + cheapestSeat.cost
+		flightCost(cheapestSeat)
 	}
 	
 }
