@@ -88,7 +88,7 @@ class UserController {
 		}
 	}
 	
-	@Put("/user/profile")
+	@Put("/user/:userId/profile")
 	def updateProfile(@Body String body) {
 		try {
 			val userBody = body.fromJson(User)
