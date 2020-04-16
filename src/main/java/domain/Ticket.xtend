@@ -1,5 +1,6 @@
 package domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.Parse
@@ -9,7 +10,7 @@ class Ticket implements Entidad{
 	String id
 	Flight flight
 	Seat seat
-	double finalCost
+	@JsonIgnore double finalCost
 	String purchaseDate
 
 	new(Flight _flight, Seat _seat) {
@@ -17,13 +18,19 @@ class Ticket implements Entidad{
 		seat = _seat
 	}
 
-	def cost() {
+	def getCost() {
+		purchaseDate.isNullOrEmpty ?
+		calculateFlightCost:
+		finalCost
+	}
+	
+	def calculateFlightCost(){
 		flight.flightCost(seat)
 	}
 
 	def buyTicket() {
+		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-		finalCost = cost() 
 		seat.reserve()
 	}
 

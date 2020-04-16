@@ -21,7 +21,7 @@ class TicketSerializer extends JsonSerializer<List<Ticket>>  {
 			gen.writeStringField("airline", value.flight.airline)
 			gen.writeStringField("seatNumber", value.seat.getNumber)
 			gen.writeStringField("seatType", value.seat.type)
-			gen.writeNumberField("cost", value.cost)
+			gen.writeNumberField("cost", value.getCost)
 			gen.writeBooleanField("avaliable", value.seat.isAvaliable)
 			gen.writeEndObject
 		]

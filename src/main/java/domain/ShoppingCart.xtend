@@ -15,7 +15,7 @@ class ShoppingCart{
 	@JsonIgnore int currentId = 0
 	
 	def getTotalCost() {
-		tickets.fold(0.0, [total, ticket|total + ticket.cost()])
+		tickets.fold(0.0, [total, ticket|total + ticket.getCost()])
 	}
 	
 	def getNumberOfTickets(){
