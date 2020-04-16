@@ -1,12 +1,16 @@
 package domain
 
+import java.time.LocalDate
 import org.eclipse.xtend.lib.annotations.Accessors
+import serializers.Parse
 
 @Accessors
 class Ticket implements Entidad{
 	String id
 	Flight flight
 	Seat seat
+	double finalCost
+	String purchaseDate
 
 	new(Flight _flight, Seat _seat) {
 		flight = _flight
@@ -17,7 +21,9 @@ class Ticket implements Entidad{
 		flight.flightCost(seat)
 	}
 
-	def reserve() {
+	def buyTicket() {
+		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
+		finalCost = cost() 
 		seat.reserve()
 	}
 

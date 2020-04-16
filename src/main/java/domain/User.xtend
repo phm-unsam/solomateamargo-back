@@ -18,7 +18,7 @@ class User implements Entidad{
 	String password
 	int age
 	@JsonIgnore Set <User> friends = new HashSet()
-	@JsonIgnore List <Purchase> purchases = new ArrayList()
+	@JsonIgnore List <Ticket> purchases = new ArrayList()
 	String profilePhoto
 	double cash = 60000
 	@JsonIgnore ShoppingCart shoppingCart = new ShoppingCart
@@ -64,7 +64,7 @@ class User implements Entidad{
 		if(shoppingCart.totalCost > cash)
 			throw new BusinessException("Dinero insuficiente para realizar la compra")
 		cash -= shoppingCart.totalCost
-		shoppingCart.tickets.forEach[purchases.add(new Purchase(it))]
+		purchases.addAll(shoppingCart.tickets)
 		shoppingCart.purchaseCart()
 	}
 }

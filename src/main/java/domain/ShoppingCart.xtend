@@ -49,7 +49,7 @@ class ShoppingCart{
 			throw new BusinessException ("El carrito esta vacio")
 		if(tickets.exists[!it.seat.avaliable])
 			throw new BusinessException ("Hay tickets en el carrito no disponibles")
-		tickets.forEach[it.reserve]
+		tickets.forEach[it.buyTicket]
 		clearCart
 	}
 
