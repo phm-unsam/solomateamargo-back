@@ -1,18 +1,26 @@
 package domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.ArrayList
 import java.util.List
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.TicketSerializer
 
 @Accessors
+@Entity
 class ShoppingCart{
+	@Id @GeneratedValue
+	Long id
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JsonSerialize(using = typeof(TicketSerializer))
 	List<Ticket> tickets = new ArrayList()
-	@JsonIgnore int currentId = 0
 	
 	def getTotalCost() {
 		tickets.fold(0.0, [total, ticket|total + ticket.getCost()])
@@ -31,8 +39,6 @@ class ShoppingCart{
 	def addTicket(Ticket ticket) {
 		if(ticketIsAlreadyAdded(ticket))
 			throw new BusinessException("El ticket ya esta en el carrito")
-		ticket.setId(currentId.toString)
-		currentId++
 		tickets.add(ticket)
 	}
 	

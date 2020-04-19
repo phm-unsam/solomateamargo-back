@@ -2,15 +2,26 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.ManyToOne
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.Parse
 
 @Accessors
-class Ticket implements Entidad{
-	String id
+@Entity
+class Ticket{
+	@Id @GeneratedValue
+	Long id
+	@ManyToOne
 	Flight flight
+	@ManyToOne
 	Seat seat
+	@Column
 	@JsonIgnore double finalCost
+	@Column
 	String purchaseDate
 
 	new(Flight _flight, Seat _seat) {

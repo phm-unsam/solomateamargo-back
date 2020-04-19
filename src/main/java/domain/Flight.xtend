@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
 import java.util.List
+import java.util.Set
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -26,7 +27,7 @@ class Flight{
 	@Column
 	@JsonIgnore String planeType
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JsonIgnore List<Seat> seats = new ArrayList
+	@JsonIgnore Set<Seat> seats = newHashSet
 	@Column
 	String destinationFrom
 	@Column
