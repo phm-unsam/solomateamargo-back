@@ -26,7 +26,7 @@ class FlightFilter extends Filter<Flight> {
 	}
 
 	override matchesCriteria(Flight flight) {
-		matches(flight.to, arrival) && matches(flight.from, departure) && filterDates(flight)
+		matches(flight.destinationTo, arrival) && matches(flight.destinationFrom, departure) && filterDates(flight)
 	}
 
 	def hasDatesToFilter() {

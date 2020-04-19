@@ -6,7 +6,7 @@ import domain.SeatFilter
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
 
-class FlightRepository extends Repository<Flight> {
+class FlightRepository extends RepositoryG<Flight> {
 	@Accessors String tipo = "F"
 
 	private new() {
@@ -20,33 +20,39 @@ class FlightRepository extends Repository<Flight> {
 		}
 		instance
 	}
-
-	def getAvaliableSeatsByFlightId(String flightId) {
-		val flight = searchByID(flightId)
-		if(!flight.hasSeatsAvaliables){
-			throw new NotFoundException("No hay asientos disponibles para el vuelo "+flight.id)
-		}
-			
-		flight.seatsAvailiables
+	
+	override getEntityType() {
+		Flight
 	}
 	
+	
 
-	def getAvaliableFlights() {
-		elements.filter[it.hasSeatsAvaliables].toList
-
-	}
-
-	override exceptionMsg() {
-		"No existen vuelos diponibles"
-	}
-
-	def getFlightsFiltered(FlightFilter filters) {
-		filterList(getAvaliableFlights, filters)
-	}
-
-	def getSeatsFiltered(SeatFilter filters, String flightId) {
-		var seats = getAvaliableSeatsByFlightId(flightId).toList
-		filterList(seats, filters)
-	}
+//	def getAvaliableSeatsByFlightId(String flightId) {
+//		val flight = searchByID(flightId)
+//		if(!flight.hasSeatsAvaliables){
+//			throw new NotFoundException("No hay asientos disponibles para el vuelo "+flight.id)
+//		}
+//			
+//		flight.seatsAvailiables
+//	}
+//	
+//
+//	def getAvaliableFlights() {
+//		elements.filter[it.hasSeatsAvaliables].toList
+//
+//	}
+//
+//	override exceptionMsg() {
+//		"No existen vuelos diponibles"
+//	}
+//
+//	def getFlightsFiltered(FlightFilter filters) {
+//		filterList(getAvaliableFlights, filters)
+//	}
+//
+//	def getSeatsFiltered(SeatFilter filters, String flightId) {
+//		var seats = getAvaliableSeatsByFlightId(flightId).toList
+//		filterList(seats, filters)
+//	}
 
 }

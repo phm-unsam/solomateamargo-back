@@ -4,19 +4,40 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.ArrayList
 import java.util.List
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
 
 @Accessors
-class Flight implements Entidad {
-	String id
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+
+class Flight{
+	@Id @GeneratedValue
+	Long id
+	@Column
 	@JsonIgnore String planeType
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JsonIgnore List<Seat> seats = new ArrayList
-	String from
-	String to
+	@Column
+	String destinationFrom
+	@Column
+	String destinationTo
+	@Column
 	String airline
+	@Column
 	int flightDuration
+	@Column
 	String departure
+	@Column
 	Double baseCost
 
 	def flightCost(Seat seat) {
@@ -61,9 +82,11 @@ class Flight implements Entidad {
 	}
 	
 }
-
+ 
+@Entity
 @Accessors
 class FlightWithStopover extends Flight {
+	@OneToMany(fetch=FetchType.LAZY)
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 
 	override getBaseCost() {

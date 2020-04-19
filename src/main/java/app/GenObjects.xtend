@@ -68,8 +68,8 @@ class GenObjects {
 |--------------------------------------------------------------------------*/
 
 		val vuelo1 = new Flight() => [
-			from = "Buenos Aires"
-			to = "Salta"
+			destinationFrom = "Buenos Aires"
+			destinationTo = "Salta"
 			departure = "22/05/2020"
 			planeType = "Embraer 190"
 			baseCost = 5000.0
@@ -85,8 +85,8 @@ class GenObjects {
 		]
 		
 		val vuelo2 = new Flight() => [
-			from = "Buenos Aires"
-			to = "Bariloche"
+			destinationFrom = "Buenos Aires"
+			destinationTo = "Bariloche"
 			departure = "11/07/2020"
 			planeType = "Avioneta"
 			baseCost = 3000.0
@@ -102,8 +102,8 @@ class GenObjects {
 		]
 		
 		val vuelo3 = new Flight() => [
-			from = "Buenos Aires"
-			to = "Montevideo"
+			destinationFrom = "Buenos Aires"
+			destinationTo = "Montevideo"
 			flightDuration = 1
 			departure = "22/11/2020"
 			planeType = "Boeing 737 MAX"
@@ -118,8 +118,8 @@ class GenObjects {
 			]
 		]
 		val vuelo4 = new Flight() => [
-			from = "Buenos Aires"
-			to = "Comodoro Rivadavia"
+			destinationFrom = "Buenos Aires"
+			destinationTo = "Comodoro Rivadavia"
 			flightDuration = 5
 			departure = "22/09/2020"
 			planeType = "Airbus 340"
@@ -134,8 +134,8 @@ class GenObjects {
 			]
 		]
 		val vuelo5 = new Flight() => [
-			from = "Cordoba"
-			to = "Mendoza"
+			destinationFrom = "Cordoba"
+			destinationTo = "Mendoza"
 			flightDuration = 2
 			departure = "30/01/2020"
 			planeType = "Airbus 300"
@@ -150,8 +150,8 @@ class GenObjects {
 			]
 		]
 		val vuelo6 = new Flight() => [
-			from = "Rio de janeiro"
-			to = "Panama"
+			destinationFrom = "Rio de janeiro"
+			destinationTo = "Panama"
 			flightDuration = 7
 			departure = "11/11/2020"
 			planeType = "Boeing 747"
@@ -164,8 +164,8 @@ class GenObjects {
 			]
 		]
 		val vuelo7 = new Flight() => [
-			from = "Panama"
-			to = "Los Angeles"
+			destinationFrom = "Panama"
+			destinationTo = "Los Angeles"
 			flightDuration = 9
 			departure = "14/01/2021"
 			planeType = "Boeing 747"
@@ -178,8 +178,8 @@ class GenObjects {
 			]
 		]
 		val vuelo8 = new FlightWithStopover() => [
-			from = "Rio de janeiro"
-			to = "Los Angeles"
+			destinationFrom = "Rio de janeiro"
+			destinationTo = "Los Angeles"
 			departure = "16/03/2021"
 			planeType = "Boeing 747"
 			stopovers => [
@@ -261,12 +261,7 @@ class GenObjects {
 			]
 		]
 		
-		userA.addFriend(userB)
-		userA.addFriend(userC)
-		userB.addFriend(userA)
-		userC.addFriend(userB)
-		userD.addFriend(userA)
-		userE.addFriend(userC)
+	
 		
 		repoUser => [
 			create(userA)
@@ -275,46 +270,46 @@ class GenObjects {
 			create(userD)
 			create(userE)
 		]
-/*
+/* 
 |---------------------------------------------------------------------------|
-| 					BUYING TICKETS ...								|
+| 					BUYING TICKETS ...										|
 |--------------------------------------------------------------------------*/
 		
-		var ticket = new Ticket(vuelo1,seat14)
-		userB.addTicketToCart(ticket)
-		ticket = new Ticket(vuelo1,seat15)
-		userA.addTicketToCart(ticket)
-		
-		ticket = new Ticket(vuelo2,seat24)
-		userA.addTicketToCart(ticket)
-		ticket = new Ticket(vuelo2,seat25)
-		userC.addTicketToCart(ticket)
-		
-		
-		ticket = new Ticket(vuelo3,seat35)
-		userD.addTicketToCart(ticket)
-		ticket = new Ticket(vuelo3,seat34)
-		userB.addTicketToCart(ticket)
-		
-		
-		ticket = new Ticket(vuelo4,seat44)
-		userC.addTicketToCart(ticket)
-		ticket = new Ticket(vuelo4,seat45)
-		userE.addTicketToCart(ticket)
-		
-		
-		ticket = new Ticket(vuelo5,seat54)
-		userE.addTicketToCart(ticket)
-		ticket = new Ticket(vuelo5,seat55)
-		userD.addTicketToCart(ticket)
-		
-		userA.purchaseCartTickets
-		userB.purchaseCartTickets
-		userC.purchaseCartTickets
-		userD.purchaseCartTickets
-		userE.purchaseCartTickets
+//		var ticket = new Ticket(vuelo1,seat14)
+//		userB.addTicketToCart(ticket)
+//		ticket = new Ticket(vuelo1,seat15)
+//		userA.addTicketToCart(ticket)
+//		
+//		ticket = new Ticket(vuelo2,seat24)
+//		userA.addTicketToCart(ticket)
+//		ticket = new Ticket(vuelo2,seat25)
+//		userC.addTicketToCart(ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo3,seat35)
+//		userD.addTicketToCart(ticket)
+//		ticket = new Ticket(vuelo3,seat34)
+//		userB.addTicketToCart(ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo4,seat44)
+//		userC.addTicketToCart(ticket)
+//		ticket = new Ticket(vuelo4,seat45)
+//		userE.addTicketToCart(ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo5,seat54)
+//		userE.addTicketToCart(ticket)
+//		ticket = new Ticket(vuelo5,seat55)
+//		userD.addTicketToCart(ticket)
+//		
+//		userA.purchaseCartTickets
+//		userB.purchaseCartTickets
+//		userC.purchaseCartTickets
+//		userD.purchaseCartTickets
+//		userE.purchaseCartTickets
+//		
 		
 	
-	}
-
+	} 
 }
