@@ -1,15 +1,17 @@
 package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.util.ArrayList
 import java.util.HashSet
+import java.util.List
 import java.util.Set
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
 
@@ -28,14 +30,14 @@ class User{
 	String password
 	@Column
 	int age
-	@ManyToMany(fetch=FetchType.EAGER )
+	@ManyToMany(fetch=FetchType.LAZY )
 	@JsonIgnore Set <User> friends = new HashSet()
-	//@JsonIgnore List <Ticket> purchases = new ArrayList()
+	@OneToMany(fetch=FetchType.LAZY )
+	@JsonIgnore List <Ticket> purchases = new ArrayList()
 	@Column
 	String profilePhoto
 	@Column
 	double cash = 60000
-	//@JsonIgnore ShoppingCart shoppingCart = new ShoppingCart
 	
 	
 	def isThisYou(User user) {
@@ -66,19 +68,5 @@ class User{
 		friends.contains(user)
 	}	
 	
-//	def addTicketToCart(Ticket ticket){
-//		shoppingCart.addTicket(ticket)
-//	}
-//	
-//	def removeTicketFromCart(String ticketId){
-//		shoppingCart.removeTicket(ticketId)
-//	}
-//	
-//	def purchaseCartTickets(){
-//		if(shoppingCart.totalCost > cash)
-//			throw new BusinessException("Dinero insuficiente para realizar la compra")
-//		cash -= shoppingCart.totalCost
-//		purchases.addAll(shoppingCart.tickets)
-//		shoppingCart.purchaseCart()
-//	}
+
 }

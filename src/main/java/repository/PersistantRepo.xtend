@@ -6,7 +6,7 @@ import javax.persistence.Persistence
 import javax.persistence.PersistenceException
 
 
-abstract class RepositoryG<T>{
+abstract class PersistantRepo<T>{
 	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("aterrizapp")
 	 
 	def List<T> allInstances() {

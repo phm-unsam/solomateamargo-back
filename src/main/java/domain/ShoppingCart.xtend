@@ -3,24 +3,16 @@ package domain
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.ArrayList
 import java.util.List
-import javax.persistence.CascadeType
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.TicketSerializer
 
 @Accessors
-@Entity
-class ShoppingCart{
-	@Id @GeneratedValue
-	Long id
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+class ShoppingCart implements Entidad{
+	String id
 	@JsonSerialize(using = typeof(TicketSerializer))
 	List<Ticket> tickets = new ArrayList()
+	Long userId
 	
 	def getTotalCost() {
 		tickets.fold(0.0, [total, ticket|total + ticket.getCost()])

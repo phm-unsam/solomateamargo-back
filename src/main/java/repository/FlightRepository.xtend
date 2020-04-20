@@ -6,7 +6,7 @@ import domain.SeatFilter
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
 
-class FlightRepository extends RepositoryG<Flight> {
+class FlightRepository extends PersistantRepo<Flight> {
 	@Accessors String tipo = "F"
 
 	private new() {

@@ -4,7 +4,7 @@ import domain.User
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 
-class UserRepository extends RepositoryG<User> {
+class UserRepository extends PersistantRepo<User> {
 	@Accessors String tipo = "U"
 
 	private new() {
