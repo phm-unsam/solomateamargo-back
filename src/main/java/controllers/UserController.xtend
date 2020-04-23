@@ -27,111 +27,111 @@ class UserController {
 	def login(@Body String body) {
 		try {
 			val userBody = body.fromJson(User)
-			val user = this.userRepository.match(userBody)
+			val user = this.userRepository.login(userBody)
 			if (user === null) {
 				return notFound("Username o password incorrectos")
 			}
 			return ok(UserSerializer.toJson(user))
 
 		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
+			internalServerError(e.toJson)
 		}
 	}
 
-	@Get("/user/:userId/profile")
-	def profile() {
-		try {
-			val user = this.userRepository.searchByID(userId)
-			return ok(user.toJson)
-
-		} catch (NotFoundException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	
-	@Get("/user/:userId/friends")
-	def friends() {
-		try {
-			val user = this.userRepository.searchByID(userId)
-			return ok(UserSerializer.toJson(user.friends))
-		} catch (NotFoundException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	@Get("/user/:userId/possiblefriends")
-	def possibleFriends() {
-		try {
-			val possibleFriends = this.userRepository.getPossibleFriends(userId)
-			return ok(UserSerializer.toJson(possibleFriends))
-		} catch (NotFoundException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	
-	@Put("/user/:userId/addcash")
-	def addCash(@Body String body) {
-		try {
-			val cash = body.fromJson(Double)
-			this.userRepository.addCash(userId, cash)
-			
-			return ok("{status : ok}")
-		} catch (BusinessException e) {
-			badRequest(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	
-	@Put("/user/:userId/profile")
-	def updateProfile(@Body String body) {
-		try {
-			val userBody = body.fromJson(User)
-			this.userRepository.update(userBody)
-			return ok("{status : ok}")
-			
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	
-	@Post("/user/:userId/friend/:newFriendId")
-	def addFriend() {
-		try {
-			this.userRepository.addFriend(userId, newFriendId)
-			return ok("{status : ok}")
-		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	
-	@Delete("/user/:userId/friend/:deletedId")
-	def deleteFriend() {
-		try {
-			this.userRepository.deleteFriend(userId, deletedId)
-			return ok("{status : ok}")
-		} catch (BusinessException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
-	@Get("/user/:userId/purchases")
-	def purchases() {
-		try {
-			val purchases = this.userRepository.searchByID(userId).purchases
-			return ok(PurchaseSerializer.toJson(purchases))
-		} catch (NotFoundException e) {
-			notFound(Parse.errorToJson(e.message))
-		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
-		}
-	}
+//	@Get("/user/:userId/profile")
+//	def profile() {
+//		try {
+//			val user = this.userRepository.searchByID(userId)
+//			return ok(user.toJson)
+//
+//		} catch (NotFoundException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	
+//	@Get("/user/:userId/friends")
+//	def friends() {
+//		try {
+//			val user = this.userRepository.searchByID(userId)
+//			return ok(UserSerializer.toJson(user.friends))
+//		} catch (NotFoundException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	@Get("/user/:userId/possiblefriends")
+//	def possibleFriends() {
+//		try {
+//			val possibleFriends = this.userRepository.getPossibleFriends(userId)
+//			return ok(UserSerializer.toJson(possibleFriends))
+//		} catch (NotFoundException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	
+//	@Put("/user/:userId/addcash")
+//	def addCash(@Body String body) {
+//		try {
+//			val cash = body.fromJson(Double)
+//			this.userRepository.addCash(userId, cash)
+//			
+//			return ok("{status : ok}")
+//		} catch (BusinessException e) {
+//			badRequest(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	
+//	@Put("/user/:userId/profile")
+//	def updateProfile(@Body String body) {
+//		try {
+//			val userBody = body.fromJson(User)
+//			this.userRepository.update(userBody)
+//			return ok("{status : ok}")
+//			
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	
+//	@Post("/user/:userId/friend/:newFriendId")
+//	def addFriend() {
+//		try {
+//			this.userRepository.addFriend(userId, newFriendId)
+//			return ok("{status : ok}")
+//		} catch (BusinessException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	
+//	@Delete("/user/:userId/friend/:deletedId")
+//	def deleteFriend() {
+//		try {
+//			this.userRepository.deleteFriend(userId, deletedId)
+//			return ok("{status : ok}")
+//		} catch (BusinessException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
+//	@Get("/user/:userId/purchases")
+//	def purchases() {
+//		try {
+//			val purchases = this.userRepository.searchByID(userId).purchases
+//			return ok(PurchaseSerializer.toJson(purchases))
+//		} catch (NotFoundException e) {
+//			notFound(Parse.errorToJson(e.message))
+//		} catch (Exception e) {
+//			internalServerError(Parse.errorToJson(e.message))
+//		}
+//	}
 }

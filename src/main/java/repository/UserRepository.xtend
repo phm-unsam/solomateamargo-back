@@ -1,11 +1,10 @@
 package repository
 
 import domain.User
-import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.BusinessException
+import javax.persistence.NoResultException
+import serializers.NotFoundException
 
 class UserRepository extends PersistantRepo<User> {
-	@Accessors String tipo = "U"
 
 	private new() {
 	}
@@ -18,9 +17,44 @@ class UserRepository extends PersistantRepo<User> {
 		}
 		instance
 	}
-	
+
 	override getEntityType() {
 		User
+	}
+
+	def User seatchById(Long id) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			query.select(from).where(criteria.equal(from.get("id"), id))
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager?.close
+		}
+	}
+	
+	def login(User userToLog) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+				query.select(from)
+				.where(
+					criteria.and(
+					criteria.equal(from.get("username"), userToLog.username),
+					criteria.equal(from.get("password"), userToLog.password)
+					)
+				)
+			entityManager.createQuery(query).singleResult
+		}catch(NoResultException e ){
+			throw new NotFoundException("No existe la combinacion de usuario y contraseña")
+		}
+		finally {
+			entityManager?.close
+		}
 	}
 
 //	override update(User user) { // PROB ESTO CAMBIE 
@@ -63,6 +97,5 @@ class UserRepository extends PersistantRepo<User> {
 //	def getPossibleFriends(String userId) {
 //		val friendList = searchByID(userId).friends
 //		elements.filter(user|!friendList.contains(user) && user.getId != userId).toSet
-	//}
-
+// }
 }

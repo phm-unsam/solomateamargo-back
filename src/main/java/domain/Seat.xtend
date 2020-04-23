@@ -23,6 +23,8 @@ class Seat {
 	String number
 	@Column
 	String type
+	
+	new(){}
 
 	new(boolean _nextoWindow, boolean _avaliable, double _cost, String _number, String _type) {
 		nextoWindow = _nextoWindow

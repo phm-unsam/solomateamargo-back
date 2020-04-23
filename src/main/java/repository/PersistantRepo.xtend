@@ -57,6 +57,7 @@ abstract class PersistantRepo<T>{
 			entityManager?.close
 		}
 	}
+	
 
 	def getEntityManager() {
 		entityManagerFactory.createEntityManager

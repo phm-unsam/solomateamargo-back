@@ -2,6 +2,7 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -17,12 +18,14 @@ class Ticket{
 	Long id
 	@ManyToOne
 	Flight flight
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.MERGE)
 	Seat seat
 	@Column
 	@JsonIgnore double finalCost
 	@Column
 	String purchaseDate
+	
+	new(){}
 
 	new(Flight _flight, Seat _seat) {
 		flight = _flight
@@ -42,7 +45,7 @@ class Ticket{
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-		seat.reserve()
+		seat.avaliable=false
 	}
 
 }

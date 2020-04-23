@@ -7,7 +7,7 @@ import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
 
-abstract class Repository<T extends Entidad> {
+abstract class MemoryRepository<T extends Entidad> {
 	@Accessors protected List<T> elements = new ArrayList<T>
 	protected int id = 0
 

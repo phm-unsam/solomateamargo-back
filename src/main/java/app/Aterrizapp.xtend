@@ -8,12 +8,12 @@ import org.uqbar.xtrest.api.XTRest
 class Aterrizapp {
 	def static void main(String[] args) {
 		GenObjects.generateAll
-//		XTRest.startInstance(
-//			16000,
+			XTRest.startInstance(
+			16000,
 //			new FlightController(),
-//			new UserController(),
+			new UserController()
 //			new CartController()
-//		)
+		)
 
 	}
 }

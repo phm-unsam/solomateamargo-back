@@ -5,6 +5,7 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import java.util.Set
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -32,7 +33,7 @@ class User{
 	int age
 	@ManyToMany(fetch=FetchType.LAZY )
 	@JsonIgnore Set <User> friends = new HashSet()
-	@OneToMany(fetch=FetchType.LAZY )
+	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.PERSIST)
 	@JsonIgnore List <Ticket> purchases = new ArrayList()
 	@Column
 	String profilePhoto
@@ -68,5 +69,8 @@ class User{
 		friends.contains(user)
 	}	
 	
+	def addTickets(List<Ticket> newTickets){
+		purchases.addAll(newTickets)
+	}
 
 }

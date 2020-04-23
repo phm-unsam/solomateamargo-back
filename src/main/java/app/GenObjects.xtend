@@ -7,12 +7,14 @@ import domain.Ticket
 import domain.User
 import repository.FlightRepository
 import repository.UserRepository
+import repository.ShoppingCartRepo
 
 class GenObjects {
 
 	def static generateAll() {
-		val repoFlight = FlightRepository.instance	
-		val repoUser = UserRepository.instance	
+		val repoFlight = FlightRepository.getInstance	
+		val repoUser = UserRepository.getInstance	
+		val shoppingCartRepo = ShoppingCartRepo.getInstance
 		
 /*
 |---------------------------------------------------------------------------|
@@ -261,7 +263,49 @@ class GenObjects {
 			]
 		]
 		
-	
+/* 
+|---------------------------------------------------------------------------|
+| 					BUYING TICKETS ...										|
+|--------------------------------------------------------------------------*/
+		
+		var ticket = new Ticket(vuelo1,seat14)
+		ticket.buyTicket
+		userB.purchases.add(ticket)
+//		ticket = new Ticket(vuelo1,seat15)
+//		shoppingCartRepo.addItem(userA.id,ticket)
+//		
+//		ticket = new Ticket(vuelo2,seat24)
+//		shoppingCartRepo.addItem(userA.id,ticket)
+//		ticket = new Ticket(vuelo2,seat25)
+//		shoppingCartRepo.addItem(userC.id,ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo3,seat35)
+//		shoppingCartRepo.addItem(userD.id,ticket)
+//		ticket = new Ticket(vuelo3,seat34)
+//		shoppingCartRepo.addItem(userB.id,ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo4,seat44)
+//		shoppingCartRepo.addItem(userC.id,ticket)
+//		ticket = new Ticket(vuelo4,seat45)
+//		shoppingCartRepo.addItem(userE.id,ticket)
+//		
+//		
+//		ticket = new Ticket(vuelo5,seat54)
+//		shoppingCartRepo.addItem(userE.id,ticket)
+//		ticket = new Ticket(vuelo5,seat55)
+//		shoppingCartRepo.addItem(userD.id,ticket)
+//		
+//		shoppingCartRepo =>[
+//			purchaseCartfromUser(userA)
+//			purchaseCartfromUser(userB)
+//			purchaseCartfromUser(userC)
+//			purchaseCartfromUser(userD)
+//			purchaseCartfromUser(userE)
+//			
+//		]		
+		
 		
 		repoUser => [
 			create(userA)
@@ -270,46 +314,6 @@ class GenObjects {
 			create(userD)
 			create(userE)
 		]
-/* 
-|---------------------------------------------------------------------------|
-| 					BUYING TICKETS ...										|
-|--------------------------------------------------------------------------*/
-		
-//		var ticket = new Ticket(vuelo1,seat14)
-//		userB.addTicketToCart(ticket)
-//		ticket = new Ticket(vuelo1,seat15)
-//		userA.addTicketToCart(ticket)
-//		
-//		ticket = new Ticket(vuelo2,seat24)
-//		userA.addTicketToCart(ticket)
-//		ticket = new Ticket(vuelo2,seat25)
-//		userC.addTicketToCart(ticket)
-//		
-//		
-//		ticket = new Ticket(vuelo3,seat35)
-//		userD.addTicketToCart(ticket)
-//		ticket = new Ticket(vuelo3,seat34)
-//		userB.addTicketToCart(ticket)
-//		
-//		
-//		ticket = new Ticket(vuelo4,seat44)
-//		userC.addTicketToCart(ticket)
-//		ticket = new Ticket(vuelo4,seat45)
-//		userE.addTicketToCart(ticket)
-//		
-//		
-//		ticket = new Ticket(vuelo5,seat54)
-//		userE.addTicketToCart(ticket)
-//		ticket = new Ticket(vuelo5,seat55)
-//		userD.addTicketToCart(ticket)
-//		
-//		userA.purchaseCartTickets
-//		userB.purchaseCartTickets
-//		userC.purchaseCartTickets
-//		userD.purchaseCartTickets
-//		userE.purchaseCartTickets
-//		
-		
 	
 	} 
 }
