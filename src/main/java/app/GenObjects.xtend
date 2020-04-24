@@ -270,6 +270,7 @@ class GenObjects {
 		
 		var ticket = new Ticket(vuelo1,seat14)
 		ticket.buyTicket
+		ticket.seat.avaliable=false
 		userB.purchases.add(ticket)
 //		ticket = new Ticket(vuelo1,seat15)
 //		shoppingCartRepo.addItem(userA.id,ticket)

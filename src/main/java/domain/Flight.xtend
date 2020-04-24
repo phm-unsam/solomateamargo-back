@@ -20,7 +20,6 @@ import serializers.NotFoundException
 @Accessors
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-
 class Flight{
 	@Id @GeneratedValue
 	Long id

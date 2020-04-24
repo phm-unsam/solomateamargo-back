@@ -1,8 +1,10 @@
 package repository
 
 import domain.User
-import javax.persistence.NoResultException
-import serializers.NotFoundException
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
 class UserRepository extends PersistantRepo<User> {
 
@@ -22,39 +24,46 @@ class UserRepository extends PersistantRepo<User> {
 		User
 	}
 
-	def User seatchById(Long id) {
+	def login(User userToLog) {
+		querySingleResult(loginQuery, userToLog)
+	}
+
+	def loginQuery() {
+		[ CriteriaBuilder criteria, CriteriaQuery<User> query, Root<User> from, User userToLog |
+			query.select(from).where(
+				criteria.and(
+					criteria.equal(from.get("username"), userToLog.username),
+					criteria.equal(from.get("password"), userToLog.password)
+				)
+			)
+		]
+	}
+
+	def searchById(Long id) {
 		val entityManager = this.entityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
+			from.fetch("friends", JoinType.LEFT)
+			from.fetch("purchases", JoinType.LEFT)
 			query.select(from).where(criteria.equal(from.get("id"), id))
 			entityManager.createQuery(query).singleResult
 		} finally {
 			entityManager?.close
 		}
 	}
-	
-	def login(User userToLog) {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-				query.select(from)
-				.where(
-					criteria.and(
-					criteria.equal(from.get("username"), userToLog.username),
-					criteria.equal(from.get("password"), userToLog.password)
-					)
-				)
-			entityManager.createQuery(query).singleResult
-		}catch(NoResultException e ){
-			throw new NotFoundException("No existe la combinacion de usuario y contraseña")
-		}
-		finally {
-			entityManager?.close
-		}
+
+	def addFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.addFriend(searchById(friendId))
+		update(user)
+	}
+
+	def deleteFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.deleteFriend(searchById(friendId))
+		update(user)
 	}
 
 //	override update(User user) { // PROB ESTO CAMBIE 
@@ -79,21 +88,6 @@ class UserRepository extends PersistantRepo<User> {
 //		}
 //		searchByID(userId).setCash(cashToAdd)
 //	}
-//
-//	def addFriend(String userId, String friendId) {
-//		val user = searchByID(userId)
-//		val friend = searchByID(friendId)
-//
-//		user.addFriend(friend)
-//	}
-//
-//	def deleteFriend(String userId, String friendId) {
-//		val user = searchByID(userId)
-//		val friend = searchByID(friendId)
-//
-//		user.deleteFriend(friend)
-//	}
-//
 //	def getPossibleFriends(String userId) {
 //		val friendList = searchByID(userId).friends
 //		elements.filter(user|!friendList.contains(user) && user.getId != userId).toSet
