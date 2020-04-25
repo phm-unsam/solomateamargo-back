@@ -62,6 +62,16 @@ class User {
 		purchases.addAll(newTickets)
 	}
 
-
-
+	override equals(Object obj) {
+		try {
+			val other = obj as User
+			id == other?.id
+		} catch (ClassCastException e) {
+			return false
+		}
+	}
+	
+	override hashCode() {
+		if (id !== null) id.hashCode else super.hashCode
+	}
 }

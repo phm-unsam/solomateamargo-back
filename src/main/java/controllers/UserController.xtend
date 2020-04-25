@@ -9,10 +9,13 @@ import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
+import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.json.JSONUtils
 import repository.UserRepository
 import serializers.BusinessException
+import serializers.NotFoundException
 import serializers.Parse
+import serializers.PurchaseSerializer
 import serializers.UserSerializer
 
 @Controller
@@ -46,56 +49,57 @@ class UserController {
 			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
-//	
-//	@Get("/user/:userId/friends")
-//	def friends() {
-//		try {
-//			val user = this.userRepository.searchByID(userId)
-//			return ok(UserSerializer.toJson(user.friends))
-//		} catch (NotFoundException e) {
-//			notFound(Parse.errorToJson(e.message))
-//		} catch (Exception e) {
-//			internalServerError(Parse.errorToJson(e.message))
-//		}
-//	}
-//	@Get("/user/:userId/possiblefriends")
-//	def possibleFriends() {
-//		try {
-//			val possibleFriends = this.userRepository.getPossibleFriends(userId)
-//			return ok(UserSerializer.toJson(possibleFriends))
-//		} catch (NotFoundException e) {
-//			notFound(Parse.errorToJson(e.message))
-//		} catch (Exception e) {
-//			internalServerError(Parse.errorToJson(e.message))
-//		}
-//	}
-//	
-//	@Put("/user/:userId/addcash")
-//	def addCash(@Body String body) {
-//		try {
-//			val cash = body.fromJson(Double)
-//			this.userRepository.addCash(userId, cash)
-//			
-//			return ok("{status : ok}")
-//		} catch (BusinessException e) {
-//			badRequest(Parse.errorToJson(e.message))
-//		} catch (Exception e) {
-//			internalServerError(Parse.errorToJson(e.message))
-//		}
-//	}
-//	
-//	@Put("/user/:userId/profile")
-//	def updateProfile(@Body String body) {
-//		try {
-//			val userBody = body.fromJson(User)
-//			this.userRepository.update(userBody)
-//			return ok("{status : ok}")
-//			
-//		} catch (Exception e) {
-//			internalServerError(Parse.errorToJson(e.message))
-//		}
-//	}
-//	
+	
+	@Get("/user/:userId/friends")
+	def friends() {
+		try {
+			val user = this.userRepository.searchById(Long.parseLong(userId))
+			return ok(UserSerializer.toJson(user.friends))
+		} catch (NotFoundException e) {
+			notFound(Parse.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
+
+	@Get("/user/:userId/possiblefriends")
+	def possibleFriends() {
+		try {
+			val possibleFriends = this.userRepository.getPossibleFriends(Long.parseLong(userId))
+			return ok(UserSerializer.toJson(possibleFriends))
+		} catch (NotFoundException e) {
+			notFound(Parse.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
+	
+	@Put("/user/:userId/addcash")
+	def addCash(@Body String body) {
+		try {
+			val cash = body.fromJson(Double)
+			this.userRepository.addCash(Long.parseLong(userId), cash)
+			
+			return ok("{status : ok}")
+		} catch (BusinessException e) {
+			badRequest(Parse.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
+	
+	@Put("/user/:userId/profile")
+	def updateProfile(@Body String body) {
+		try {
+			val userBody = body.fromJson(User)
+			this.userRepository.updateProfile(Long.parseLong(userId),userBody)
+			return ok("{status : ok}")
+			
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
+
 	@Post("/user/:userId/friends/:newFriendId")
 	def addFriend() {
 		try {
@@ -119,15 +123,16 @@ class UserController {
 			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
-//	@Get("/user/:userId/purchases")
-//	def purchases() {
-//		try {
-//			val purchases = this.userRepository.searchByID(userId).purchases
-//			return ok(PurchaseSerializer.toJson(purchases))
-//		} catch (NotFoundException e) {
-//			notFound(Parse.errorToJson(e.message))
-//		} catch (Exception e) {
-//			internalServerError(Parse.errorToJson(e.message))
-//		}
-//	}
+	
+	@Get("/user/:userId/purchases")
+	def purchases() {
+		try {
+			val purchases = this.userRepository.searchById(Long.parseLong(userId)).purchases
+			return ok(PurchaseSerializer.toJson(purchases))
+		} catch (NotFoundException e) {
+			notFound(Parse.errorToJson(e.message))
+		} catch (Exception e) {
+			internalServerError(Parse.errorToJson(e.message))
+		}
+	}
 }
