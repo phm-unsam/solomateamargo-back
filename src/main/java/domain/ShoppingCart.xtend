@@ -45,7 +45,7 @@ class ShoppingCart implements Entidad{
 	def purchaseCart(){ 
 		if(tickets.isEmpty)
 			throw new BusinessException ("El carrito esta vacio")
-		if(tickets.exists[!it.seat.avaliable])
+		if(tickets.exists[!it.seat.available])
 			throw new BusinessException ("Hay tickets en el carrito no disponibles")
 		tickets.forEach[it.buyTicket]
 		clearCart

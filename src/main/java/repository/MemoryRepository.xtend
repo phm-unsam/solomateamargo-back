@@ -50,8 +50,8 @@ abstract class MemoryRepository<T extends Entidad> {
 
 	def String exceptionMsg()
 
-	def <E> filterList(List<E> list, Filter<E> filters) {
+	/*def <E> filterList(List<E> list, Filter<E> filters) {
 		list.filter[filters.matchesCriteria(it)].toList
-	}
+	}*/
 }
 

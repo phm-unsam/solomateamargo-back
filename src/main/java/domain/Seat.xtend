@@ -16,19 +16,20 @@ class Seat {
 	@Column
 	boolean nextoWindow
 	@Column
-	@JsonIgnore boolean avaliable
+	@JsonIgnore boolean available
 	@Column
 	double cost
 	@Column
 	String number
 	@Column
 	String type
-	
+	@Column(name = "flight_id", insertable = false, updatable = false)
+ 	Long flight_id;
 	new(){}
 
-	new(boolean _nextoWindow, boolean _avaliable, double _cost, String _number, String _type) {
+	new(boolean _nextoWindow, boolean _available, double _cost, String _number, String _type) {
 		nextoWindow = _nextoWindow
-		avaliable = _avaliable
+		available = _available
 		cost = _cost
 		number = _number
 		type = _type
@@ -36,8 +37,8 @@ class Seat {
 	}
 
 	def reserve() {
-		avaliable
-			? avaliable = false
+		available
+			? available = false
 			: throw new BusinessException("El asiento ya esta reservado")
 
 	}

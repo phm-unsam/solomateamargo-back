@@ -8,6 +8,7 @@ import domain.User
 import repository.FlightRepository
 import repository.UserRepository
 import repository.ShoppingCartRepo
+import java.time.LocalDate
 
 class GenObjects {
 
@@ -55,13 +56,13 @@ class GenObjects {
 		val seat62 = new Seat(true,true,12000,"B10", "Business")
 		val seat63 = new Seat(false,true,15300,"F10", "First")
 		
-		val seat71 = new Seat(false,true,1200,"E10", "Economy")
-		val seat72 = new Seat(false,true,3700,"B10", "Business")
-		val seat73 = new Seat(true,true,6900,"F10", "First")
+		val seat71 = new Seat(false,false,1200,"E10", "Economy")
+		val seat72 = new Seat(false,false,3700,"B10", "Business")
+		val seat73 = new Seat(true,false,6900,"F10", "First")
 		
-		val seat81 = new Seat(true,true,10000,"E10", "Economy")
-		val seat82 = new Seat(true,true,13900,"B10", "Business")
-		val seat83 = new Seat(true,true,15760,"F10", "First")
+		val seat81 = new Seat(true,false,10000,"E10", "Economy")
+		val seat82 = new Seat(true,false,13900,"B10", "Business")
+		val seat83 = new Seat(true,false,15760,"F10", "First")
 		
 		
 /*
@@ -72,7 +73,7 @@ class GenObjects {
 		val vuelo1 = new Flight() => [
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Salta"
-			departure = "22/05/2020"
+			departure = LocalDate.parse("2020-05-22")
 			planeType = "Embraer 190"
 			baseCost = 5000.0
 			flightDuration = 3
@@ -89,7 +90,7 @@ class GenObjects {
 		val vuelo2 = new Flight() => [
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Bariloche"
-			departure = "11/07/2020"
+			departure = LocalDate.parse("2020-07-11")
 			planeType = "Avioneta"
 			baseCost = 3000.0
 			flightDuration = 4
@@ -107,7 +108,7 @@ class GenObjects {
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Montevideo"
 			flightDuration = 1
-			departure = "22/11/2020"
+			departure = LocalDate.parse("2020-11-22")
 			planeType = "Boeing 737 MAX"
 			baseCost = 23123.2
 			setAirline("Aerolineas Argentinas")
@@ -123,7 +124,7 @@ class GenObjects {
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Comodoro Rivadavia"
 			flightDuration = 5
-			departure = "22/09/2020"
+			departure = LocalDate.parse("2020-09-22")
 			planeType = "Airbus 340"
 			baseCost = 7000.0
 			setAirline("Aerolineas Argentinas")
@@ -139,7 +140,7 @@ class GenObjects {
 			destinationFrom = "Cordoba"
 			destinationTo = "Mendoza"
 			flightDuration = 2
-			departure = "30/01/2020"
+			departure = LocalDate.parse("2020-01-30")
 			planeType = "Airbus 300"
 			baseCost = 3000.0
 			setAirline("Norwegian")
@@ -155,7 +156,7 @@ class GenObjects {
 			destinationFrom = "Rio de janeiro"
 			destinationTo = "Panama"
 			flightDuration = 7
-			departure = "11/11/2020"
+			departure = LocalDate.parse("2020-11-11")
 			planeType = "Boeing 747"
 			baseCost = 10000.0
 			setAirline("American Airlines")
@@ -169,7 +170,7 @@ class GenObjects {
 			destinationFrom = "Panama"
 			destinationTo = "Los Angeles"
 			flightDuration = 9
-			departure = "14/01/2021"
+			departure = LocalDate.parse("2021-01-14")
 			planeType = "Boeing 747"
 			baseCost = 14000.0
 			setAirline("American Airlines")
@@ -179,7 +180,7 @@ class GenObjects {
 				add(seat73)
 			]
 		]
-		val vuelo8 = new FlightWithStopover() => [
+		/*val vuelo8 = new FlightWithStopover() => [
 			destinationFrom = "Rio de janeiro"
 			destinationTo = "Los Angeles"
 			departure = "16/03/2021"
@@ -194,7 +195,7 @@ class GenObjects {
 				add(seat82)
 				add(seat83)
 			]
-		]
+		]*/
 
 		repoFlight => [
 			create(vuelo1)
@@ -204,7 +205,7 @@ class GenObjects {
 			create(vuelo5)
 			create(vuelo6)
 			create(vuelo7)
-			create(vuelo8)
+			//create(vuelo8)
 			
 		]
 		

@@ -45,7 +45,7 @@ class Ticket{
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-		seat.avaliable=false
+		seat.available=false
 	}
 
 }

@@ -10,7 +10,7 @@ class Aterrizapp {
 		GenObjects.generateAll
 			XTRest.startInstance(
 			16000,
-//			new FlightController(),
+			new FlightController(),
 			new UserController()
 //			new CartController()
 		)
