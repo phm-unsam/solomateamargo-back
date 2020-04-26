@@ -104,9 +104,9 @@ class UserRepository extends PersistantRepo<User> {
 		update(user)
 	}
 	
-	def addTickets(Set<Ticket> tickets, Long userId){
+	def addTickets(Set<Ticket> tickets, double cost, Long userId){
 		val user = searchById(userId)
-		user.purchases.add(tickets.get(0))
+		user.addPurchase(tickets,cost)
 		update(user)
 	}
 

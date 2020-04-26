@@ -46,6 +46,7 @@ class FlightRepository extends PersistantRepo<Flight> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
+			from.fetch("seats", JoinType.LEFT)
 			val seats = from.joinSet("seats", JoinType.INNER)
 			val criterias = filter.filterCriteria(criteria, from)
 			

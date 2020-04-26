@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
+import serializers.BusinessException
 
 @Accessors
 @Entity
@@ -65,7 +66,10 @@ class User {
 		friends.contains(user)
 	}
 
-	def addTickets(Set<Ticket> newTickets) {
+	def addPurchase(Set<Ticket> newTickets,double cost) {
+		if(cost>cash)
+			throw new BusinessException("Dinero induficiente")
+		cash -= cost
 		purchases.addAll(newTickets)
 	}
 

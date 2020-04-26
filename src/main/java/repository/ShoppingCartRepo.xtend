@@ -55,8 +55,7 @@ class ShoppingCartRepo {
 	def purchaseCartfromUser(Long id) {
 		val cart = getUserCart(id)
 		cart.purchaseCart
-		val tickets = cart.tickets.filter[true]
-		userRepo.addTickets(tickets.toSet,id)
+		userRepo.addTickets(cart.tickets.toSet,cart.getTotalCost,id)
 		cart.clearCart
 	}
 

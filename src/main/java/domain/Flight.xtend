@@ -82,10 +82,10 @@ class Flight{
 		seatsAvailiables.minBy[it.cost]
 	}
 	
-	/* @JsonProperty("priceFrom")
+	@JsonProperty("priceFrom")
 	def priceFrom(){
 		flightCost(cheapestSeat)
-	}*/
+	}
 	
 }
  
