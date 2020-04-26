@@ -46,6 +46,7 @@ class Ticket{
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
+<<<<<<< HEAD
 		id = null
 		seat.reserve
 	}
@@ -61,6 +62,9 @@ class Ticket{
 	
 	override hashCode() {
 		if (id !== null) id.hashCode else super.hashCode
+=======
+		seat.available=false
+>>>>>>> refs/remotes/origin/entrega1-euge
 	}
 
 }

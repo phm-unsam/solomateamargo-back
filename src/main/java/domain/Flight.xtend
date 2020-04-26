@@ -16,6 +16,10 @@ import javax.persistence.InheritanceType
 import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.NotFoundException
+import javax.persistence.JoinColumn
+import java.time.LocalDate
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import serializers.LocalDateSerializer
 
 @Accessors
 @Entity
@@ -26,6 +30,7 @@ class Flight{
 	@Column
 	@JsonIgnore String planeType
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name = "flight_id")
 	@JsonIgnore Set<Seat> seats = newHashSet
 	@Column
 	String destinationFrom
@@ -36,7 +41,8 @@ class Flight{
 	@Column
 	int flightDuration
 	@Column
-	String departure
+	@JsonSerialize(using = LocalDateSerializer)  
+	LocalDate departure
 	@Column
 	Double baseCost
 
@@ -45,7 +51,7 @@ class Flight{
 	}
 
 	def seatsAvailiables() {
-		seats.filter(seat|seat.avaliable)
+		seats.filter(seat|seat.available)
 	}
 
 	def seatCost(Seat seat) {
@@ -62,7 +68,7 @@ class Flight{
 	}
 
 	def hasSeatsAvaliables() {
-		seats.exists[it.isAvaliable]
+		seats.exists[it.isAvailable]
 	}
 
 	def getSeatById(Long seatNumber) {
@@ -76,10 +82,10 @@ class Flight{
 		seatsAvailiables.minBy[it.cost]
 	}
 	
-	@JsonProperty("priceFrom")
+	/* @JsonProperty("priceFrom")
 	def priceFrom(){
 		flightCost(cheapestSeat)
-	}
+	}*/
 	
 }
  
