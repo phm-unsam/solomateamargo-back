@@ -81,24 +81,4 @@ class FlightRepository extends PersistantRepo<Flight> {
 			entityManager?.close
 		}
 	}
-	
-//
-//	def getAvaliableFlights() {
-//		elements.filter[it.hasSeatsAvaliables].toList
-//
-//	}
-//
-//	override exceptionMsg() {
-//		"No existen vuelos diponibles"
-//	}
-//
-//	def getFlightsFiltered(FlightFilter filters) {
-//		filterList(getAvaliableFlights, filters)
-//	}
-//
-//	def getSeatsFiltered(SeatFilter filters, String flightId) {
-//		var seats = getAvaliableSeatsByFlightId(flightId).toList
-//		filterList(seats, filters)
-//	}
-
 }
