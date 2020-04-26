@@ -11,8 +11,8 @@ class Aterrizapp {
 			XTRest.startInstance(
 			16000,
 //			new FlightController(),
-			new UserController()
-//			new CartController()
+			new UserController(),
+			new CartController()
 		)
 
 	}

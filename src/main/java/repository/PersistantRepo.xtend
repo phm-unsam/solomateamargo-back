@@ -5,7 +5,6 @@ import javax.persistence.EntityManagerFactory
 import javax.persistence.Persistence
 import javax.persistence.PersistenceException
 
-
 abstract class PersistantRepo<T>{
 	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("aterrizapp")
 	 
@@ -57,6 +56,8 @@ abstract class PersistantRepo<T>{
 			entityManager?.close
 		}
 	}
+	
+
 	
 
 	def getEntityManager() {

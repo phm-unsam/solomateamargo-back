@@ -1,8 +1,9 @@
 package repository
 
+import domain.Ticket
 import domain.User
-import javax.persistence.NoResultException
-import serializers.NotFoundException
+import java.util.Set
+import javax.persistence.criteria.JoinType
 
 class UserRepository extends PersistantRepo<User> {
 
@@ -22,80 +23,91 @@ class UserRepository extends PersistantRepo<User> {
 		User
 	}
 
-	def User seatchById(Long id) {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-			query.select(from).where(criteria.equal(from.get("id"), id))
-			entityManager.createQuery(query).singleResult
-		} finally {
-			entityManager?.close
-		}
-	}
-	
 	def login(User userToLog) {
 		val entityManager = this.entityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
-				query.select(from)
-				.where(
-					criteria.and(
+			query.select(from).where(
+				criteria.and(
 					criteria.equal(from.get("username"), userToLog.username),
 					criteria.equal(from.get("password"), userToLog.password)
-					)
 				)
+			)
 			entityManager.createQuery(query).singleResult
-		}catch(NoResultException e ){
-			throw new NotFoundException("No existe la combinacion de usuario y contraseña")
+		} finally {
+			entityManager?.close
 		}
-		finally {
+
+	}
+
+
+	def searchById(Long id) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			from.fetch("friends", JoinType.LEFT)
+			from.fetch("purchases", JoinType.LEFT)
+			query.select(from).where(criteria.equal(from.get("id"), id))
+			entityManager.createQuery(query).singleResult
+		} finally {
 			entityManager?.close
 		}
 	}
 
-//	override update(User user) { // PROB ESTO CAMBIE 
-//		var elementoViejo = searchByID(user.getId())
-//		user.friends = elementoViejo.friends
-//		user.purchases = elementoViejo.purchases
-//		delete(elementoViejo)
-//		create(user)
-//	}
-//
-//	def match(User userToLog) {
-//		elements.findFirst(user|user.isThisYou(userToLog))
-//	}
-//
-//	override exceptionMsg() {
-//		"Usuario no encontrado"
-//	}
-//
-//	def addCash(String userId, double cashToAdd) {
-//		if (cashToAdd <= 0) {
-//			throw new BusinessException("La suma de dinero ingresada es incorrecta")
-//		}
-//		searchByID(userId).setCash(cashToAdd)
-//	}
-//
-//	def addFriend(String userId, String friendId) {
-//		val user = searchByID(userId)
-//		val friend = searchByID(friendId)
-//
-//		user.addFriend(friend)
-//	}
-//
-//	def deleteFriend(String userId, String friendId) {
-//		val user = searchByID(userId)
-//		val friend = searchByID(friendId)
-//
-//		user.deleteFriend(friend)
-//	}
-//
-//	def getPossibleFriends(String userId) {
-//		val friendList = searchByID(userId).friends
-//		elements.filter(user|!friendList.contains(user) && user.getId != userId).toSet
-// }
+	def addFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.addFriend(searchById(friendId))
+		update(user)
+	}
+
+	def deleteFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.deleteFriend(searchById(friendId))
+		update(user)
+	}
+
+	def getPossibleFriends(Long id) {
+		val a = searchById(id)
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			from.fetch("friends",JoinType.LEFT)
+			if(a.friends.empty)
+				query.where(criteria.notEqual(from.get("id"),id))
+			else
+				query.where(criteria.not(from.get("id").in(a.friends.map[it.id].toSet)),
+					criteria.notEqual(from.get("id"),id)
+				)
+			
+			entityManager.createQuery(query).resultList.toSet
+		} finally {
+			entityManager?.close
+		}
+	}
+
+	def addCash(Long userId, double cashToAdd) {
+		val user = searchById(userId)
+		user.setCash(cashToAdd)
+		update(user)
+	}
+
+	def updateProfile(Long id, User userUpdated) {  
+		var user  = searchById(id)
+		user.age = userUpdated.age
+		user.password = userUpdated.password
+		update(user)
+	}
+	
+	def addTickets(Set<Ticket> tickets, Long userId){
+		val user = searchById(userId)
+		user.purchases.add(tickets.get(0))
+		update(user)
+	}
+
 }

@@ -1,6 +1,7 @@
 package repository
 
 import domain.Flight
+import javax.persistence.criteria.JoinType
 
 class FlightRepository extends PersistantRepo<Flight> {
 
@@ -18,6 +19,20 @@ class FlightRepository extends PersistantRepo<Flight> {
 	
 	override getEntityType() {
 		Flight
+	}
+	
+	def searchById(Long id) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			from.fetch("seats", JoinType.LEFT)
+			query.select(from).where(criteria.equal(from.get("id"), id))
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager?.close
+		}
 	}
 	
 	

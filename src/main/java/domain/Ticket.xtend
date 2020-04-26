@@ -8,6 +8,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
+import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.Parse
 
@@ -18,7 +19,7 @@ class Ticket{
 	Long id
 	@ManyToOne
 	Flight flight
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@OneToOne(cascade=CascadeType.MERGE)
 	Seat seat
 	@Column
 	@JsonIgnore double finalCost
@@ -31,7 +32,7 @@ class Ticket{
 		flight = _flight
 		seat = _seat
 	}
-
+//reveer
 	def getCost() {
 		purchaseDate.isNullOrEmpty ?
 		calculateFlightCost:
@@ -45,7 +46,21 @@ class Ticket{
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-		seat.avaliable=false
+		id = null
+		seat.reserve
+	}
+	
+	override equals(Object obj) {
+		try {
+			val other = obj as User
+			id == other?.id
+		} catch (ClassCastException e) {
+			return false
+		}
+	}
+	
+	override hashCode() {
+		if (id !== null) id.hashCode else super.hashCode
 	}
 
 }

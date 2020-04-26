@@ -13,8 +13,8 @@ class TicketSerializer extends JsonSerializer<List<Ticket>>  {
 		gen.writeStartArray()
 		tickets.forEach[value|
 			gen.writeStartObject()
-			gen.writeStringField("id", value.id)
-			gen.writeStringField("flightId", value.flight.id)
+			gen.writeNumberField("id", value.id)
+			gen.writeNumberField("flightId", value.flight.id)
 			gen.writeStringField("from", value.flight.destinationFrom)
 			gen.writeStringField("to", value.flight.destinationTo)
 			gen.writeStringField("departure",value.flight.departure)
