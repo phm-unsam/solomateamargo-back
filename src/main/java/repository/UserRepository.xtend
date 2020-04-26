@@ -1,6 +1,8 @@
 package repository
 
+import domain.Ticket
 import domain.User
+import java.util.Set
 import javax.persistence.criteria.JoinType
 
 class UserRepository extends PersistantRepo<User> {
@@ -99,6 +101,12 @@ class UserRepository extends PersistantRepo<User> {
 		var user  = searchById(id)
 		user.age = userUpdated.age
 		user.password = userUpdated.password
+		update(user)
+	}
+	
+	def addTickets(Set<Ticket> tickets, Long userId){
+		val user = searchById(userId)
+		user.purchases.add(tickets.get(0))
 		update(user)
 	}
 

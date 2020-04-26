@@ -7,7 +7,6 @@ import domain.Ticket
 import domain.User
 import repository.FlightRepository
 import repository.UserRepository
-import repository.ShoppingCartRepo
 
 class GenObjects {
 

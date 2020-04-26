@@ -2,11 +2,14 @@ package repository
 
 import domain.ShoppingCart
 import domain.Ticket
-import domain.User
+import java.util.HashSet
+import java.util.Set
+import org.eclipse.xtend.lib.annotations.Accessors
 
-class ShoppingCartRepo extends MemoryRepository<ShoppingCart>{
-	
-	
+class ShoppingCartRepo {
+	@Accessors protected Set<ShoppingCart> elements = new HashSet<ShoppingCart>
+	protected int id = 0
+	UserRepository userRepo = UserRepository.getInstance
 	private new() {
 	}
 
@@ -18,27 +21,43 @@ class ShoppingCartRepo extends MemoryRepository<ShoppingCart>{
 		}
 		instance
 	}
-	
-	
-	override getTipo() {
-		"SC"
+
+	def void create(ShoppingCart element) {
+		if (element.getId === null) {
+			id++
+			element.setId(id.toString())
+			elements.add(element)
+		} else {
+			elements.add(element)
+		}
 	}
-	
-	override exceptionMsg() {
-		"carrito no encontrado"
+
+	def searchByID(String id) {
+		elements.findFirst[it.id.contains(id)]
 	}
-	
-	def getUserCart(Long userId){
+
+	def getUserCart(Long userId) {
+		val cart = elements.findFirst[it.userId == userId]
+		if(cart === null)
+			create(new ShoppingCart(userId))
+			
 		elements.findFirst[it.userId == userId]
 	}
-	
-	def addItem(Long userId, Ticket ticket){
+
+	def removeItem(Long userId, long ticketId) {
+		getUserCart(userId).removeTicket(ticketId)
+	}
+
+	def addItem(Long userId, Ticket ticket) {
 		getUserCart(userId).addTicket(ticket)
 	}
-	
-	def purchaseCartfromUser(User user){
-		val cart = getUserCart(user.id)
+
+	def purchaseCartfromUser(Long id) {
+		val cart = getUserCart(id)
 		cart.purchaseCart
-		user.addTickets(cart.tickets)
+		val tickets = cart.tickets.filter[true]
+		userRepo.addTickets(tickets.toSet,id)
+		cart.clearCart
 	}
+
 }

@@ -46,7 +46,21 @@ class Ticket{
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-		seat.avaliable=false
+		id = null
+		seat.reserve
+	}
+	
+	override equals(Object obj) {
+		try {
+			val other = obj as User
+			id == other?.id
+		} catch (ClassCastException e) {
+			return false
+		}
+	}
+	
+	override hashCode() {
+		if (id !== null) id.hashCode else super.hashCode
 	}
 
 }

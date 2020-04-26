@@ -21,26 +21,33 @@ import serializers.NotFoundException
 class User {
 	@Id @GeneratedValue
 	Long id
+	
 	@Column
 	String name
+	
 	@Column
 	String lastName
+	
 	@Column
 	String username
+	
 	@Column
 	String password
+	
 	@Column
 	int age
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JsonIgnore Set<User> friends = new HashSet()
-
+	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JsonIgnore List<Ticket> purchases = new ArrayList()
-
+	
 	@Column
 	String profilePhoto
+	
 	@Column
 	double cash = 60000
+
 
 	def setCash(double newAmount) {
 		cash += newAmount
@@ -58,7 +65,7 @@ class User {
 		friends.contains(user)
 	}
 
-	def addTickets(List<Ticket> newTickets) {
+	def addTickets(Set<Ticket> newTickets) {
 		purchases.addAll(newTickets)
 	}
 

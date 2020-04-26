@@ -65,8 +65,8 @@ class Flight{
 		seats.exists[it.isAvaliable]
 	}
 
-	def getSeatByNumber(String seatNumber) {
-		val seat = seats.findFirst[it.number == seatNumber]
+	def getSeatById(Long seatNumber) {
+		val seat = seats.findFirst[it.id == seatNumber]
 		if (seat === null)
 			throw new NotFoundException("El asiento no existe en este vuelo")
 		seat
