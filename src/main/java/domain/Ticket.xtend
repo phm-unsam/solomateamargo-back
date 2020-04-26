@@ -14,7 +14,7 @@ import serializers.Parse
 
 @Accessors
 @Entity
-class Ticket{
+class Ticket {
 	@Id @GeneratedValue
 	Long id
 	@ManyToOne
@@ -25,32 +25,33 @@ class Ticket{
 	@JsonIgnore double finalCost
 	@Column
 	String purchaseDate
-	
-	new(){}
+
+	new() {
+	}
 
 	new(Flight _flight, Seat _seat) {
 		flight = _flight
 		seat = _seat
 	}
+
 //reveer
 	def getCost() {
-		purchaseDate.isNullOrEmpty ?
-		calculateFlightCost:
-		finalCost
+		purchaseDate.isNullOrEmpty
+			? calculateFlightCost
+			: finalCost
 	}
-	
-	def calculateFlightCost(){
+
+	def calculateFlightCost() {
 		flight.flightCost(seat)
 	}
 
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
-<<<<<<< HEAD
 		id = null
 		seat.reserve
 	}
-	
+
 	override equals(Object obj) {
 		try {
 			val other = obj as User
@@ -59,12 +60,9 @@ class Ticket{
 			return false
 		}
 	}
-	
+
 	override hashCode() {
-		if (id !== null) id.hashCode else super.hashCode
-=======
-		seat.available=false
->>>>>>> refs/remotes/origin/entrega1-euge
+		if(id !== null) id.hashCode else super.hashCode
 	}
 
 }

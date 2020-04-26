@@ -18,7 +18,7 @@ class ShoppingCart implements Entidad {
 	def validate() {
 		if (tickets.isEmpty)
 			throw new BusinessException("El carrito esta vacio")
-		if (tickets.exists[!it.seat.avaliable])
+		if (tickets.exists[!it.seat.available])
 			throw new BusinessException("Hay tickets en el carrito no disponibles")
 	}
 
@@ -55,18 +55,9 @@ class ShoppingCart implements Entidad {
 	def clearCart() {
 		tickets.clear()
 	}
-<<<<<<< HEAD
 
 	def purchaseCart() {
 		validate
-=======
-	
-	def purchaseCart(){ 
-		if(tickets.isEmpty)
-			throw new BusinessException ("El carrito esta vacio")
-		if(tickets.exists[!it.seat.available])
-			throw new BusinessException ("Hay tickets en el carrito no disponibles")
->>>>>>> refs/remotes/origin/entrega1-euge
 		tickets.forEach[it.buyTicket]
 	}
 

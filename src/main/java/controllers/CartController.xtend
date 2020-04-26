@@ -13,14 +13,12 @@ import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.FlightRepository
 import repository.ShoppingCartRepo
-import repository.UserRepository
 import serializers.BusinessException
 import serializers.Parse
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CartController {
-	UserRepository userRepository = UserRepository.getInstance
 	FlightRepository flightRepository = FlightRepository.getInstance
 	ShoppingCartRepo cartRepository = ShoppingCartRepo.getInstance
 	

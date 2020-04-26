@@ -1,10 +1,10 @@
 package app
 
 import domain.Flight
-import domain.FlightWithStopover
 import domain.Seat
 import domain.Ticket
 import domain.User
+import java.time.LocalDate
 import repository.FlightRepository
 import repository.UserRepository
 

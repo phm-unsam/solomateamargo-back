@@ -1,17 +1,12 @@
 package repository
 
 import domain.Flight
-<<<<<<< HEAD
-import javax.persistence.criteria.JoinType
-=======
-import javax.persistence.NoResultException
-import javassist.NotFoundException
-import javax.persistence.criteria.Join
-import domain.Seat
-import javax.persistence.criteria.JoinType
 import domain.FlightFilter
+import domain.Seat
 import domain.SeatFilter
->>>>>>> refs/remotes/origin/entrega1-euge
+import javassist.NotFoundException
+import javax.persistence.NoResultException
+import javax.persistence.criteria.JoinType
 
 class FlightRepository extends PersistantRepo<Flight> {
 
@@ -31,7 +26,6 @@ class FlightRepository extends PersistantRepo<Flight> {
 		Flight
 	}
 	
-<<<<<<< HEAD
 	def searchById(Long id) {
 		val entityManager = this.entityManager
 		try {
@@ -46,7 +40,6 @@ class FlightRepository extends PersistantRepo<Flight> {
 		}
 	}
 	
-=======
 	def getAvailableFlights(FlightFilter filter) {
 		val entityManager = this.entityManager
 		try {
@@ -68,7 +61,6 @@ class FlightRepository extends PersistantRepo<Flight> {
 		}
 
 	}
->>>>>>> refs/remotes/origin/entrega1-euge
 	
 
 	def getAvaliableSeatsByFlightId(SeatFilter filter) {
