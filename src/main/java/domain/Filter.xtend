@@ -28,8 +28,9 @@ class FlightFilter extends Filter<Flight> {
 	}
 	
 	override filterCriteria(CriteriaBuilder c, Root<Flight> from) {
-		criterias.add(c.like(from.get("destinationFrom"), "%" + departure + "%"))
-		criterias.add(c.like(from.get("destinationTo"), "%" + arrival + "%"))
+		if(!departure.isNullOrEmpty) criterias.add(c.like(from.get("destinationFrom"), "%" + departure + "%")) 
+		if(!arrival.isNullOrEmpty) criterias.add(c.like(from.get("destinationTo"), "%" + arrival + "%"))
+		
 		
 		if(hasDatesToFilter){
 			criterias.add(c.greaterThan(from.get("departure"), dateFrom))
