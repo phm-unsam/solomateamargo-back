@@ -92,7 +92,7 @@ class Flight{
 @Entity
 @Accessors
 class FlightWithStopover extends Flight {
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.EAGER)
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 
 	override getBaseCost() {

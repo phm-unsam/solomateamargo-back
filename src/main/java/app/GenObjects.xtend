@@ -7,6 +7,7 @@ import domain.User
 import java.time.LocalDate
 import repository.FlightRepository
 import repository.UserRepository
+import domain.FlightWithStopover
 
 class GenObjects {
 
@@ -178,10 +179,11 @@ class GenObjects {
 				add(seat73)
 			]
 		]
-		/*val vuelo8 = new FlightWithStopover() => [
+		
+		val vuelo8 = new FlightWithStopover() => [
 			destinationFrom = "Rio de janeiro"
 			destinationTo = "Los Angeles"
-			departure = "16/03/2021"
+			departure = LocalDate.parse("2021-03-16")
 			planeType = "Boeing 747"
 			stopovers => [
 				add(vuelo6)
@@ -193,7 +195,7 @@ class GenObjects {
 				add(seat82)
 				add(seat83)
 			]
-		]*/
+		]
 
 		repoFlight => [
 			create(vuelo1)
@@ -203,7 +205,7 @@ class GenObjects {
 			create(vuelo5)
 			create(vuelo6)
 			create(vuelo7)
-			//create(vuelo8)
+			create(vuelo8)
 			
 		]
 
