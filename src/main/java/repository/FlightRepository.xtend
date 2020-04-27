@@ -76,7 +76,7 @@ class FlightRepository extends PersistantRepo<Flight> {
 			
 			entityManager.createQuery(query).resultList.toSet;
 		}catch(NoResultException e ){
-			throw new NotFoundException("No hay vuelos disponibles.")
+			throw new NotFoundException("No hay asientos disponibles.")
 		}
 		finally {
 			entityManager?.close
