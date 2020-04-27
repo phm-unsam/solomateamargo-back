@@ -2,6 +2,8 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import java.time.LocalDate
 import java.util.ArrayList
 import java.util.List
 import java.util.Set
@@ -13,16 +15,15 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.Inheritance
 import javax.persistence.InheritanceType
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
 import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.NotFoundException
-import javax.persistence.JoinColumn
-import java.time.LocalDate
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import serializers.LocalDateSerializer
+import serializers.NotFoundException
 
 @Accessors
-@Entity
+@Entity(name = "flights")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 class Flight{
 	@Id @GeneratedValue
@@ -93,6 +94,7 @@ class Flight{
 @Accessors
 class FlightWithStopover extends Flight {
 	@OneToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="flights_stopovers")
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 
 	override getBaseCost() {

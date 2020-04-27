@@ -13,7 +13,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.Parse
 
 @Accessors
-@Entity
+@Entity(name = "tickets")
 class Ticket {
 	@Id @GeneratedValue
 	Long id
