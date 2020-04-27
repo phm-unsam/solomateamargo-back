@@ -11,14 +11,15 @@ import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.JoinTable
 import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.NotFoundException
 import serializers.BusinessException
+import serializers.NotFoundException
 
 @Accessors
-@Entity
+@Entity(name = "users")
 class User {
 	@Id @GeneratedValue
 	Long id
@@ -38,9 +39,11 @@ class User {
 	@Column
 	int age
 	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name="friendships")
 	@JsonIgnore Set<User> friends = new HashSet()
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinTable(name="user_purchases")
 	@JsonIgnore List<Ticket> purchases = new ArrayList()
 	
 	@Column

@@ -9,7 +9,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 
 @Accessors
-@Entity
+@Entity(name = "seats")
 class Seat {
 	@Id @GeneratedValue
 	Long id
