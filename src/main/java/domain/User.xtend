@@ -17,6 +17,7 @@ import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.NotFoundException
+import javax.persistence.JoinColumn
 
 @Accessors
 @Entity(name = "users")
@@ -43,7 +44,7 @@ class User {
 	@JsonIgnore Set<User> friends = new HashSet()
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinTable(name="user_purchases")
+	@JoinColumn(name="user_id")
 	@JsonIgnore List<Ticket> purchases = new ArrayList()
 	
 	@Column
