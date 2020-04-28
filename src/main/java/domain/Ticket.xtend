@@ -54,15 +54,11 @@ class Ticket {
 
 	override equals(Object obj) {
 		try {
-			val other = obj as User
-			id == other?.id
+			val other = obj as Ticket
+			flight.id == other?.flight.id && seat.id == other?.seat.id
 		} catch (ClassCastException e) {
 			return false
 		}
-	}
-
-	override hashCode() {
-		if(id !== null) id.hashCode else super.hashCode
 	}
 
 }
