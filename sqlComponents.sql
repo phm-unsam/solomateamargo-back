@@ -23,3 +23,25 @@ inner join seats s on t.seat_id = s.id
 inner join flights f on t.flight_id = f.id
 where s.type = "first" and destinationTo= destination;
 END
+
+CREATE TABLE flights_change_audit(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    modify_date datetime NOT NULL,
+    old_destination VARCHAR(255) NOT NULL,
+    new_destination VARCHAR(255) NOT NULL
+);
+
+
+
+CREATE TRIGGER flight_change_log
+	AFTER UPDATE
+	ON aterrizapp.flights FOR EACH ROW
+
+INSERT INTO flights_change_audit
+SET modify_date = NOW(),
+	old_destination = OLD.destinationFrom,
+	new_destination = NEW.destinationFrom;
+
+
+ALTER TABLE `aterrizapp`.`users` 
+CHANGE COLUMN `cash` `cash` DOUBLE NOT NULL;
