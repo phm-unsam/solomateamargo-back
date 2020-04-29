@@ -20,7 +20,7 @@ class PurchaseSerializer extends StdSerializer<Ticket> {
 		gen.writeStringField("from", value.flight.destinationFrom)
 		gen.writeStringField("to", value.flight.destinationTo)
 		gen.writeStringField("departure",Parse.getStringDateFromLocalDate(value.flight.departure))
-		gen.writeStringField("purchaseDate", value.purchaseDate)
+		gen.writeStringField("purchaseDate", Parse.getStringDateFromLocalDate(value.purchaseDate))
 		gen.writeStringField("airline", value.flight.airline)
 		gen.writeNumberField("cost", value.getCost)
 		gen.writeEndObject()

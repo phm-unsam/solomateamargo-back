@@ -10,7 +10,6 @@ import javax.persistence.Id
 import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.Parse
 
 @Accessors
 @Entity(name = "tickets")
@@ -24,7 +23,7 @@ class Ticket {
 	@Column
 	@JsonIgnore double finalCost
 	@Column
-	String purchaseDate
+	LocalDate purchaseDate
 
 	new() {
 	}
@@ -36,7 +35,7 @@ class Ticket {
 
 //reveer
 	def getCost() {
-		purchaseDate.isNullOrEmpty
+		purchaseDate === null
 			? calculateFlightCost
 			: finalCost
 	}
@@ -47,7 +46,7 @@ class Ticket {
 
 	def buyTicket() {
 		finalCost = calculateFlightCost
-		purchaseDate = Parse.getStringDateFromLocalDate(LocalDate.now)
+		purchaseDate = LocalDate.now
 		id = null
 		seat.reserve
 	}
