@@ -6,7 +6,10 @@ import domain.Seat
 import domain.SeatFilter
 import javassist.NotFoundException
 import javax.persistence.NoResultException
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
 class FlightRepository extends PersistantRepo<Flight> {
 
@@ -14,7 +17,7 @@ class FlightRepository extends PersistantRepo<Flight> {
 	}
 
 	static FlightRepository instance
-
+	
 	static def getInstance() {
 		if (instance === null) {
 			instance = new FlightRepository()
@@ -26,18 +29,9 @@ class FlightRepository extends PersistantRepo<Flight> {
 		Flight
 	}
 	
-	def searchById(Long id) {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-			from.fetch("seats", JoinType.LEFT)
-			query.select(from).where(criteria.equal(from.get("id"), id))
-			entityManager.createQuery(query).singleResult
-		} finally {
-			entityManager?.close
-		}
+	override void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<Flight> query, Root<Flight> from){
+		from.fetch("seats", JoinType.LEFT)
+		query.select(from).where(builder.equal(from.get("id"), id))
 	}
 	
 	def getAvailableFlights(FlightFilter filter) {

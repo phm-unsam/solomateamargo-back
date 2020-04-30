@@ -1,25 +1,14 @@
 package repository
 
-import java.util.List
 import javax.persistence.EntityManagerFactory
 import javax.persistence.Persistence
 import javax.persistence.PersistenceException
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.Root
 
 abstract class PersistantRepo<T>{
 	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("aterrizapp")
-	 
-	def List<T> allInstances() {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-			query.select(from)
-			entityManager.createQuery(query).resultList
-		} finally {
-			entityManager?.close
-		}
-	}
 	
 	abstract def Class<T> getEntityType()
 	
@@ -57,9 +46,23 @@ abstract class PersistantRepo<T>{
 		}
 	}
 	
-
+	def searchById(Long id) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			query.select(from)
+			this.queryById(id, criteria, query, from)
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager.close
+		}
+	}
 	
-
+	def void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<T> query, Root<T> from)
+	
+	
 	def getEntityManager() {
 		entityManagerFactory.createEntityManager
 	}

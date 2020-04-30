@@ -3,7 +3,10 @@ package repository
 import domain.Ticket
 import domain.User
 import java.util.Set
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
 class UserRepository extends PersistantRepo<User> {
 
@@ -42,20 +45,10 @@ class UserRepository extends PersistantRepo<User> {
 
 	}
 
-
-	def searchById(Long id) {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-			from.fetch("friends", JoinType.LEFT)
-			from.fetch("purchases", JoinType.LEFT)
-			query.select(from).where(criteria.equal(from.get("id"), id))
-			entityManager.createQuery(query).singleResult
-		} finally {
-			entityManager?.close
-		}
+	override void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<User> query, Root<User> from) {
+		from.fetch("friends", JoinType.LEFT)
+		from.fetch("purchases", JoinType.LEFT)
+		query.select(from).where(builder.equal(from.get("id"), id))
 	}
 
 	def addFriend(Long userId, Long friendId) {
@@ -77,14 +70,15 @@ class UserRepository extends PersistantRepo<User> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
-			from.fetch("friends",JoinType.LEFT)
-			if(a.friends.empty)
-				query.where(criteria.notEqual(from.get("id"),id))
+			from.fetch("friends", JoinType.LEFT)
+			if (a.friends.empty)
+				query.where(criteria.notEqual(from.get("id"), id))
 			else
-				query.where(criteria.not(from.get("id").in(a.friends.map[it.id].toSet)),
-					criteria.notEqual(from.get("id"),id)
+				query.where(
+					criteria.not(from.get("id").in(a.friends.map[it.id].toSet)),
+					criteria.notEqual(from.get("id"), id)
 				)
-			
+
 			entityManager.createQuery(query).resultList.toSet
 		} finally {
 			entityManager?.close
@@ -97,16 +91,16 @@ class UserRepository extends PersistantRepo<User> {
 		update(user)
 	}
 
-	def updateProfile(Long id, User userUpdated) {  
-		var user  = searchById(id)
+	def updateProfile(Long id, User userUpdated) {
+		var user = searchById(id)
 		user.age = userUpdated.age
 		user.password = userUpdated.password
 		update(user)
 	}
-	
-	def addTickets(Set<Ticket> tickets, double cost, Long userId){
+
+	def addTickets(Set<Ticket> tickets, double cost, Long userId) {
 		val user = searchById(userId)
-		user.addPurchase(tickets,cost)
+		user.addPurchase(tickets, cost)
 		update(user)
 	}
 
