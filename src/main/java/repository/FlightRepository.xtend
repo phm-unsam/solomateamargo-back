@@ -3,7 +3,6 @@ package repository
 import domain.Flight
 import domain.FlightFilter
 import domain.Seat
-import domain.SeatFilter
 import javassist.NotFoundException
 import javax.persistence.NoResultException
 import javax.persistence.criteria.CriteriaBuilder
@@ -40,11 +39,12 @@ class FlightRepository extends PersistantRepo<Flight> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
-			from.fetch("seats", JoinType.LEFT)
-			val seats = from.joinSet("seats", JoinType.INNER)
-			val criterias = filter.filterCriteria(criteria, from)
 			
-			query.where(criteria.equal(seats.get("available"), 1))
+			val seats = from.joinSet("seats", JoinType.INNER)
+			from.fetch("seats", JoinType.INNER)
+			val criterias = filter.filterCriteria(criteria, from, seats)
+			
+			
 			query.where(criterias)
 			
 			entityManager.createQuery(query).resultList.toSet;
@@ -58,16 +58,13 @@ class FlightRepository extends PersistantRepo<Flight> {
 	}
 	
 
-	def getAvaliableSeatsByFlightId(SeatFilter filter) {
+	def getAvaliableSeatsByFlightId(Long flight_id) {
 		val entityManager = this.entityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(Seat)
 			val from = query.from(Seat)
-			val criterias = filter.filterCriteria(criteria, from)
-			
-			query.where(criterias)
-			
+			query.where(criteria.equal(from.get("flight_id"), flight_id))			
 			entityManager.createQuery(query).resultList.toSet;
 		}catch(NoResultException e ){
 			throw new NotFoundException("No hay asientos disponibles.")

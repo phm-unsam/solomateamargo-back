@@ -7,27 +7,30 @@ import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.Predicate
 import javax.persistence.criteria.Root
 import serializers.Parse
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.SetJoin
 
-abstract class Filter<T extends Object> {
 
-	def Set<Predicate> filterCriteria(CriteriaBuilder c, Root<T> from)
-}
-
-class FlightFilter extends Filter<Flight> {
+class FlightFilter {
 	LocalDate dateFrom
 	LocalDate dateTo
 	String departure
 	String arrival
-	Set<Predicate> criterias = new HashSet();
+	String seatType
+	String nextoWindow
 
-	new(String _dateFrom, String _dateTo, String _departure, String _arrival) {
+	new(String _dateFrom, String _dateTo, String _departure, String _arrival, String _seatType, String _nextoWindow) {
 		dateFrom = Parse.stringToLocalDateTime(_dateFrom)
 		dateTo = Parse.stringToLocalDateTime(_dateTo)
 		arrival = _arrival
 		departure = _departure
+		seatType = _seatType
+		nextoWindow = _nextoWindow
 	}
 	
-	override filterCriteria(CriteriaBuilder c, Root<Flight> from) {
+	def filterCriteria(CriteriaBuilder c, Root<Flight> from, SetJoin seats) {
+		val criterias = new HashSet();
+		
 		if(!departure.isNullOrEmpty) criterias.add(c.like(from.get("destinationFrom"), "%" + departure + "%")) 
 		if(!arrival.isNullOrEmpty) criterias.add(c.like(from.get("destinationTo"), "%" + arrival + "%"))
 		
@@ -36,7 +39,18 @@ class FlightFilter extends Filter<Flight> {
 			criterias.add(c.greaterThan(from.get("departure"), dateFrom))
 			criterias.add(c.lessThan(from.get("departure"), dateTo))
 		}
-			
+		
+		
+		criterias.add(c.equal(seats.get("available"), 1))
+		
+		if(!nextoWindow.isNullOrEmpty){
+			criterias.add(c.equal(seats.get("nextoWindow"), Boolean.parseBoolean(nextoWindow)))
+		}
+		
+		if(!seatType.isNullOrEmpty){
+			criterias.add(c.equal(seats.get("type"), seatType))
+		}
+				
 		return criterias
 	}
 	
@@ -44,33 +58,4 @@ class FlightFilter extends Filter<Flight> {
 		dateFrom !== null && dateTo !== null
 	}
 	
-}
-
-class SeatFilter extends Filter<Seat> {
-	String seatType
-	String nextoWindow
-	Long flight_id
-	Set<Predicate> criterias = new HashSet();
-
-	new(String _seatType, String _nextoWindow, String flightId) {
-		seatType = _seatType
-		nextoWindow = _nextoWindow
-		flight_id = Long.parseLong(flightId)
-	}
-	
-	override filterCriteria(CriteriaBuilder c, Root<Seat> from) {
-		if(!nextoWindow.isNullOrEmpty){
-			criterias.add(c.equal(from.get("nextoWindow"), Boolean.parseBoolean(nextoWindow)))
-		}
-		
-		if(!seatType.isNullOrEmpty){
-			criterias.add(c.equal(from.get("type"), seatType))
-		}
-		
-		
-		criterias.add(c.equal(from.get("available"), 1))
-		criterias.add(c.equal(from.get("flight_id"), flight_id))
-		return criterias
-	}
-
 }

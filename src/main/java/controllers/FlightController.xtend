@@ -12,7 +12,6 @@ import repository.FlightRepository
 import serializers.BadDateFormatException
 import serializers.NotFoundException
 import serializers.Parse
-import domain.SeatFilter
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -22,9 +21,9 @@ class FlightController {
 	extension JSONUtils = new JSONUtils
 
 	@Get("/flights")
-	def Result flightsFiltered(String dateFrom, String dateTo, String departure, String arrival) {
+	def Result flightsFiltered(String dateFrom, String dateTo, String departure, String arrival, String seatType, String nextoWindow) {
 		try {
-			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival)
+			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival, seatType, nextoWindow)
 			val filtered = flightRepository.getAvailableFlights(filters)			
 			ok(filtered.toJson)
 		} catch (NotFoundException e) {
@@ -37,10 +36,9 @@ class FlightController {
 	}
 
 	@Get("/flight/:flightId/seats")
-	def Result seats(String seatType, String nextoWindow) {
+	def Result seats() {
 		try {
-			val filters = new SeatFilter(seatType, nextoWindow, flightId)
-			val seatsAvaliables = flightRepository.getAvaliableSeatsByFlightId(filters)
+			val seatsAvaliables = flightRepository.getAvaliableSeatsByFlightId(Long.parseLong(flightId))
 			ok(seatsAvaliables.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
