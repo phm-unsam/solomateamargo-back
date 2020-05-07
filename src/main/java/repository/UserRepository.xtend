@@ -64,18 +64,18 @@ class UserRepository extends PersistantRepo<User> {
 	}
 
 	def getPossibleFriends(Long id) {
-		val a = searchById(id)
+		val user = searchById(id)
 		val entityManager = this.entityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
 			from.fetch("friends", JoinType.LEFT)
-			if (a.friends.empty)
+			if (user.friends.empty)
 				query.where(criteria.notEqual(from.get("id"), id))
 			else
 				query.where(
-					criteria.not(from.get("id").in(a.friends.map[it.id].toSet)),
+					criteria.not(from.get("id").in(user.friends.map[it.id].toSet)),
 					criteria.notEqual(from.get("id"), id)
 				)
 

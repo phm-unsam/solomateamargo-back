@@ -33,7 +33,6 @@ class Ticket {
 		seat = _seat
 	}
 
-//reveer
 	def getCost() {
 		purchaseDate === null
 			? calculateFlightCost

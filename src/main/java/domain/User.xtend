@@ -44,7 +44,6 @@ class User {
 	@JsonIgnore Set<User> friends = new HashSet()
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name="user_id")
 	@JsonIgnore List<Ticket> purchases = new ArrayList()
 	
 	@Column

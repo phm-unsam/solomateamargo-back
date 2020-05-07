@@ -35,11 +35,15 @@ class Seat {
 		type = _type
 
 	}
+	
+	def validate(){
+		if(!available)
+			throw new BusinessException("El asiento ya esta reservado")
+	}
 
 	def reserve() {
-		available
-			? available = false
-			: throw new BusinessException("El asiento ya esta reservado")
+		validate()
+		available = false
 
 	}
 
