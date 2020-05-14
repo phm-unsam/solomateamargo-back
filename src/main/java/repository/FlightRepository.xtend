@@ -64,7 +64,11 @@ class FlightRepository extends PersistantRepo<Flight> {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(Seat)
 			val from = query.from(Seat)
-			query.where(criteria.equal(from.get("flight_id"), flight_id))			
+			query.where(criteria.and(
+					criteria.equal(from.get("flight_id"), flight_id),
+					criteria.equal(from.get("available"), 1)
+				)
+			)
 			entityManager.createQuery(query).resultList.toSet;
 		}catch(NoResultException e ){
 			throw new NotFoundException("No hay asientos disponibles.")
