@@ -1,69 +1,64 @@
 package repository
 
-import javax.persistence.EntityManagerFactory
-import javax.persistence.Persistence
-import javax.persistence.PersistenceException
-import javax.persistence.criteria.CriteriaBuilder
-import javax.persistence.criteria.CriteriaQuery
-import javax.persistence.criteria.Root
+import org.mongodb.morphia.Datastore
+import org.mongodb.morphia.Morphia
+import com.mongodb.MongoClient
+import java.util.List
+import org.mongodb.morphia.query.UpdateOperations
 
 abstract class PersistantRepo<T>{
-	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("aterrizapp")
+	static protected Datastore ds
+	static Morphia morphia
 	
-	abstract def Class<T> getEntityType()
-	
-	def create(T t) {
-		val entityManager = this.entityManager
-		try {
-			entityManager => [
-				transaction.begin
-				persist(t)
-				transaction.commit
+	new() {
+		if (ds === null) {
+			val mongo = new MongoClient("localhost", 27017)
+			morphia = new Morphia => [
+				//map(Usuario).map(Libro).map(Prestamo)
+				ds = createDatastore(mongo, "aterrizapp")
+				ds.ensureIndexes
 			]
-		} catch (PersistenceException e) {
-			e.printStackTrace
-			entityManager.transaction.rollback
-			throw new RuntimeException("Ocurrió un error, la operación no puede completarse", e)
-		} finally {
-			entityManager?.close
+		}
+	}
+	
+	def T getByExample(T example) {
+		val result = searchByExample(example)
+		if (result.isEmpty) {
+			return null
+		} else {
+			return result.get(0)
 		}
 	}
 
-	def update(T t) {
-		val entityManager = this.entityManager
-		try {
-			entityManager => [
-				transaction.begin
-				merge(t)
-				transaction.commit
-			]
-		} catch (PersistenceException e) {
-			e.printStackTrace
-			entityManager.transaction.rollback
-			throw new RuntimeException("Ocurrió un error, la operación no puede completarse", e)
-		} finally {
-			entityManager?.close
+	def List<T> searchByExample(T t)
+
+	def T createIfNotExists(T t) {
+		val entidadAModificar = getByExample(t)
+		if (entidadAModificar !== null) {
+			return entidadAModificar
 		}
+		create(t)
 	}
-	
-	def searchById(Long id) {
-		val entityManager = this.entityManager
-		try {
-			val criteria = entityManager.criteriaBuilder
-			val query = criteria.createQuery(entityType)
-			val from = query.from(entityType)
-			query.select(from)
-			this.queryById(id, criteria, query, from)
-			entityManager.createQuery(query).singleResult
-		} finally {
-			entityManager.close
-		}
+
+	def void update(T t) {
+		ds.update(t, this.defineUpdateOperations(t))
 	}
-	
-	def void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<T> query, Root<T> from)
-	
-	
-	def getEntityManager() {
-		entityManagerFactory.createEntityManager
+
+	abstract def UpdateOperations<T> defineUpdateOperations(T t)
+
+	def T create(T t) {
+		ds.save(t)
+		t
 	}
+
+	def void delete(T t) {
+		ds.delete(t)
+	}
+
+	def List<T> allInstances() {
+		ds.createQuery(this.getEntityType()).asList
+	}
+
+	abstract def Class<T> getEntityType()
+	
 }

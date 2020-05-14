@@ -13,7 +13,7 @@ class GenObjects {
 
 	def static generateAll() {
 		val repoFlight = FlightRepository.getInstance
-		val repoUser = UserRepository.getInstance
+		//val repoUser = UserRepository.getInstance
 
 		/*
 		 |------------------------------------------------------------------|
@@ -215,7 +215,7 @@ class GenObjects {
 		 |--------------------------------------------------------------------------|
 		 */
 		 
-		val userA = new User() => [
+		/*val userA = new User() => [
 			name = "Ricardo"
 			lastName = "Gutierrez"
 			age = 45
@@ -264,7 +264,7 @@ class GenObjects {
 			]
 		]
 
-		repoUser => [create(userA) create(userB) create(userC) create(userD) create(userE)]
+		repoUser => [create(userA) create(userB) create(userC) create(userD) create(userE)]*/
 
 		/* 
 		 |---------------------------------------------------------------------------|
@@ -272,7 +272,7 @@ class GenObjects {
 		 |---------------------------------------------------------------------------|*/
 		 
 //-----USER A----		
-		var ticket = new Ticket(vuelo1, seat15)
+		/*var ticket = new Ticket(vuelo1, seat15)
 		ticket.buyTicket
 		userA.purchases.add(ticket)
 
@@ -319,7 +319,7 @@ class GenObjects {
 			update(userD)
 			update(userE)
 
-		]
+		]*/
 
 	}
 }

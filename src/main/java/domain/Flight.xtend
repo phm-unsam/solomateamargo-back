@@ -7,44 +7,27 @@ import java.time.LocalDate
 import java.util.ArrayList
 import java.util.List
 import java.util.Set
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Inheritance
-import javax.persistence.InheritanceType
-import javax.persistence.JoinColumn
-import javax.persistence.JoinTable
-import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.LocalDateSerializer
 import serializers.NotFoundException
+import org.mongodb.morphia.annotations.Entity
+import org.mongodb.morphia.annotations.Id
+import org.bson.types.ObjectId
+import org.mongodb.morphia.annotations.Embedded
 
 @Accessors
-@Entity(name = "flights")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Entity(value="Flights")
 class Flight{
-	@Id @GeneratedValue
-	Long id
-	@Column
+	@Id ObjectId id
 	@JsonIgnore String planeType
-	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-	@JoinColumn(name = "flight_id")
+	@Embedded
 	@JsonIgnore Set<Seat> seats = newHashSet
-	@Column
 	String destinationFrom
-	@Column
 	String destinationTo
-	@Column
 	String airline
-	@Column
 	int flightDuration
-	@Column
 	@JsonSerialize(using = LocalDateSerializer)  
 	LocalDate departure
-	@Column
 	Double baseCost
 
 	def flightCost(Seat seat) {
@@ -93,8 +76,7 @@ class Flight{
 @Entity
 @Accessors
 class FlightWithStopover extends Flight {
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="flights_stopovers")
+	@Embedded
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 
 	override getBaseCost() {
