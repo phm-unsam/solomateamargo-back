@@ -2,21 +2,49 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import java.time.LocalDate
 import java.util.ArrayList
 import java.util.List
+import java.util.Set
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.Inheritance
+import javax.persistence.InheritanceType
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
+import serializers.LocalDateSerializer
 import serializers.NotFoundException
 
 @Accessors
-class Flight implements Entidad {
-	String id
+@Entity(name = "flights")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+class Flight{
+	@Id @GeneratedValue
+	Long id
+	@Column
 	@JsonIgnore String planeType
-	@JsonIgnore List<Seat> seats = new ArrayList
-	String from
-	String to
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name = "flight_id")
+	@JsonIgnore Set<Seat> seats = newHashSet
+	@Column
+	String destinationFrom
+	@Column
+	String destinationTo
+	@Column
 	String airline
+	@Column
 	int flightDuration
-	String departure
+	@Column
+	@JsonSerialize(using = LocalDateSerializer)  
+	LocalDate departure
+	@Column
 	Double baseCost
 
 	def flightCost(Seat seat) {
@@ -24,7 +52,7 @@ class Flight implements Entidad {
 	}
 
 	def seatsAvailiables() {
-		seats.filter(seat|seat.avaliable)
+		seats.filter(seat|seat.available)
 	}
 
 	def seatCost(Seat seat) {
@@ -41,11 +69,11 @@ class Flight implements Entidad {
 	}
 
 	def hasSeatsAvaliables() {
-		seats.exists[it.isAvaliable]
+		seats.exists[it.isAvailable]
 	}
 
-	def getSeatByNumber(String seatNumber) {
-		val seat = seats.findFirst[it.number == seatNumber]
+	def getSeatById(Long seatNumber) {
+		val seat = seats.findFirst[it.id == seatNumber]
 		if (seat === null)
 			throw new NotFoundException("El asiento no existe en este vuelo")
 		seat
@@ -57,13 +85,16 @@ class Flight implements Entidad {
 	
 	@JsonProperty("priceFrom")
 	def priceFrom(){
-		getBaseCost + cheapestSeat.cost
+		flightCost(cheapestSeat)
 	}
 	
 }
-
+ 
+@Entity
 @Accessors
 class FlightWithStopover extends Flight {
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="flights_stopovers")
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 
 	override getBaseCost() {

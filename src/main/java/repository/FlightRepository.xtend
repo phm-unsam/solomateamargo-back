@@ -2,51 +2,79 @@ package repository
 
 import domain.Flight
 import domain.FlightFilter
-import domain.SeatFilter
-import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.NotFoundException
+import domain.Seat
+import javassist.NotFoundException
+import javax.persistence.NoResultException
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
-class FlightRepository extends Repository<Flight> {
-	@Accessors String tipo = "F"
+class FlightRepository extends PersistantRepo<Flight> {
 
 	private new() {
 	}
 
 	static FlightRepository instance
-
+	
 	static def getInstance() {
 		if (instance === null) {
 			instance = new FlightRepository()
 		}
 		instance
 	}
-
-	def getAvaliableSeatsByFlightId(String flightId) {
-		val flight = searchByID(flightId)
-		if(!flight.hasSeatsAvaliables){
-			throw new NotFoundException("No hay asientos disponibles para el vuelo "+flight.id)
-		}
+	
+	override getEntityType() {
+		Flight
+	}
+	
+	override void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<Flight> query, Root<Flight> from){
+		from.fetch("seats", JoinType.LEFT)
+		query.select(from).where(builder.equal(from.get("id"), id))
+	}
+	
+	def getAvailableFlights(FlightFilter filter) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
 			
-		flight.seatsAvailiables
+			val seats = from.joinSet("seats", JoinType.INNER)
+			from.fetch("seats", JoinType.INNER)
+			val criterias = filter.filterCriteria(criteria, from, seats)
+			
+			
+			query.where(criterias)
+			
+			entityManager.createQuery(query).resultList.toSet;
+		}catch(NoResultException e ){
+			throw new NotFoundException("No hay vuelos disponibles.")
+		}
+		finally {
+			entityManager?.close
+		}
+
 	}
 	
 
-	def getAvaliableFlights() {
-		elements.filter[it.hasSeatsAvaliables].toList
-
+	def getAvaliableSeatsByFlightId(Long flight_id) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(Seat)
+			val from = query.from(Seat)
+			query.where(criteria.and(
+					criteria.equal(from.get("flight_id"), flight_id),
+					criteria.equal(from.get("available"), 1)
+				)
+			)
+			entityManager.createQuery(query).resultList.toSet;
+		}catch(NoResultException e ){
+			throw new NotFoundException("No hay asientos disponibles.")
+		}
+		finally {
+			entityManager?.close
+		}
 	}
-
-	override exceptionMsg() {
-		"No existen vuelos diponibles"
-	}
-
-	def getFlightsFiltered(FlightFilter filters) {
-		filterList(getAvaliableFlights, filters)
-	}
-
-	def getSeatsFiltered(SeatFilter filters, String flightId) {
-		var seats = getAvaliableSeatsByFlightId(flightId).toList
-		filterList(seats, filters)
-	}
-
 }

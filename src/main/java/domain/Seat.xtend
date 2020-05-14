@@ -1,30 +1,49 @@
 package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 
 @Accessors
+@Entity(name = "seats")
 class Seat {
+	@Id @GeneratedValue
+	Long id
+	@Column
 	boolean nextoWindow
-	@JsonIgnore boolean avaliable
+	@Column
+	@JsonIgnore boolean available
+	@Column
 	double cost
+	@Column
 	String number
+	@Column
 	String type
+	@Column(name = "flight_id", insertable = false, updatable = false)
+ 	Long flight_id;
+	new(){}
 
-	new(boolean _nextoWindow, boolean _avaliable, double _cost, String _number, String _type) {
+	new(boolean _nextoWindow, boolean _available, double _cost, String _number, String _type) {
 		nextoWindow = _nextoWindow
-		avaliable = _avaliable
+		available = _available
 		cost = _cost
 		number = _number
 		type = _type
 
 	}
+	
+	def validate(){
+		if(!available)
+			throw new BusinessException("El asiento ya esta reservado")
+	}
 
 	def reserve() {
-		avaliable
-			? avaliable = false
-			: throw new BusinessException("El asiento ya esta reservado")
+		validate()
+		available = false
 
 	}
 

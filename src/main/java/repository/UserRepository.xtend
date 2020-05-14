@@ -1,11 +1,14 @@
 package repository
 
+import domain.Ticket
 import domain.User
-import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.BusinessException
+import java.util.Set
+import javax.persistence.criteria.CriteriaBuilder
+import javax.persistence.criteria.CriteriaQuery
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 
-class UserRepository extends Repository<User> {
-	@Accessors String tipo = "U"
+class UserRepository extends PersistantRepo<User> {
 
 	private new() {
 	}
@@ -19,46 +22,86 @@ class UserRepository extends Repository<User> {
 		instance
 	}
 
-	override update(User user) { // PROB ESTO CAMBIE 
-		var elementoViejo = searchByID(user.getId())
-		user.friends = elementoViejo.friends
-		user.purchases = elementoViejo.purchases
-		delete(elementoViejo)
-		create(user)
+	override getEntityType() {
+		User
 	}
 
-	def match(User userToLog) {
-		elements.findFirst(user|user.isThisYou(userToLog))
-	}
-
-	override exceptionMsg() {
-		"Usuario no encontrado"
-	}
-
-	def addCash(String userId, double cashToAdd) {
-		if (cashToAdd <= 0) {
-			throw new BusinessException("La suma de dinero ingresada es incorrecta")
+	def login(User userToLog) {
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			query.select(from).where(
+				criteria.and(
+					criteria.equal(from.get("username"), userToLog.username),
+					criteria.equal(from.get("password"), userToLog.password)
+				)
+			)
+			entityManager.createQuery(query).singleResult
+		} finally {
+			entityManager?.close
 		}
-		searchByID(userId).setCash(cashToAdd)
+
 	}
 
-	def addFriend(String userId, String friendId) {
-		val user = searchByID(userId)
-		val friend = searchByID(friendId)
-
-		user.addFriend(friend)
+	override void queryById(Long id, CriteriaBuilder builder, CriteriaQuery<User> query, Root<User> from) {
+		from.fetch("friends", JoinType.LEFT)
+		from.fetch("purchases", JoinType.LEFT)
+		query.select(from).where(builder.equal(from.get("id"), id))
 	}
 
-	def deleteFriend(String userId, String friendId) {
-		val user = searchByID(userId)
-		val friend = searchByID(friendId)
-
-		user.deleteFriend(friend)
+	def addFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.addFriend(searchById(friendId))
+		update(user)
 	}
 
-	def getPossibleFriends(String userId) {
-		val friendList = searchByID(userId).friends
-		elements.filter(user|!friendList.contains(user) && user.getId != userId).toSet
+	def deleteFriend(Long userId, Long friendId) {
+		val user = searchById(userId)
+		user.deleteFriend(searchById(friendId))
+		update(user)
+	}
+
+	def getPossibleFriends(Long id) {
+		val user = searchById(id)
+		val entityManager = this.entityManager
+		try {
+			val criteria = entityManager.criteriaBuilder
+			val query = criteria.createQuery(entityType)
+			val from = query.from(entityType)
+			from.fetch("friends", JoinType.LEFT)
+			if (user.friends.empty)
+				query.where(criteria.notEqual(from.get("id"), id))
+			else
+				query.where(
+					criteria.not(from.get("id").in(user.friends.map[it.id].toSet)),
+					criteria.notEqual(from.get("id"), id)
+				)
+
+			entityManager.createQuery(query).resultList.toSet
+		} finally {
+			entityManager?.close
+		}
+	}
+
+	def addCash(Long userId, double cashToAdd) {
+		val user = searchById(userId)
+		user.setCash(cashToAdd)
+		update(user)
+	}
+
+	def updateProfile(Long id, User userUpdated) {
+		var user = searchById(id)
+		user.age = userUpdated.age
+		user.password = userUpdated.password
+		update(user)
+	}
+
+	def addTickets(Set<Ticket> tickets, double cost, Long userId) {
+		val user = searchById(userId)
+		user.addPurchase(tickets, cost)
+		update(user)
 	}
 
 }

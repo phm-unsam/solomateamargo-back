@@ -5,66 +5,87 @@ import java.util.ArrayList
 import java.util.HashSet
 import java.util.List
 import java.util.Set
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.JoinTable
+import javax.persistence.ManyToMany
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.NotFoundException
+import javax.persistence.JoinColumn
 
 @Accessors
-class User implements Entidad{
+@Entity(name = "users")
+class User {
+	@Id @GeneratedValue
+	Long id
+	
+	@Column
 	String name
+	
+	@Column
 	String lastName
-	String id
+	
+	@Column
 	String username
+	
+	@Column
 	String password
+	
+	@Column
 	int age
-	@JsonIgnore Set <User> friends = new HashSet()
-	@JsonIgnore List <Purchase> purchases = new ArrayList()
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name="friendships")
+	@JsonIgnore Set<User> friends = new HashSet()
+	
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnore List<Ticket> purchases = new ArrayList()
+	
+	@Column
 	String profilePhoto
+	
+	@Column
 	double cash = 60000
-	@JsonIgnore ShoppingCart shoppingCart = new ShoppingCart
-	
-	
-	def isThisYou(User user) {
-		checkUsername(user) && checkPassword(user)
-	}
-	
-	def checkPassword(User user) {
-		user.username == username
-	}
-	
-	def checkUsername(User user) {
-		user.password == password
-	}
-	
-	def setCash(double newAmount){
+
+
+	def setCash(double newAmount) {
 		cash += newAmount
 	}
-	
-	def addFriend(User newFriend){
+
+	def addFriend(User newFriend) {
 		friends.add(newFriend)
 	}
-	
-	def deleteFriend(User friend){
+
+	def deleteFriend(User friend) {
 		isMyFriend(friend) ? friends.remove(friend) : throw new NotFoundException("User not found in friend list")
 	}
-	
+
 	def isMyFriend(User user) {
 		friends.contains(user)
-	}	
-	
-	def addTicketToCart(Ticket ticket){
-		shoppingCart.addTicket(ticket)
+	}
+
+	def addPurchase(Set<Ticket> newTickets,double cost) {
+		if(cost>cash)
+			throw new BusinessException("Dinero induficiente")
+		cash -= cost
+		purchases.addAll(newTickets)
+	}
+
+	override equals(Object obj) {
+		try {
+			val other = obj as User
+			id == other?.id
+		} catch (ClassCastException e) {
+			return false
+		}
 	}
 	
-	def removeTicketFromCart(String ticketId){
-		shoppingCart.removeTicket(ticketId)
-	}
-	
-	def purchaseCartTickets(){
-		if(shoppingCart.totalCost > cash)
-			throw new BusinessException("Dinero insuficiente para realizar la compra")
-		cash -= shoppingCart.totalCost
-		shoppingCart.tickets.forEach[purchases.add(new Purchase(it))]
-		shoppingCart.purchaseCart()
+	override hashCode() {
+		if (id !== null) id.hashCode else super.hashCode
 	}
 }

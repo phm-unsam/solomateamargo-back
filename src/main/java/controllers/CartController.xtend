@@ -12,15 +12,15 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
 import repository.FlightRepository
-import repository.UserRepository
+import repository.ShoppingCartRepo
 import serializers.BusinessException
 import serializers.Parse
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CartController {
-	UserRepository userRepository = UserRepository.getInstance
 	FlightRepository flightRepository = FlightRepository.getInstance
+	ShoppingCartRepo cartRepository = ShoppingCartRepo.getInstance
 	
 	extension JSONUtils = new JSONUtils
 	
@@ -28,8 +28,7 @@ class CartController {
 	def Result addToCart(@Body String body) {
 		try {
 			val ticket = createTicket(body.fromJson(TicketBody))
-			val user = userRepository.searchByID(userId)
-			user.addTicketToCart(ticket)
+			cartRepository.addItem(Long.parseLong(userId),ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -41,8 +40,7 @@ class CartController {
 	@Delete("/user/:userId/cart/item/:ticketId")
 	def Result removeFromCart() {
 		try {
-			val user = userRepository.searchByID(userId)
-			user.removeTicketFromCart(ticketId)
+			cartRepository.removeItem(Long.parseLong(userId),Long.parseLong(ticketId))
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -54,20 +52,20 @@ class CartController {
 	@Post("/user/:userId/cart/purchase")
 	def Result purchaseCart() {
 		try {
-			val user = userRepository.searchByID(userId)
-			user.purchaseCartTickets()
+			cartRepository.purchaseCartfromUser(Long.parseLong(userId))
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
+			internalServerError(e.toJson)
 		}
 	}
+	
 	@Delete("/user/:userId/cart")
 	def Result removeFromCart() {
 		try {
-			val user = userRepository.searchByID(userId)
-			user.shoppingCart.clearCart
+			val cart = cartRepository.getUserCart(Long.parseLong(userId))
+			cart.clearCart
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -79,7 +77,7 @@ class CartController {
 	@Get("/user/:userId/cart")
 	def Result getShoppingCart() {
 		try {
-			val cart = userRepository.searchByID(userId).shoppingCart
+			val cart = cartRepository.getUserCart(Long.parseLong(userId))
 			ok(cart.toJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -90,8 +88,8 @@ class CartController {
 	
 
 	def createTicket(TicketBody ticket) {
-		val flight = flightRepository.searchByID(ticket.flightId)
-		val seat = flight.getSeatByNumber(ticket.seatNumber)
+		val flight = flightRepository.searchById(ticket.flightId)
+		val seat = flight.getSeatById(ticket.seatId)
 		new Ticket(flight,seat)
 
 	}
@@ -101,7 +99,7 @@ class CartController {
 //TODO:future implementation with id
 @Accessors
 class TicketBody{
-	String seatNumber
-	String flightId
+	Long seatId
+	Long flightId
 }
 
