@@ -16,7 +16,7 @@ import org.bson.types.ObjectId
 import org.mongodb.morphia.annotations.Embedded
 
 @Accessors
-@Entity(value="Flights")
+@Entity(value="Flights", noClassnameStored=true)
 class Flight{
 	@Id ObjectId id
 	@JsonIgnore String planeType
@@ -55,8 +55,8 @@ class Flight{
 		seats.exists[it.isAvailable]
 	}
 
-	def getSeatById(Long seatNumber) {
-		val seat = seats.findFirst[it.id == seatNumber]
+	def getSeatById(String seatNumber) {
+		val seat = seats.findFirst[it.number == seatNumber]
 		if (seat === null)
 			throw new NotFoundException("El asiento no existe en este vuelo")
 		seat
@@ -73,7 +73,6 @@ class Flight{
 	
 }
  
-@Entity
 @Accessors
 class FlightWithStopover extends Flight {
 	@Embedded

@@ -13,7 +13,7 @@ class GenObjects {
 
 	def static generateAll() {
 		val repoFlight = FlightRepository.getInstance
-		//val repoUser = UserRepository.getInstance
+		val repoUser = UserRepository.getInstance
 
 		/*
 		 |------------------------------------------------------------------|
@@ -215,7 +215,7 @@ class GenObjects {
 		 |--------------------------------------------------------------------------|
 		 */
 		 
-		/*val userA = new User() => [
+		val userA = new User() => [
 			name = "Ricardo"
 			lastName = "Gutierrez"
 			age = 45
@@ -264,7 +264,7 @@ class GenObjects {
 			]
 		]
 
-		repoUser => [create(userA) create(userB) create(userC) create(userD) create(userE)]*/
+		repoUser => [create(userA) create(userB) create(userC) create(userD) create(userE)]
 
 		/* 
 		 |---------------------------------------------------------------------------|
@@ -272,13 +272,14 @@ class GenObjects {
 		 |---------------------------------------------------------------------------|*/
 		 
 //-----USER A----		
-		/*var ticket = new Ticket(vuelo1, seat15)
+		var ticket = new Ticket(vuelo1, seat15)
 		ticket.buyTicket
 		userA.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo2, seat24)
 		ticket.buyTicket
 		userA.purchases.add(ticket)
+		
 //-----USER B----
 		ticket = new Ticket(vuelo1, seat14)
 		ticket.buyTicket
@@ -287,6 +288,7 @@ class GenObjects {
 		ticket = new Ticket(vuelo3, seat34)
 		ticket.buyTicket
 		userB.purchases.add(ticket)
+		
 //-----USER C----
 		ticket = new Ticket(vuelo2, seat25)
 		ticket.buyTicket
@@ -295,6 +297,7 @@ class GenObjects {
 		ticket = new Ticket(vuelo4, seat44)
 		ticket.buyTicket
 		userC.purchases.add(ticket)
+		
 //-----USER D----
 		ticket = new Ticket(vuelo3, seat35)
 		ticket.buyTicket
@@ -303,6 +306,7 @@ class GenObjects {
 		ticket = new Ticket(vuelo5, seat55)
 		ticket.buyTicket
 		userD.purchases.add(ticket)
+		
 //-----USER E----
 		ticket = new Ticket(vuelo4, seat45)
 		ticket.buyTicket
@@ -318,8 +322,7 @@ class GenObjects {
 			update(userC)
 			update(userD)
 			update(userE)
-
-		]*/
+		]
 
 	}
 }

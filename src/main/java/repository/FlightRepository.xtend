@@ -2,7 +2,7 @@ package repository
 
 import domain.Flight
 
-class FlightRepository extends PersistantRepo<Flight> {
+class FlightRepository extends MongoPersistantRepo<Flight> {
 	
 	static FlightRepository instance
 
