@@ -24,7 +24,8 @@ class FlightController {
 	def Result flightsFiltered(String dateFrom, String dateTo, String departure, String arrival, String seatType, String nextoWindow) {
 		try {
 			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival, seatType, nextoWindow)
-			val filtered = flightRepository.getAvailableFlights(filters)			
+			val filtered = flightRepository.getFlights(filters)
+			println(filtered)
 			ok(filtered.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -35,7 +36,7 @@ class FlightController {
 		}
 	}
 
-	@Get("/flight/:flightId/seats")
+	/*@Get("/flight/:flightId/seats")
 	def Result seats() {
 		try {
 			val seatsAvaliables = flightRepository.getAvaliableSeatsByFlightId(Long.parseLong(flightId))
@@ -45,5 +46,5 @@ class FlightController {
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
-	}
+	}*/
 }
