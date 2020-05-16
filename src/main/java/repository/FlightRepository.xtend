@@ -36,8 +36,8 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 	
 	def getFlights(FlightFilter filter){
 		val query = ds.createQuery(entityType)
-		val result = filter.filterCriteria(query)
-		result.asList.toSet
+		filter.filterCriteria(query)
+		query.asList.toSet
 	}
 
 }

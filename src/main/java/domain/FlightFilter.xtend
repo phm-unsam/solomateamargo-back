@@ -7,16 +7,16 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class FlightFilter {
-	Date dateFrom
-	Date dateTo
+	String dateFrom
+	String dateTo
 	String departure
 	String arrival
 	String seatType
 	String nextoWindow
 
 	new(String _dateFrom, String _dateTo, String _departure, String _arrival, String _seatType, String _nextoWindow) {
-		dateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(_dateFrom)
-		dateTo = new SimpleDateFormat("dd/MM/yyyy").parse(_dateTo)
+		dateFrom = _dateFrom
+		dateTo =_dateTo
 		arrival = _arrival
 		departure = _departure
 		seatType = _seatType
@@ -30,8 +30,8 @@ class FlightFilter {
 		
 		
 		if(hasDatesToFilter){
-			query.field("departure").greaterThanOrEq(dateFrom)
-			query.field("departure").lessThanOrEq(dateTo)
+			query.field("departure").greaterThanOrEq(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom))
+			query.field("departure").lessThanOrEq(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo))
 		}
 		
 		query.field("seats.available").equal(true)
@@ -43,12 +43,10 @@ class FlightFilter {
 		if(!seatType.isNullOrEmpty){
 			query.field("seats.type").equal(seatType)
 		}
-				
-		return query
 	}
 	
 	def hasDatesToFilter() {
-		dateFrom !== null && dateTo !== null
+		(dateFrom !== null) && (dateTo !== null)
 	}
 	
 }
