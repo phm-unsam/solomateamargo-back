@@ -25,7 +25,6 @@ class FlightController {
 		try {
 			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival, seatType, nextoWindow)
 			val filtered = flightRepository.getFlights(filters)
-			println(filtered)
 			ok(filtered.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))

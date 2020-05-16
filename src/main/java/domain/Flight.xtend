@@ -3,7 +3,6 @@ package domain
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import java.time.LocalDate
 import java.util.ArrayList
 import java.util.List
 import java.util.Set
@@ -14,6 +13,7 @@ import org.mongodb.morphia.annotations.Entity
 import org.mongodb.morphia.annotations.Id
 import org.bson.types.ObjectId
 import org.mongodb.morphia.annotations.Embedded
+import java.util.Date
 
 @Accessors
 @Entity(value="Flights", noClassnameStored=true)
@@ -26,9 +26,10 @@ class Flight{
 	String destinationTo
 	String airline
 	int flightDuration
-	@JsonSerialize(using = LocalDateSerializer)  
-	LocalDate departure
+	//@JsonSerialize(using = LocalDateSerializer)  
+	Date departure
 	Double baseCost
+	Double priceFrom
 
 	def flightCost(Seat seat) {
 		getBaseCost + seatCost(seat)
@@ -66,10 +67,10 @@ class Flight{
 		seatsAvailiables.minBy[it.cost]
 	}
 	
-	@JsonProperty("priceFrom")
+	/* @JsonProperty("priceFrom")
 	def priceFrom(){
 		flightCost(cheapestSeat)
-	}
+	}*/
 	
 }
  
