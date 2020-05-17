@@ -2,18 +2,16 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.ArrayList
+import java.util.Date
 import java.util.List
 import java.util.Set
+import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
-import serializers.LocalDateSerializer
-import serializers.NotFoundException
+import org.mongodb.morphia.annotations.Embedded
 import org.mongodb.morphia.annotations.Entity
 import org.mongodb.morphia.annotations.Id
-import org.bson.types.ObjectId
-import org.mongodb.morphia.annotations.Embedded
-import java.util.Date
+import serializers.NotFoundException
 
 @Accessors
 @Entity(value="Flights", noClassnameStored=true)
@@ -67,10 +65,14 @@ class Flight{
 		seatsAvailiables.minBy[it.cost]
 	}
 	
-	/* @JsonProperty("priceFrom")
+	@JsonProperty("priceFrom")
 	def priceFrom(){
 		flightCost(cheapestSeat)
-	}*/
+	}
+	
+	def seatByNumber(String number){
+		seats.findFirst[it.number == number]
+	}
 	
 }
  

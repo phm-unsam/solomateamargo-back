@@ -3,7 +3,6 @@ package controllers
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import domain.Ticket
-import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Body
 import org.uqbar.xtrest.api.annotation.Controller
@@ -11,7 +10,6 @@ import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
-import repository.FlightRepository
 import repository.ShoppingCartRepo
 import serializers.BusinessException
 import serializers.Parse
@@ -19,7 +17,6 @@ import serializers.Parse
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CartController {
-	FlightRepository flightRepository = FlightRepository.getInstance
 	ShoppingCartRepo cartRepository = ShoppingCartRepo.getInstance
 	
 	extension JSONUtils = new JSONUtils
@@ -27,7 +24,7 @@ class CartController {
 	@Post("/user/:userId/cart/item")
 	def Result addToCart(@Body String body) {
 		try {
-			val ticket = createTicket(body.fromJson(TicketBody))
+			val ticket = body.fromJson(Ticket)
 			cartRepository.addItem(Long.parseLong(userId),ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
@@ -85,21 +82,5 @@ class CartController {
 			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
-	
-
-	def createTicket(TicketBody ticket) {
-		val flight = flightRepository.searchById(ticket.flightId)
-		val seat = flight.getSeatById(ticket.seatId)
-		new Ticket(flight,seat)
-
-	}
 
 }
-
-//TODO:future implementation with id
-@Accessors
-class TicketBody{
-	Long seatId
-	Long flightId
-}
-

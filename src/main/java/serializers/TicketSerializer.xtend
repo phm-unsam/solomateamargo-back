@@ -14,15 +14,15 @@ class TicketSerializer extends JsonSerializer<List<Ticket>>  {
 		tickets.forEach[value|
 			gen.writeStartObject()
 			gen.writeNumberField("id", value.id)
-			gen.writeNumberField("flightId", value.flight.id)
-			gen.writeStringField("from", value.flight.destinationFrom)
-			gen.writeStringField("to", value.flight.destinationTo)
-			gen.writeStringField("departure",Parse.getStringDateFromLocalDate(value.flight.departure))
-			gen.writeStringField("airline", value.flight.airline)
-			gen.writeStringField("seatNumber", value.seat.getNumber)
-			gen.writeStringField("seatType", value.seat.type)
+			gen.writeStringField("flightId", value.getFlight.id.toString)
+			gen.writeStringField("from", value.getFlight.destinationFrom)
+			gen.writeStringField("to", value.getFlight.destinationTo)
+			//gen.writeStringField("departure",Parse.getStringDateFromLocalDate(value.flight.departure))
+			gen.writeStringField("airline", value.getFlight.airline)
+			gen.writeStringField("seatNumber", value.getSeat.getNumber)
+			gen.writeStringField("seatType", value.getSeat.type)
 			gen.writeNumberField("cost", value.getCost)
-			gen.writeBooleanField("avaliable", value.seat.isAvailable)
+			gen.writeBooleanField("avaliable", value.getSeat.isAvailable)
 			gen.writeEndObject
 		]
 		gen.writeEndArray()

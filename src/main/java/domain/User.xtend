@@ -17,7 +17,6 @@ import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.NotFoundException
-import javax.persistence.JoinColumn
 
 @Accessors
 @Entity(name = "users")

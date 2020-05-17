@@ -2,26 +2,24 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
-import org.eclipse.xtend.lib.annotations.Accessors
 import javax.persistence.Transient
 import org.bson.types.ObjectId
+import org.eclipse.xtend.lib.annotations.Accessors
+import repository.FlightRepository
 
 @Accessors
-@Entity(name = "tickets")
+@Entity(name="tickets")
 class Ticket {
 	@Id @GeneratedValue
 	Long id
 	@Transient
 	Flight flight
 	@Transient
-	Seat seat
+	FlightRepository flightRepo
 	@Column
 	@JsonIgnore double finalCost
 	@Column
@@ -29,33 +27,40 @@ class Ticket {
 	@Column
 	ObjectId flightId
 	@Column
-	String seatId
-	
+	String seatNumber
+
+	def Flight getFlight() {
+		println("concha de la lora "+flightId)
+			flight = flightRepo.searchById(flightId)
+		flight
+	}
+
+	def getSeat() {
+		getFlight.seatByNumber(seatNumber)
+	}
+
 	new() {
 	}
 
 	new(Flight _flight, Seat _seat) {
-		flight = _flight
-		seat = _seat
 		flightId = _flight.id
-		seatId = _seat.number
+		seatNumber = _seat.number
 	}
 
 	def getCost() {
-		purchaseDate === null
-			? calculateFlightCost
-			: finalCost
+		purchaseDate === null ? calculateFlightCost : finalCost
 	}
 
 	def calculateFlightCost() {
-		flight.flightCost(seat)
+		getFlight.flightCost(getSeat)
 	}
 
 	def buyTicket() {
 		finalCost = calculateFlightCost
 		purchaseDate = LocalDate.now
 		id = null
-		seat.reserve
+		//getSeat.reserve
+		//flightRepo.update(flight)
 	}
 
 	override equals(Object obj) {

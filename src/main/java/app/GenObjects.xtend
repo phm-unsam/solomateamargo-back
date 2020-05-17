@@ -1,14 +1,13 @@
 package app
 
 import domain.Flight
+import domain.FlightWithStopover
 import domain.Seat
 import domain.Ticket
 import domain.User
-import java.time.LocalDate
+import java.text.SimpleDateFormat
 import repository.FlightRepository
 import repository.UserRepository
-import domain.FlightWithStopover
-import java.text.SimpleDateFormat
 
 class GenObjects {
 

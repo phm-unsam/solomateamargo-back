@@ -2,9 +2,11 @@ package repository
 
 import domain.Flight
 import domain.FlightFilter
+import org.bson.types.ObjectId
+import serializers.NotFoundException
 
 class FlightRepository extends MongoPersistantRepo<Flight> {
-	
+
 	static FlightRepository instance
 
 	static def getInstance() {
@@ -15,29 +17,24 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 	}
 
 	override getEntityType() { Flight }
-	
-	override searchByExample(Flight f) {
+
+	override searchById(ObjectId id) {
+		println("concha de la lora 2")
+		ds.get(Flight, id)
+	}
+
+	def void update(Flight flight) {
+		ds.update(flight, this.defineUpdateOperations(flight))
+	}
+
+	def defineUpdateOperations(Flight flight) {
+		ds.createUpdateOperations(entityType).set("seats", flight.seats)
+	}
+
+	def getFlights(FlightFilter filter) {
 		val query = ds.createQuery(entityType)
-		if(f.id !== null){
-			query.field("id").equal(f.id)
-		}
-		query.asList
-	}
-	
-	override defineUpdateOperations(Flight t) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-	
-	def createWhenNew(Flight flight) {
-		if (searchByExample(flight).isEmpty) {
-			this.create(flight)
-		}
-	}
-	
-	def getFlights(FlightFilter filter){
-		val query = ds.createQuery(entityType)
-		filter.filterCriteria(query)
-		query.asList.toSet
+		val result = filter.filterCriteria(query)
+		result.asList.toSet
 	}
 
 }
