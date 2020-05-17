@@ -17,9 +17,9 @@ class Ticket {
 	@Id @GeneratedValue
 	Long id
 	@Transient
-	Flight flight
+	Flight flight 
 	@Transient
-	FlightRepository flightRepo
+	FlightRepository flightRepo = FlightRepository.getInstance
 	@Column
 	@JsonIgnore double finalCost
 	@Column
@@ -30,9 +30,10 @@ class Ticket {
 	String seatNumber
 
 	def Flight getFlight() {
-		println("concha de la lora "+flightId)
+		if(flight === null)
 			flight = flightRepo.searchById(flightId)
 		flight
+
 	}
 
 	def getSeat() {
@@ -59,8 +60,8 @@ class Ticket {
 		finalCost = calculateFlightCost
 		purchaseDate = LocalDate.now
 		id = null
-		//getSeat.reserve
-		//flightRepo.update(flight)
+		getSeat.reserve
+		flightRepo.update(flight)
 	}
 
 	override equals(Object obj) {
