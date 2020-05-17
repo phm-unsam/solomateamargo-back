@@ -46,14 +46,14 @@ abstract class PersistantRepo<T>{
 		}
 	}
 	
-	def searchById(Long id) {
+	def searchById(String id) {
 		val entityManager = this.entityManager
 		try {
 			val criteria = entityManager.criteriaBuilder
 			val query = criteria.createQuery(entityType)
 			val from = query.from(entityType)
 			query.select(from)
-			this.queryById(id, criteria, query, from)
+			this.queryById(Long.parseLong(id), criteria, query, from)
 			entityManager.createQuery(query).singleResult
 		} finally {
 			entityManager.close

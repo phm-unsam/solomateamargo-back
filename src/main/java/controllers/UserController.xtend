@@ -17,11 +17,13 @@ import serializers.NotFoundException
 import serializers.Parse
 import serializers.PurchaseSerializer
 import serializers.UserSerializer
+import services.UserService
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class UserController {
 	UserRepository userRepository = UserRepository.getInstance
+	UserService userService = new UserService()
 	extension JSONUtils = new JSONUtils
 
 	@Post("/user/login")
@@ -40,9 +42,8 @@ class UserController {
 	@Get("/user/:userId/profile")
 	def profile() {
 		try {
-			val user = this.userRepository.searchById(Long.parseLong(userId))
+			val user = userRepository.searchById(userId)
 			return ok(user.toJson)
-
 		} catch (NoResultException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
@@ -53,8 +54,8 @@ class UserController {
 	@Get("/user/:userId/friends")
 	def friends() {
 		try {
-			val user = this.userRepository.searchById(Long.parseLong(userId))
-			return ok(UserSerializer.toJson(user.friends))
+			val friends = userService.getUserFriends(userId)
+			return ok(UserSerializer.toJson(friends))
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
@@ -65,7 +66,7 @@ class UserController {
 	@Get("/user/:userId/possiblefriends")
 	def possibleFriends() {
 		try {
-			val possibleFriends = this.userRepository.getPossibleFriends(Long.parseLong(userId))
+			val possibleFriends = this.userRepository.getPossibleFriends(userId)
 			return ok(UserSerializer.toJson(possibleFriends))
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -78,8 +79,7 @@ class UserController {
 	def addCash(@Body String body) {
 		try {
 			val cash = body.fromJson(Double)
-			this.userRepository.addCash(Long.parseLong(userId), cash)
-			
+			userService.addCash(userId, cash)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -92,7 +92,7 @@ class UserController {
 	def updateProfile(@Body String body) {
 		try {
 			val userBody = body.fromJson(User)
-			this.userRepository.updateProfile(Long.parseLong(userId),userBody)
+			userService.updateProfile(userId,userBody)
 			return ok("{status : ok}")
 			
 		} catch (Exception e) {
@@ -103,7 +103,7 @@ class UserController {
 	@Post("/user/:userId/friends/:newFriendId")
 	def addFriend() {
 		try {
-			this.userRepository.addFriend(Long.parseLong(userId), Long.parseLong(newFriendId))
+			userService.addFriend(userId, newFriendId)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -115,7 +115,7 @@ class UserController {
 	@Delete("/user/:userId/friends/:deletedId")
 	def deleteFriend() {
 		try {
-			this.userRepository.deleteFriend(Long.parseLong(userId), Long.parseLong(deletedId))
+			userService.deleteFriend(userId, deletedId)
 			return ok("{status : ok}")
 		} catch (BusinessException e) {
 			notFound(Parse.errorToJson(e.message))
@@ -127,7 +127,7 @@ class UserController {
 	@Get("/user/:userId/purchases")
 	def purchases() {
 		try {
-			val purchases = this.userRepository.searchById(Long.parseLong(userId)).purchases
+			val purchases = userService.userPurchases(userId)
 			return ok(PurchaseSerializer.toJson(purchases))
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
