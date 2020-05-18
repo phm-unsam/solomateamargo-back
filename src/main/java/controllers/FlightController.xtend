@@ -12,6 +12,7 @@ import repository.FlightRepository
 import serializers.BadDateFormatException
 import serializers.NotFoundException
 import serializers.Parse
+import org.bson.types.ObjectId
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
@@ -35,15 +36,15 @@ class FlightController {
 		}
 	}
 
-	/*@Get("/flight/:flightId/seats")
+	@Get("/flight/:flightId/seats")
 	def Result seats() {
 		try {
-			val seatsAvaliables = flightRepository.getAvaliableSeatsByFlightId(Long.parseLong(flightId))
-			ok(seatsAvaliables.toJson)
+			val seatsAvailables = flightRepository.getSeatsByFlightId(new ObjectId(flightId))
+			ok(seatsAvailables.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {
 			internalServerError(Parse.errorToJson(e.message))
 		}
-	}*/
+	}
 }

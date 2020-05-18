@@ -1,18 +1,27 @@
 package domain
 
-import java.time.LocalDate
-import serializers.Parse
+
 import org.mongodb.morphia.query.Query
 import java.text.SimpleDateFormat
-import java.util.Date
+import org.mongodb.morphia.annotations.Id
+import org.bson.types.ObjectId
+import org.mongodb.morphia.annotations.Entity
+import repository.LogRepository
 
+@Entity(value="Logs", noClassnameStored=true)
 class FlightFilter {
+	
+	new(){}
+	
+	@Id ObjectId id
+	Long userId
 	String dateFrom
 	String dateTo
 	String departure
 	String arrival
 	String seatType
 	String nextoWindow
+	LogRepository repoLog = LogRepository.instance
 
 	new(String _dateFrom, String _dateTo, String _departure, String _arrival, String _seatType, String _nextoWindow) {
 		dateFrom = _dateFrom
@@ -28,7 +37,6 @@ class FlightFilter {
 		if(!departure.isNullOrEmpty) query.field("destinationFrom").containsIgnoreCase(departure)
 		if(!arrival.isNullOrEmpty) query.field("destinationTo").containsIgnoreCase(arrival)
 		
-		
 		if(hasDatesToFilter){
 			query.field("departure").greaterThanOrEq(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom))
 			query.field("departure").lessThanOrEq(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo))
@@ -43,10 +51,16 @@ class FlightFilter {
 		if(!seatType.isNullOrEmpty){
 			query.field("seats.type").equal(seatType)
 		}
+		
+		repoLog.create(this)
 	}
 	
 	def hasDatesToFilter() {
 		(dateFrom !== null) && (dateTo !== null)
+	}
+	
+	def hasDataToFilter(){
+		hasDatesToFilter || !departure.isNullOrEmpty || !arrival.isNullOrEmpty
 	}
 	
 }
