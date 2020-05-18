@@ -30,7 +30,7 @@ class Flight{
 	Double priceFrom
 
 	def flightCost(Seat seat) {
-		getBaseCost + seatCost(seat)
+		baseCost + seatCost(seat)
 	}
 
 	def seatsAvailiables() {
@@ -80,6 +80,7 @@ class Flight{
 class FlightWithStopover extends Flight {
 	@Embedded
 	@JsonIgnore List<Flight> stopovers = new ArrayList
+	
 
 	override getBaseCost() {
 		stopovers.fold(0.0, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90

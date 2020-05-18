@@ -185,6 +185,7 @@ class GenObjects {
 			destinationTo = "Los Angeles"
 			departure = new SimpleDateFormat("dd/MM/yyyy").parse("16/03/2021")
 			planeType = "Boeing 747"
+			baseCost = 9000.0
 			stopovers => [
 				add(vuelo6)
 				add(vuelo7)
@@ -205,7 +206,7 @@ class GenObjects {
 			create(vuelo5)
 			create(vuelo6)
 			create(vuelo7)
-			//create(vuelo8)
+			create(vuelo8)
 			
 		]
 
