@@ -10,22 +10,21 @@ import org.uqbar.xtrest.api.annotation.Delete
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Post
 import org.uqbar.xtrest.json.JSONUtils
-import repository.ShoppingCartRepo
 import serializers.BusinessException
 import serializers.Parse
+import services.CartService
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class CartController {
-	ShoppingCartRepo cartRepository = ShoppingCartRepo.getInstance
-	
+	CartService cartService = new CartService()
 	extension JSONUtils = new JSONUtils
 	
 	@Post("/user/:userId/cart/item")
 	def Result addToCart(@Body String body) {
 		try {
 			val ticket = body.fromJson(Ticket)
-			cartRepository.addItem(Long.parseLong(userId),ticket)
+			cartService.addItem(userId,ticket)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -37,7 +36,7 @@ class CartController {
 	@Delete("/user/:userId/cart/item/:ticketId")
 	def Result removeFromCart() {
 		try {
-			cartRepository.removeItem(Long.parseLong(userId),Long.parseLong(ticketId))
+			cartService.removeItem(userId,Long.parseLong(ticketId))
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -49,7 +48,7 @@ class CartController {
 	@Post("/user/:userId/cart/purchase")
 	def Result purchaseCart() {
 		try {
-			cartRepository.purchaseCartfromUser(Long.parseLong(userId))
+			cartService.purchaseCartfromUser(userId)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -61,8 +60,7 @@ class CartController {
 	@Delete("/user/:userId/cart")
 	def Result removeFromCart() {
 		try {
-			val cart = cartRepository.getUserCart(Long.parseLong(userId))
-			cart.clearCart
+			cartService.cleanUserCart(userId)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -74,7 +72,7 @@ class CartController {
 	@Get("/user/:userId/cart")
 	def Result getShoppingCart() {
 		try {
-			val cart = cartRepository.getUserCart(Long.parseLong(userId))
+			val cart = cartService.getUserCart(userId)
 			ok(cart.toJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))

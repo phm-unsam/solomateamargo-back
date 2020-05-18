@@ -7,11 +7,9 @@ import serializers.BusinessException
 import serializers.TicketSerializer
 
 @Accessors
-class ShoppingCart implements Entidad {
-	String id
+class ShoppingCart {
 	@JsonSerialize(using=typeof(TicketSerializer))
 	List<Ticket> tickets = newArrayList
-	Long userId
 	
 	long idCounter = 0
 
@@ -20,10 +18,6 @@ class ShoppingCart implements Entidad {
 			throw new BusinessException("El carrito esta vacio")
 		if (tickets.exists[!it.seat.available])
 			throw new BusinessException("Hay tickets en el carrito no disponibles")
-	}
-
-	new(Long _userId) {
-		userId = _userId
 	}
 
 	def getTotalCost() {
