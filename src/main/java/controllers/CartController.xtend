@@ -29,7 +29,7 @@ class CartController {
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(Parse.errorToJson(e.message))
+			internalServerError(e.toJson)
 		}
 	}
 

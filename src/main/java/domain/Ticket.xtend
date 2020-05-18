@@ -10,6 +10,7 @@ import javax.persistence.Transient
 import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.FlightRepository
+import serializers.BusinessException
 
 @Accessors
 @Entity(name="tickets")
@@ -17,7 +18,7 @@ class Ticket {
 	@Id @GeneratedValue
 	Long id
 	@Transient
-	Flight flight 
+	Flight flight
 	@Transient
 	FlightRepository flightRepo = FlightRepository.getInstance
 	@Column
@@ -30,7 +31,7 @@ class Ticket {
 	String seatNumber
 
 	def Flight getFlight() {
-		if(flight === null)
+		if (flight === null)
 			flight = flightRepo.searchById(flightId)
 		flight
 
@@ -57,6 +58,8 @@ class Ticket {
 	}
 
 	def buyTicket() {
+		flight = flightRepo.searchById(flightId) // refresing
+		validate()
 		finalCost = calculateFlightCost
 		purchaseDate = LocalDate.now
 		id = null
@@ -64,10 +67,15 @@ class Ticket {
 		flightRepo.update(flight)
 	}
 
+	def validate() {
+		if (!getSeat.available)
+			throw new BusinessException("El asiento del ticket " + id + " esta ocupado")
+	}
+
 	override equals(Object obj) {
 		try {
 			val other = obj as Ticket
-			flight.id == other?.flight.id && seat.number == other?.seat.number
+			flightId == other?.flightId && seatNumber == other?.seatNumber
 		} catch (ClassCastException e) {
 			return false
 		}

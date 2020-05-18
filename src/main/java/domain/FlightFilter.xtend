@@ -1,11 +1,10 @@
 package domain
 
-
-import org.mongodb.morphia.query.Query
 import java.text.SimpleDateFormat
-import org.mongodb.morphia.annotations.Id
 import org.bson.types.ObjectId
 import org.mongodb.morphia.annotations.Entity
+import org.mongodb.morphia.annotations.Id
+import org.mongodb.morphia.query.Query
 import repository.LogRepository
 
 @Entity(value="Logs", noClassnameStored=true)

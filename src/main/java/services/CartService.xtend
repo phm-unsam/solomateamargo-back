@@ -1,7 +1,6 @@
 package services
 
 import domain.Ticket
-import org.eclipse.xtend.lib.annotations.Accessors
 import repository.ShoppingCartRepo
 import repository.UserRepository
 

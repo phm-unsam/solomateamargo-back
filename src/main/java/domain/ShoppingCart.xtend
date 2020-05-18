@@ -16,8 +16,6 @@ class ShoppingCart {
 	def validate() {
 		if (tickets.isEmpty)
 			throw new BusinessException("El carrito esta vacio")
-		if (tickets.exists[!it.seat.available])
-			throw new BusinessException("Hay tickets en el carrito no disponibles")
 	}
 
 	def getTotalCost() {
