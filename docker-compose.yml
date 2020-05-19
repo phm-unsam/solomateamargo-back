@@ -1,8 +1,74 @@
-version: "3.7"
+version: "3"
  
 services:
-  mongo:
-    image: mongo:3.6
+  # CONFIG SERVER -------------------
+  cfgsvr1:
+    image: mongo
+    command: mongod --replSet rsConf --configsvr --port 26050 --dbpath /data/db
     ports:
-      - "27019:27017"
-    command: mongod --noauth --bind_ip_all
+      - 26050:26050
+    volumes:
+      - cfgsvr1:/data/db
+
+  cfgsvr2:
+    image: mongo
+    command: mongod --replSet rsConf --configsvr --port 26051 --dbpath /data/db
+    ports:
+      - 26051:26051
+    volumes:
+      - cfgsvr2:/data/db
+  # CONFIG SERVER -------------------------------------------------------------------
+
+
+  # # SHARD 1 CON REPLICA--------------------------------------------------------------
+  shard1svr1:
+    image: mongo
+    command: mongod --shardsvr --replSet shard1 --dbpath /data/db --port 27000
+    ports:
+      - 27000:27000
+    volumes:
+      - shard1svr1:/data/db
+    
+  shard1svr2:
+    image: mongo
+    command: mongod --shardsvr --replSet shard1 --dbpath /data/db --port 27001
+    ports:
+      - 27001:27001
+    volumes:
+      - shard1svr2:/data/db
+  # # SHARD 1 CON REPLICA---------------------------------------------------------------
+
+
+  # # SHARD 2 CON REPLICA---------------------------------------------------------------
+  shard2svr1:
+    image: mongo
+    command: mongod --shardsvr --replSet shard2 --dbpath /data/db --port 27100
+    ports:
+      - 27100:27100
+    volumes:
+      - shard2svr1:/data/db
+
+  shard2svr2:
+    image: mongo
+    command: mongod --shardsvr --replSet shard2 --dbpath /data/db --port 27101  
+    ports:
+      - 27101:27101
+    volumes:
+      - shard2svr2:/data/db
+  # # SHARD 2 CON REPLICA----------------------------------------------------------
+  
+  # #MONGOS------------------------------------------------------------------------
+  mongos:
+    image: mongo
+    command: mongos --configdb rsConf/127.0.0.1:26050,127.0.0.1:26051 --port 28001 --bind_ip 127.0.0.1
+    ports:
+      - 28001:28001
+  # #MONGOS------------------------------------------------------------------------
+
+volumes:
+  cfgsvr1: {}
+  cfgsvr2: {}
+  shard1svr1: {}
+  shard1svr2: {}
+  shard2svr1: {}
+  shard2svr2: {}
