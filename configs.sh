@@ -9,6 +9,7 @@ rs.initiate(
     ]
   }
 )
+exit
 
 mongo mongodb://127.0.0.1:50001
 
@@ -21,6 +22,7 @@ rs.initiate(
     ]
   }
 )
+exit
 
 mongo mongodb://127.0.0.1:50004
 
@@ -33,16 +35,25 @@ rs.initiate(
     ]
   }
 )
+exit
+
+mongo mongodb://127.0.0.1:60000
 
 sh.addShard("shard1rs/kubernetes.docker.internal:50001,kubernetes.docker.internal:50002")
 sh.addShard("shard1rs/kubernetes.docker.internal:50003,kubernetes.docker.internal:50004")
 
+db.Flights.ensureIndex({"flightDuration": "hashed"})
+
+sh.enableSharding("aterrizapp")
+
+sh.shardCollection("aterrizapp.Flights", {"flightDuration": "hashed" }, false)
+
 #  ---- extra...
 
-sh.shardCollection("aterrizapp.Flights", {"departure": "hashed" }, false)
+# sh.shardCollection("aterrizapp.Flights", {"departure": "hashed" }, false)
 
-docker volume prune
-docker volume ls -f dangling=true
-docker rmi
-docker system prune -a
-docker system prune
+# docker volume prune
+# docker volume ls -f dangling=true
+# docker rmi
+# docker system prune -a
+# docker system prune
