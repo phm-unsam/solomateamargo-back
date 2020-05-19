@@ -41,7 +41,9 @@ class UserService {
 	}
 	
 	def userPurchases(String id) {
-		userRepo.searchById(id).purchases
+		val purchases = userRepo.searchById(id).purchases
+		purchases.forEach[it.popularData]
+		purchases
 	}
 	
 	def getUserFriends(String id) {

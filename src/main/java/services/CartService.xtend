@@ -36,7 +36,9 @@ class CartService {
 			shoppingCartRepo.create(userId)
 			return shoppingCartRepo.getCartByKey(userId)
 		}
+		cart.tickets.forEach[it.popularData]
 		cart
 	}
+	
 }
 

@@ -20,6 +20,8 @@ class Ticket {
 	@Transient
 	Flight flight
 	@Transient
+	Seat seat
+	@Transient
 	FlightRepository flightRepo = FlightRepository.getInstance
 	@Column
 	@JsonIgnore double finalCost
@@ -30,18 +32,13 @@ class Ticket {
 	@Column
 	String seatNumber
 
-	def Flight getFlight() {
-		if (flight === null)
-			flight = flightRepo.searchById(flightId)
-		flight
-
-	}
-
-	def getSeat() {
-		getFlight.seatByNumber(seatNumber)
-	}
 
 	new() {
+	}
+	
+	def popularData(){
+		flight = flightRepo.searchById(flightId)
+		seat = flight.seatByNumber(seatNumber)
 	}
 
 	new(Flight _flight, Seat _seat) {
@@ -58,12 +55,12 @@ class Ticket {
 	}
 
 	def buyTicket() {
-		flight = flightRepo.searchById(flightId) // refresing
+		popularData()
 		validate()
+		id=null
 		finalCost = calculateFlightCost
 		purchaseDate = LocalDate.now
-		id = null
-		getSeat.reserve
+		seat.reserve
 		flightRepo.update(flight)
 	}
 

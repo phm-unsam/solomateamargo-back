@@ -1,10 +1,13 @@
 package repository
 
 import com.mongodb.MongoClient
+import domain.Flight
 import java.util.List
 import org.bson.types.ObjectId
 import org.mongodb.morphia.Datastore
 import org.mongodb.morphia.Morphia
+import org.mongodb.morphia.query.Query
+import serializers.NotFoundException
 
 abstract class MongoPersistantRepo<T>{
 	static protected Datastore ds
@@ -35,6 +38,12 @@ abstract class MongoPersistantRepo<T>{
 	def List<T> allInstances() {
 		ds.createQuery(this.getEntityType()).asList
 	}
+
+	def validateQuery(Query<Flight> query, String msg) {
+		if(query.asList.empty)
+			throw new NotFoundException(msg)
+	}
+	
 
 	abstract def Class<T> getEntityType()
 	

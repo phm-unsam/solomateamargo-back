@@ -22,6 +22,7 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 		if(id !== null){
 			query.field("id").equal(id)
 		}
+		validateQuery(query, "No existe el vuelo")
 		query.get()
 	}
 	
@@ -37,6 +38,7 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 	def getFlights(FlightFilter filter){
 		val query = ds.createQuery(entityType)
 		filter.filterCriteria(query)
+		validateQuery(query, "No existen vuelos para esos parametros")
 		query.asList.toSet
 	}
 	
@@ -47,6 +49,7 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 			query.field("id").equal(id)
 		}
 		query.field("seats.available").equal(true)
+		validateQuery(query, "No hay asientos para ese vuelo")
 		query.get().seats
 	}
 
