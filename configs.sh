@@ -40,13 +40,15 @@ exit
 mongo mongodb://127.0.0.1:60000
 
 sh.addShard("shard1rs/kubernetes.docker.internal:50001,kubernetes.docker.internal:50002")
-sh.addShard("shard1rs/kubernetes.docker.internal:50003,kubernetes.docker.internal:50004")
+sh.addShard("shard2rs/kubernetes.docker.internal:50004,kubernetes.docker.internal:50005")
 
-db.Flights.ensureIndex({"flightDuration": "hashed"})
+use aterrizapp
+
+db.Flights.ensureIndex({"_id": "hashed"})
 
 sh.enableSharding("aterrizapp")
 
-sh.shardCollection("aterrizapp.Flights", {"flightDuration": "hashed" }, false)
+sh.shardCollection("aterrizapp.Flights", {"_id": "hashed" }, false)
 
 #  ---- extra...
 
