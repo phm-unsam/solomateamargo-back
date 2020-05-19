@@ -1,0 +1,8 @@
+version: "3.7"
+ 
+services:
+  mongo:
+    image: mongo:3.6
+    ports:
+      - "27019:27017"
+    command: mongod --noauth --bind_ip_all
