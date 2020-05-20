@@ -11,6 +11,8 @@ import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.FlightRepository
 import serializers.BusinessException
+import java.util.Date
+import java.util.Calendar
 
 @Accessors
 @Entity(name="tickets")
@@ -26,7 +28,7 @@ class Ticket {
 	@Column
 	@JsonIgnore double finalCost
 	@Column
-	LocalDate purchaseDate
+	Date purchaseDate
 	@Column
 	ObjectId flightId
 	@Column
@@ -59,7 +61,7 @@ class Ticket {
 		validate()
 		id=null
 		finalCost = calculateFlightCost
-		purchaseDate = LocalDate.now
+		purchaseDate = Calendar.getInstance().getTime()
 		seat.reserve
 		flightRepo.update(flight)
 	}

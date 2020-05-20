@@ -6,10 +6,11 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import java.io.IOException
 import java.time.LocalDate
 import org.bson.types.ObjectId
+import java.util.Date
 
-class LocalDateSerializer extends JsonSerializer<LocalDate> {
+class DateSerializer extends JsonSerializer<Date> {
 
-	override serialize(LocalDate date, JsonGenerator gen, SerializerProvider provider) throws IOException {
+	override serialize(Date date, JsonGenerator gen, SerializerProvider provider) throws IOException {
 		gen.writeString(Parse.getStringDateFromLocalDate(date))
 	}
 }

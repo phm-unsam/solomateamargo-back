@@ -41,16 +41,5 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 		validateQuery(query, "No existen vuelos para esos parametros")
 		query.asList
 	}
-	
-	def getSeatsByFlightId(ObjectId id){
-		//searchById(id).seats.filter[it.available].toSet //De esta manera filtramos en memoria...
-		val query = ds.createQuery(entityType)
-		if(id !== null){
-			query.field("id").equal(id)
-		}
-		query.field("seats.available").equal(true)
-		validateQuery(query, "No hay asientos para ese vuelo")
-		query.get().seats.toSet
-	}
 
 }

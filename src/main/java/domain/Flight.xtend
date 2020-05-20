@@ -14,6 +14,7 @@ import org.mongodb.morphia.annotations.Entity
 import org.mongodb.morphia.annotations.Id
 import serializers.NotFoundException
 import serializers.ObjectIdSerializer
+import serializers.DateSerializer
 
 @Accessors
 @Entity(value="Flights", noClassnameStored=false)
@@ -27,7 +28,7 @@ class Flight{
 	String destinationTo
 	String airline
 	int flightDuration
-	//@JsonSerialize(using = LocalDateSerializer)  
+	@JsonSerialize(using = DateSerializer)  
 	Date departure
 	Double baseCost
 	Double priceFrom

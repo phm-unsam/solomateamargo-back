@@ -39,7 +39,8 @@ class FlightController {
 	@Get("/flight/:flightId/seats")
 	def Result seats() {
 		try {
-			val seatsAvailables = flightRepository.getSeatsByFlightId(new ObjectId(flightId))
+			val flight = flightRepository.searchById(new ObjectId(flightId))
+			val seatsAvailables = flight.seats.filter[it.available].toSet
 			ok(seatsAvailables.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
