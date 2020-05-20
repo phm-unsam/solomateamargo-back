@@ -2,6 +2,7 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.ArrayList
 import java.util.Date
 import java.util.List
@@ -12,10 +13,12 @@ import org.mongodb.morphia.annotations.Embedded
 import org.mongodb.morphia.annotations.Entity
 import org.mongodb.morphia.annotations.Id
 import serializers.NotFoundException
+import serializers.ObjectIdSerializer
 
 @Accessors
 @Entity(value="Flights", noClassnameStored=true)
 class Flight{
+	@JsonSerialize(using = ObjectIdSerializer)  
 	@Id ObjectId id
 	@JsonIgnore String planeType
 	@Embedded
@@ -75,11 +78,12 @@ class Flight{
 	}
 	
 }
- 
+
+@Entity(value="Flights", noClassnameStored=true)
 @Accessors
 class FlightWithStopover extends Flight {
 	@Embedded
-	@JsonIgnore List<Flight> stopovers = new ArrayList
+	List<Flight> stopovers = new ArrayList
 	
 
 	override getBaseCost() {
