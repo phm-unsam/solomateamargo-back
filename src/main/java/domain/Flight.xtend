@@ -28,6 +28,7 @@ class Flight{
 	Date departure
 	Double baseCost
 	Double priceFrom
+	int stopoversAmount = 0
 
 	def flightCost(Seat seat) {
 		baseCost + seatCost(seat)
@@ -43,11 +44,6 @@ class Flight{
 
 	def twoOrLessSeatsAvaliable() {
 		seatsAvailiables.size <= 2
-	}
-
-	@JsonProperty("stopoversAmount")
-	def stopoversAmount() {
-		0
 	}
 
 	def hasSeatsAvaliables() {
@@ -82,11 +78,11 @@ class FlightWithStopover extends Flight {
 	@JsonIgnore List<Flight> stopovers = new ArrayList
 	
 
-	override getBaseCost() {
+	def getbaseCost() {
 		stopovers.fold(0.0, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90
 	}
-
-	override stopoversAmount() {
+	
+	def getstopoversAmount() {
 		stopovers.size
 	}
 

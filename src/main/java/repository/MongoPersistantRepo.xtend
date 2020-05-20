@@ -15,7 +15,7 @@ abstract class MongoPersistantRepo<T>{
 	
 	new() {
 		if (ds === null) {
-			val mongo = new MongoClient("localhost", 27017)
+			val mongo = new MongoClient("localhost", 60000)
 			morphia = new Morphia => [
 				ds = createDatastore(mongo, "aterrizapp")
 				ds.ensureIndexes
