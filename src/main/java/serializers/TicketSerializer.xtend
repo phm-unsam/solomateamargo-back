@@ -17,7 +17,7 @@ class TicketSerializer extends JsonSerializer<List<Ticket>>  {
 			gen.writeStringField("flightId", value.getFlight.id.toString)
 			gen.writeStringField("from", value.getFlight.destinationFrom)
 			gen.writeStringField("to", value.getFlight.destinationTo)
-			//gen.writeStringField("departure",Parse.getStringDateFromLocalDate(value.flight.departure))
+			gen.writeStringField("departure",Parse.getStringFromDate(value.flight.departure))
 			gen.writeStringField("airline", value.getFlight.airline)
 			gen.writeStringField("seatNumber", value.getSeat.getNumber)
 			gen.writeStringField("seatType", value.getSeat.type)

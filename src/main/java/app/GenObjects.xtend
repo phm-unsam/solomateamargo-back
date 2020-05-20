@@ -195,7 +195,7 @@ class GenObjects {
 				add(seat82)
 				add(seat83)
 			]
-			baseCost = getbaseCost()
+			baseCost = 100.0
 			stopoversAmount = getstopoversAmount()
 		]
 

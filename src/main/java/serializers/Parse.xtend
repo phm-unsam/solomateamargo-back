@@ -1,7 +1,9 @@
 package serializers
 
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class Parse {
 	static val DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -15,6 +17,11 @@ class Parse {
 
 	static def getStringDateFromLocalDate(LocalDate date) {
 		date.format(formatter)
+	}
+	
+	static def getStringFromDate(Date date) {
+		val dateFormat = new SimpleDateFormat("dd/mm/yyyy");  
+		dateFormat.format(date)
 	}
 
 	static def stringToLocalDateTime(String date) {

@@ -16,7 +16,7 @@ import serializers.NotFoundException
 import serializers.ObjectIdSerializer
 
 @Accessors
-@Entity(value="Flights", noClassnameStored=true)
+@Entity(value="Flights", noClassnameStored=false)
 class Flight{
 	@JsonSerialize(using = ObjectIdSerializer)  
 	@Id ObjectId id
@@ -75,15 +75,15 @@ class Flight{
 	
 }
 
-@Entity(value="Flights", noClassnameStored=true)
 @Accessors
 class FlightWithStopover extends Flight {
 	@Embedded
+	@JsonIgnore
 	List<Flight> stopovers = new ArrayList
 	
 
 	def getbaseCost() {
-		stopovers.fold(0.0, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90
+		stopovers.fold(baseCost, [baseCost, stopover|baseCost + stopover.baseCost]) * 0.90
 	}
 	
 	def getstopoversAmount() {
