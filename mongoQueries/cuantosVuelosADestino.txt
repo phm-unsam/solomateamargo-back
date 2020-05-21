@@ -1,0 +1,13 @@
+db.getCollection('Flights').aggregate(
+[{
+    $match: {
+        $expr: {
+            $eq: [{ $year: "$departure" }, 2020],
+            $eq: ["$destinationTo", "Salta"]
+        }
+    }
+},
+{
+    $count: "Cantidad"
+}
+])
