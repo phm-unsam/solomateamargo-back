@@ -1,0 +1,1 @@
+db.getCollection('Flights').find( { $expr: { $gt: [ "$departure" , ISODate("2020-10-26")] } } )
