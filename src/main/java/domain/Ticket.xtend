@@ -23,8 +23,6 @@ class Ticket {
 	Flight flight
 	@Transient
 	Seat seat
-	@Transient
-	FlightRepository flightRepo = FlightRepository.getInstance
 	@Column
 	@JsonIgnore double finalCost
 	@Column
@@ -39,7 +37,7 @@ class Ticket {
 	}
 	
 	def popularData(){
-		flight = flightRepo.searchById(flightId)
+		flight = FlightRepository.getInstance.searchById(flightId)
 		seat = flight.seatByNumber(seatNumber)
 	}
 
@@ -57,13 +55,11 @@ class Ticket {
 	}
 
 	def buyTicket() {
-		popularData()
 		validate()
 		id=null
 		finalCost = calculateFlightCost
 		purchaseDate = Calendar.getInstance().getTime()
 		seat.reserve
-		flightRepo.update(flight)
 	}
 
 	def validate() {

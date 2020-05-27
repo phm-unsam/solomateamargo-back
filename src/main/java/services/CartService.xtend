@@ -1,6 +1,7 @@
 package services
 
 import domain.Ticket
+import repository.FlightRepository
 import repository.ShoppingCartRepo
 import repository.UserRepository
 
@@ -12,7 +13,9 @@ class CartService {
 		val cart = getUserCart(userId)
 		val user = userRepo.searchById(userId)
 		user.addPurchase(cart.tickets.toSet, cart.totalCost)
+		cart.tickets.forEach[it.popularData]
 		cart.purchaseCart
+		cart.tickets.forEach[FlightRepository.getInstance.update(it.flight)]
 		userRepo.update(user)
 		cart.clearCart
 	}

@@ -275,47 +275,67 @@ class GenObjects {
 		 
 //-----USER A----		
 		var ticket = new Ticket(vuelo1, seat15)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userA.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo2, seat24)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userA.purchases.add(ticket)
 		
 //-----USER B----
 		ticket = new Ticket(vuelo1, seat14)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userB.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo3, seat34)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userB.purchases.add(ticket)
 		
 //-----USER C----
 		ticket = new Ticket(vuelo2, seat25)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userC.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo4, seat44)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userC.purchases.add(ticket)
 		
 //-----USER D----
 		ticket = new Ticket(vuelo3, seat35)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userD.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo5, seat55)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userD.purchases.add(ticket)
 		
 //-----USER E----
 		ticket = new Ticket(vuelo4, seat45)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userE.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo5, seat54)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userE.purchases.add(ticket)
 
 		repoUser => [

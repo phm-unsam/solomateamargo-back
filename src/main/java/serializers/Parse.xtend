@@ -22,7 +22,7 @@ class Parse {
 	}
 	
 	static def getStringFromDate(Date date) {
-		val dateFormat = new SimpleDateFormat("dd/mm/yyyy");  
+		val dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
 		dateFormat.format(date)
 	}
 

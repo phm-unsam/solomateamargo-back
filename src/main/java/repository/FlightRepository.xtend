@@ -38,7 +38,6 @@ class FlightRepository extends MongoPersistantRepo<Flight> {
 	def getFlights(FlightFilter filter){
 		val query = ds.createQuery(entityType)
 		filter.filterCriteria(query)
-		validateQuery(query, "No existen vuelos para esos parametros")
 		query.asList
 	}
 
