@@ -22,6 +22,7 @@ rs.initiate(
     ]
   }
 )
+rs.addArb("kubernetes.docker.internal:50003")
 exit
 
 mongo mongodb://kubernetes.docker.internal:50004
@@ -35,6 +36,7 @@ rs.initiate(
     ]
   }
 )
+rs.addArb("kubernetes.docker.internal:50006")
 exit
 
 mongo mongodb://kubernetes.docker.internal:60000
