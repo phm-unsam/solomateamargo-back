@@ -3,20 +3,19 @@ package controllers
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import domain.FlightFilter
-//import domain.SeatFilter
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.annotation.Controller
 import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.json.JSONUtils
-import repository.FlightRepository
 import serializers.BadDateFormatException
 import serializers.NotFoundException
 import serializers.Parse
+import services.FlightService
 
 @Controller
 @JsonAutoDetect(fieldVisibility=Visibility.ANY)
 class FlightController {
-	FlightRepository flightRepository = FlightRepository.getInstance
+	FlightService flightService = new FlightService()
 	
 	extension JSONUtils = new JSONUtils
 
@@ -24,8 +23,8 @@ class FlightController {
 	def Result flightsFiltered(String dateFrom, String dateTo, String departure, String arrival, String seatType, String nextoWindow) {
 		try {
 			val filters = new FlightFilter(dateFrom, dateTo, departure, arrival, seatType, nextoWindow)
-			val filtered = flightRepository.getAvailableFlights(filters)			
-			ok(filtered.toJson)
+			val filteredFlights = flightService.getFlightsFiltered(filters)
+			ok(filteredFlights.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (BadDateFormatException e) {
@@ -38,8 +37,8 @@ class FlightController {
 	@Get("/flight/:flightId/seats")
 	def Result seats() {
 		try {
-			val seatsAvaliables = flightRepository.getAvaliableSeatsByFlightId(Long.parseLong(flightId))
-			ok(seatsAvaliables.toJson)
+			val seatsAvailables = flightService.getSeatsFromFlight(flightId)
+			ok(seatsAvailables.toJson)
 		} catch (NotFoundException e) {
 			notFound(Parse.errorToJson(e.message))
 		} catch (Exception e) {

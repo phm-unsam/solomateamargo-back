@@ -1,13 +1,13 @@
 package app
 
 import domain.Flight
+import domain.FlightWithStopover
 import domain.Seat
 import domain.Ticket
 import domain.User
-import java.time.LocalDate
+import java.text.SimpleDateFormat
 import repository.FlightRepository
 import repository.UserRepository
-import domain.FlightWithStopover
 
 class GenObjects {
 
@@ -21,8 +21,8 @@ class GenObjects {
 		 |------------------------------------------------------------------|  
 		 */
 		 
-		val seat11 = new Seat(false, true, 1000, "E10", "Economy")
-		val seat12 = new Seat(false, true, 3000, "B10", "Business")
+		val seat11 = new Seat(false, true, 1000, "E10", "First")
+		val seat12 = new Seat(false, true, 3000, "B10", "First")
 		val seat13 = new Seat(true, true, 5000, "F10", "First")
 		val seat14 = new Seat(true, true, 5000, "F11", "First")
 		val seat15 = new Seat(true, true, 5000, "F12", "First")
@@ -72,7 +72,7 @@ class GenObjects {
 		val vuelo1 = new Flight() => [
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Salta"
-			departure = LocalDate.parse("2020-05-22")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("22/07/2020")
 			planeType = "Embraer 190"
 			baseCost = 5000.0
 			flightDuration = 3
@@ -89,7 +89,7 @@ class GenObjects {
 		val vuelo2 = new Flight() => [
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Bariloche"
-			departure = LocalDate.parse("2020-07-11")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("07/11/2020")
 			planeType = "Avioneta"
 			baseCost = 3000.0
 			flightDuration = 4
@@ -107,7 +107,7 @@ class GenObjects {
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Montevideo"
 			flightDuration = 1
-			departure = LocalDate.parse("2020-11-22")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("22/10/2020")
 			planeType = "Boeing 737 MAX"
 			baseCost = 23123.2
 			setAirline("Aerolineas Argentinas")
@@ -123,7 +123,7 @@ class GenObjects {
 			destinationFrom = "Buenos Aires"
 			destinationTo = "Comodoro Rivadavia"
 			flightDuration = 5
-			departure = LocalDate.parse("2020-09-22")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("22/09/2020")
 			planeType = "Airbus 340"
 			baseCost = 7000.0
 			setAirline("Aerolineas Argentinas")
@@ -139,7 +139,7 @@ class GenObjects {
 			destinationFrom = "Cordoba"
 			destinationTo = "Mendoza"
 			flightDuration = 2
-			departure = LocalDate.parse("2020-01-30")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("30/01/2020")
 			planeType = "Airbus 300"
 			baseCost = 3000.0
 			setAirline("Norwegian")
@@ -155,7 +155,7 @@ class GenObjects {
 			destinationFrom = "Rio de janeiro"
 			destinationTo = "Panama"
 			flightDuration = 7
-			departure = LocalDate.parse("2020-11-11")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("11/11/2020")
 			planeType = "Boeing 747"
 			baseCost = 10000.0
 			setAirline("American Airlines")
@@ -169,7 +169,7 @@ class GenObjects {
 			destinationFrom = "Panama"
 			destinationTo = "Los Angeles"
 			flightDuration = 9
-			departure = LocalDate.parse("2021-01-14")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("19/01/2021")
 			planeType = "Boeing 747"
 			baseCost = 14000.0
 			setAirline("American Airlines")
@@ -183,7 +183,7 @@ class GenObjects {
 		val vuelo8 = new FlightWithStopover() => [
 			destinationFrom = "Rio de janeiro"
 			destinationTo = "Los Angeles"
-			departure = LocalDate.parse("2021-03-16")
+			departure = new SimpleDateFormat("dd/MM/yyyy").parse("16/03/2021")
 			planeType = "Boeing 747"
 			stopovers => [
 				add(vuelo6)
@@ -195,6 +195,8 @@ class GenObjects {
 				add(seat82)
 				add(seat83)
 			]
+			baseCost = 100.0
+			stopoversAmount = getstopoversAmount()
 		]
 
 		repoFlight => [
@@ -273,43 +275,67 @@ class GenObjects {
 		 
 //-----USER A----		
 		var ticket = new Ticket(vuelo1, seat15)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userA.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo2, seat24)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userA.purchases.add(ticket)
+		
 //-----USER B----
 		ticket = new Ticket(vuelo1, seat14)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userB.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo3, seat34)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userB.purchases.add(ticket)
+		
 //-----USER C----
 		ticket = new Ticket(vuelo2, seat25)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userC.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo4, seat44)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userC.purchases.add(ticket)
+		
 //-----USER D----
 		ticket = new Ticket(vuelo3, seat35)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userD.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo5, seat55)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userD.purchases.add(ticket)
+		
 //-----USER E----
 		ticket = new Ticket(vuelo4, seat45)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userE.purchases.add(ticket)
 
 		ticket = new Ticket(vuelo5, seat54)
+		ticket.popularData
 		ticket.buyTicket
+		repoFlight.update(ticket.flight)
 		userE.purchases.add(ticket)
 
 		repoUser => [
@@ -318,7 +344,6 @@ class GenObjects {
 			update(userC)
 			update(userD)
 			update(userE)
-
 		]
 
 	}

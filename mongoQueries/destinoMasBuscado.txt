@@ -1,0 +1,20 @@
+db.getCollection('Logs').aggregate(
+[{
+    $group: {
+        _id: {
+            arrival: "$arrival"
+        },
+        count: {
+            $sum: 1
+        }
+    }
+    }, 
+    {
+        $sort: {
+            count: -1
+        }
+    },
+    {
+        $limit: 1
+    }
+])

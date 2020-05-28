@@ -2,58 +2,75 @@ package domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
-import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
+import javax.persistence.Transient
+import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
+import repository.FlightRepository
+import serializers.BusinessException
+import java.util.Date
+import java.util.Calendar
 
 @Accessors
-@Entity(name = "tickets")
+@Entity(name="tickets")
 class Ticket {
 	@Id @GeneratedValue
 	Long id
-	@ManyToOne
+	@Transient
 	Flight flight
-	@OneToOne(cascade=CascadeType.MERGE)
+	@Transient
 	Seat seat
 	@Column
 	@JsonIgnore double finalCost
 	@Column
-	LocalDate purchaseDate
+	Date purchaseDate
+	@Column
+	ObjectId flightId
+	@Column
+	String seatNumber
+
 
 	new() {
 	}
+	
+	def popularData(){
+		flight = FlightRepository.getInstance.searchById(flightId)
+		seat = flight.seatByNumber(seatNumber)
+	}
 
 	new(Flight _flight, Seat _seat) {
-		flight = _flight
-		seat = _seat
+		flightId = _flight.id
+		seatNumber = _seat.number
 	}
 
 	def getCost() {
-		purchaseDate === null
-			? calculateFlightCost
-			: finalCost
+		purchaseDate === null ? calculateFlightCost : finalCost
 	}
 
 	def calculateFlightCost() {
-		flight.flightCost(seat)
+		getFlight.flightCost(getSeat)
 	}
 
 	def buyTicket() {
+		validate()
+		id=null
 		finalCost = calculateFlightCost
-		purchaseDate = LocalDate.now
-		id = null
+		purchaseDate = Calendar.getInstance().getTime()
 		seat.reserve
+	}
+
+	def validate() {
+		if (!getSeat.available)
+			throw new BusinessException("El asiento del ticket " + id + " esta ocupado")
 	}
 
 	override equals(Object obj) {
 		try {
 			val other = obj as Ticket
-			flight.id == other?.flight.id && seat.id == other?.seat.id
+			flightId == other?.flightId && seatNumber == other?.seatNumber
 		} catch (ClassCastException e) {
 			return false
 		}

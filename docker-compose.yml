@@ -1,0 +1,101 @@
+version: '3'
+
+services:
+
+  mongos:
+    container_name: mongos
+    image: mongo
+    command: mongos --configdb cfgrs/kubernetes.docker.internal:40001,kubernetes.docker.internal:40002 --bind_ip 0.0.0.0 --port 27017
+    ports:
+      - 60000:27017
+  
+  cfgsvr1:
+    container_name: cfgsvr1
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db
+    ports:
+      - 40001:27017
+    volumes:
+      - cfgsvr1:/data/db
+
+  cfgsvr2:
+    container_name: cfgsvr2
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db
+    ports:
+      - 40002:27017
+    volumes:
+      - cfgsvr2:/data/db
+
+  shard1svr1:
+    container_name: shard1svr1
+    image: mongo
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db
+    ports:
+      - 50001:27017
+    volumes:
+      - shard1svr1:/data/db
+
+  shard1svr2:
+    container_name: shard1svr2
+    image: mongo
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db
+    ports:
+      - 50002:27017
+    volumes:
+      - shard1svr2:/data/db
+
+  shard1arb:
+    container_name: shard1arb
+    image: mongo
+    command: mongod --port 27017 --dbpath /data/db --replSet shard1rs
+    ports:
+      - 50003:27017
+    volumes:
+      - shard1arb:/data/db
+  shard2svr1:
+    container_name: shard2svr1
+    image: mongo
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db
+    ports:
+      - 50004:27017
+    volumes:
+      - shard2svr1:/data/db
+
+  shard2svr2:
+    container_name: shard2svr2
+    image: mongo
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db
+    ports:
+      - 50005:27017
+    volumes:
+      - shard2svr2:/data/db
+
+  shard2arb:
+    container_name: shard2arb
+    image: mongo
+    command: mongod --port 27017 --dbpath /data/db --replSet shard2rs
+    ports:
+      - 50006:27017
+    volumes:
+      - shard2arb:/data/db
+
+  # mysql-server:
+  #  image: mysql
+  #  command: --default-authentication-plugin=mysql_native_password
+  #  restart: always
+  #  ports:
+  #      - 3306:3306 
+  #  environment:
+  #      MYSQL_ROOT_PASSWORD: base123
+
+
+volumes:
+  cfgsvr1: {}
+  cfgsvr2: {}
+  shard1svr1: {}
+  shard1svr2: {}
+  shard1arb: {}
+  shard2svr1: {}
+  shard2svr2: {}
+  shard2arb: {}

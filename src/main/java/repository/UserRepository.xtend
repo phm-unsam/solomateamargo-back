@@ -1,8 +1,6 @@
 package repository
 
-import domain.Ticket
 import domain.User
-import java.util.Set
 import javax.persistence.criteria.CriteriaBuilder
 import javax.persistence.criteria.CriteriaQuery
 import javax.persistence.criteria.JoinType
@@ -51,19 +49,7 @@ class UserRepository extends PersistantRepo<User> {
 		query.select(from).where(builder.equal(from.get("id"), id))
 	}
 
-	def addFriend(Long userId, Long friendId) {
-		val user = searchById(userId)
-		user.addFriend(searchById(friendId))
-		update(user)
-	}
-
-	def deleteFriend(Long userId, Long friendId) {
-		val user = searchById(userId)
-		user.deleteFriend(searchById(friendId))
-		update(user)
-	}
-
-	def getPossibleFriends(Long id) {
+	def getPossibleFriends(String id) {
 		val user = searchById(id)
 		val entityManager = this.entityManager
 		try {
@@ -83,25 +69,6 @@ class UserRepository extends PersistantRepo<User> {
 		} finally {
 			entityManager?.close
 		}
-	}
-
-	def addCash(Long userId, double cashToAdd) {
-		val user = searchById(userId)
-		user.setCash(cashToAdd)
-		update(user)
-	}
-
-	def updateProfile(Long id, User userUpdated) {
-		var user = searchById(id)
-		user.age = userUpdated.age
-		user.password = userUpdated.password
-		update(user)
-	}
-
-	def addTickets(Set<Ticket> tickets, double cost, Long userId) {
-		val user = searchById(userId)
-		user.addPurchase(tickets, cost)
-		update(user)
 	}
 
 }

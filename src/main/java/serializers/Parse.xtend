@@ -1,10 +1,14 @@
 package serializers
 
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.text.DateFormat
 
 class Parse {
 	static val DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+	static val DateFormat df = new SimpleDateFormat("dd/MM/yyyy")
 
 	static def errorToJson(String message) {
 		'{ "error": "' + message + '" }'
@@ -13,8 +17,13 @@ class Parse {
 		'{ "status": "ok" }'
 	}
 
-	static def getStringDateFromLocalDate(LocalDate date) {
-		date.format(formatter)
+	static def getStringDateFromLocalDate(Date date) {
+		df.format(date)
+	}
+	
+	static def getStringFromDate(Date date) {
+		val dateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+		dateFormat.format(date)
 	}
 
 	static def stringToLocalDateTime(String date) {
