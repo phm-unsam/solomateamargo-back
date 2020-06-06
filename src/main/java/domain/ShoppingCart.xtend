@@ -2,6 +2,7 @@ package domain
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.List
+import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.TicketSerializer
@@ -11,7 +12,9 @@ class ShoppingCart {
 	@JsonSerialize(using=typeof(TicketSerializer))
 	List<Ticket> tickets = newArrayList
 	
-	long idCounter = 0
+	new(List<Ticket> _tickets){
+		tickets = _tickets
+	}
 
 	def validate() {
 		if (tickets.isEmpty)
@@ -26,17 +29,16 @@ class ShoppingCart {
 		tickets.size
 	}
 
-	def removeTicket(long id) {
-		if (!tickets.exists[it.id == id])
+	def removeTicket(String id) {
+		if (!tickets.exists[it.idC == idC])
 			throw new BusinessException("No existe un ticket con ese id para eliminar")
-		tickets.removeIf[it.id == id]
+		tickets.removeIf[it.idC.toString == id]
 	}
 
 	def addTicket(Ticket ticket) {
 		if (ticketIsAlreadyAdded(ticket))
 			throw new BusinessException("El ticket ya esta en el carrito")
-		ticket.id=idCounter
-		idCounter++
+		ticket.idC = new ObjectId
 		tickets.add(ticket)
 	}
 

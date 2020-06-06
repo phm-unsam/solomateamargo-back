@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
 import java.io.IOException
-import java.time.LocalDate
-import org.bson.types.ObjectId
 import java.util.Date
+import org.bson.types.ObjectId
 
 class DateSerializer extends JsonSerializer<Date> {
 

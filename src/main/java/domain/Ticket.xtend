@@ -1,7 +1,8 @@
 package domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDate
+import com.google.gson.annotations.Expose
+import java.util.Calendar
+import java.util.Date
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -11,25 +12,25 @@ import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.FlightRepository
 import serializers.BusinessException
-import java.util.Date
-import java.util.Calendar
 
 @Accessors
 @Entity(name="tickets")
 class Ticket {
-	@Id @GeneratedValue
+	@Id @GeneratedValue @Expose(serialize = false)
 	Long id
 	@Transient
+	ObjectId idC
+	@Transient @Expose(serialize = false)
 	Flight flight
-	@Transient
+	@Transient @Expose(serialize = false)
 	Seat seat
-	@Column
-	@JsonIgnore double finalCost
-	@Column
+	@Column @Expose(serialize = false)
+	double finalCost
+	@Column @Expose(serialize = false)
 	Date purchaseDate
 	@Column
 	ObjectId flightId
-	@Column
+	@Column 
 	String seatNumber
 
 
@@ -75,5 +76,5 @@ class Ticket {
 			return false
 		}
 	}
-
+	
 }
