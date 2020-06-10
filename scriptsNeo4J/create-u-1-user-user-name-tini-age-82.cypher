@@ -1,0 +1,1 @@
+CREATE(u1:User {userName: "Tini", age: 82} )
