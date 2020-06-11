@@ -16,21 +16,19 @@ import serializers.BusinessException
 @Accessors
 @Entity(name="tickets")
 class Ticket {
-	@Id @GeneratedValue @Expose(serialize = false)
+	@Id @GeneratedValue @Expose
 	Long id
 	@Transient
-	ObjectId idC
-	@Transient @Expose(serialize = false)
 	Flight flight
-	@Transient @Expose(serialize = false)
+	@Transient 
 	Seat seat
-	@Column @Expose(serialize = false)
-	double finalCost
-	@Column @Expose(serialize = false)
-	Date purchaseDate
 	@Column
-	ObjectId flightId
+	double finalCost
 	@Column 
+	Date purchaseDate
+	@Column @Expose
+	ObjectId flightId
+	@Column @Expose
 	String seatNumber
 
 
@@ -60,7 +58,8 @@ class Ticket {
 		id=null
 		finalCost = calculateFlightCost
 		purchaseDate = Calendar.getInstance().getTime()
-		seat.reserve
+		seat.available = false
+		println("compra")
 	}
 
 	def validate() {

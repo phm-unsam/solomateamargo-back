@@ -9,12 +9,7 @@ import java.util.List
 import redis.clients.jedis.Jedis
 
 class ShoppingCartRepo {
-	// var JedisPool jedisPool
 	Jedis jedis = new Jedis("localhost")
-
-	private new() {
-		// jedisPool = new JedisPool(new JedisPoolConfig, "localhost")
-	}
 
 	static ShoppingCartRepo instance
 
@@ -26,10 +21,12 @@ class ShoppingCartRepo {
 	}
 
 	def update(String id, List<Ticket> tickets) {
-		val gson = new Gson()
-		val jsonTikcets = gson.toJson(tickets);
-		jedis.set(id, jsonTikcets)
-		jedis.expire(id, 3600)
+//		val gson = new GsonBuilder()
+//			.excludeFieldsWithoutExposeAnnotation
+//			.create
+		val jsonTickets = new Gson().toJson(tickets);
+		jedis.set(id, jsonTickets)
+		jedis.expire(id, 180)
 	}
 
 	def clearCart(String id) {
@@ -38,12 +35,13 @@ class ShoppingCartRepo {
 
 	def getItemsByKey(String userId) {
 		val jsonTikcets = jedis.get(userId)
+		
 		if (jsonTikcets.isNullOrEmpty)
 			return new ArrayList<Ticket>
+			
 		val Type listType = new TypeToken<ArrayList<Ticket>>() {
 		}.getType();
 		new Gson().fromJson(jsonTikcets, listType);
-
 	}
 
 }

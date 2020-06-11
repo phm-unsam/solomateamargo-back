@@ -12,13 +12,13 @@ class CartService {
 
 	def purchaseCartfromUser(String userId) {
 		val cart = getUserCart(userId)
-		val user = userRepo.searchById(userId)
-		user.addPurchase(cart.tickets.toSet, cart.totalCost)
 		popularTickets(cart)
-		cart.purchaseCart
+		val user = userRepo.searchById(userId)
+		cart.reserveTickets
+		user.addPurchase(cart.tickets.toSet, cart.totalCost)
 		cart.tickets.forEach[FlightRepository.getInstance.update(it.flight)]
 		userRepo.update(user)
-		cart.clearCart
+		shoppingCartRepo.clearCart(userId)
 	}
 
 	def removeItem(String userId, String ticketId) {

@@ -2,7 +2,6 @@ package domain
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.util.List
-import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import serializers.BusinessException
 import serializers.TicketSerializer
@@ -30,27 +29,31 @@ class ShoppingCart {
 	}
 
 	def removeTicket(String id) {
-		if (!tickets.exists[it.idC == idC])
+		val ticketid = new Long(id)
+		if (!tickets.exists[it.id == ticketid])
 			throw new BusinessException("No existe un ticket con ese id para eliminar")
-		tickets.removeIf[it.idC.toString == id]
+		tickets.removeIf[it.id == ticketid]
 	}
 
 	def addTicket(Ticket ticket) {
 		if (ticketIsAlreadyAdded(ticket))
 			throw new BusinessException("El ticket ya esta en el carrito")
-		ticket.idC = new ObjectId
+		ticket.id = currentId + 1
 		tickets.add(ticket)
 	}
-
+	
+	def currentId(){
+		if(tickets.isEmpty)
+			return new Long(0)
+		tickets.maxBy[it.id].id
+	}
+	
 	def ticketIsAlreadyAdded(Ticket ticket) {
 		tickets.contains(ticket)
 	}
 
-	def clearCart() {
-		tickets.clear()
-	}
 
-	def purchaseCart() {
+	def reserveTickets() {
 		validate
 		tickets.forEach[it.buyTicket]
 	}
