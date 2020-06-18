@@ -1,1 +1,0 @@
-CREATE(f1: Flight {destinationFrom: "Buenos Aires", destinationTo: "Dubai", departure: date("2021-01-01"), price: 250000, climate: "Calido"} )

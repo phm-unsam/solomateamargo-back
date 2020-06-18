@@ -1,0 +1,1 @@
+CREATE(f1: Flight {departure: date("2021-01-01"), price: 250000, name: "vuelo3"} )
