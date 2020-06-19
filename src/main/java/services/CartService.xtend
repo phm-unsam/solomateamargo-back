@@ -4,6 +4,7 @@ import domain.Ticket
 import repository.FlightRepository
 import repository.ShoppingCartRepo
 import repository.UserRepository
+import domain.ShoppingCart
 
 class CartService {
 	UserRepository userRepo = UserRepository.getInstance
@@ -11,37 +12,41 @@ class CartService {
 
 	def purchaseCartfromUser(String userId) {
 		val cart = getUserCart(userId)
+		popularTickets(cart)
 		val user = userRepo.searchById(userId)
+		cart.reserveTickets
 		user.addPurchase(cart.tickets.toSet, cart.totalCost)
-		cart.tickets.forEach[it.popularData]
-		cart.purchaseCart
 		cart.tickets.forEach[FlightRepository.getInstance.update(it.flight)]
 		userRepo.update(user)
-		cart.clearCart
+		shoppingCartRepo.clearCart(userId)
 	}
 
-	def removeItem(String userId, long ticketId) {
-		getUserCart(userId).removeTicket(ticketId)
+	def removeItem(String userId, String ticketId) {
+		val cart = getUserCart(userId)
+		cart.removeTicket(ticketId)
+		shoppingCartRepo.update(userId, cart.tickets)
 	}
 
 	def addItem(String userId, Ticket ticket) {
-		getUserCart(userId).addTicket(ticket)
-	}
-	
-	def cleanUserCart(String userId) {
 		val cart = getUserCart(userId)
-			cart.clearCart
+		cart.addTicket(ticket)
+		
+		shoppingCartRepo.update(userId, cart.tickets)
 	}
-	
+
+	def cleanUserCart(String userId) {
+		shoppingCartRepo.clearCart(userId)
+	}
+
 	def getUserCart(String userId) {
-		val cart = shoppingCartRepo.getCartByKey(userId)
-		if(cart === null){
-			shoppingCartRepo.create(userId)
-			return shoppingCartRepo.getCartByKey(userId)
-		}
-		cart.tickets.forEach[it.popularData]
+		val items = shoppingCartRepo.getItemsByKey(userId)
+		val cart = new ShoppingCart(items)
+		popularTickets(cart)
 		cart
 	}
-	
-}
 
+	def popularTickets(ShoppingCart cart) {
+			cart.tickets.forEach[it.popularData]
+	}
+
+}

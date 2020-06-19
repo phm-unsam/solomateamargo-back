@@ -11,7 +11,9 @@ class ShoppingCart {
 	@JsonSerialize(using=typeof(TicketSerializer))
 	List<Ticket> tickets = newArrayList
 	
-	long idCounter = 0
+	new(List<Ticket> _tickets){
+		tickets = _tickets
+	}
 
 	def validate() {
 		if (tickets.isEmpty)
@@ -26,29 +28,32 @@ class ShoppingCart {
 		tickets.size
 	}
 
-	def removeTicket(long id) {
-		if (!tickets.exists[it.id == id])
+	def removeTicket(String id) {
+		val ticketid = new Long(id)
+		if (!tickets.exists[it.id == ticketid])
 			throw new BusinessException("No existe un ticket con ese id para eliminar")
-		tickets.removeIf[it.id == id]
+		tickets.removeIf[it.id == ticketid]
 	}
 
 	def addTicket(Ticket ticket) {
 		if (ticketIsAlreadyAdded(ticket))
 			throw new BusinessException("El ticket ya esta en el carrito")
-		ticket.id=idCounter
-		idCounter++
+		ticket.id = currentId + 1
 		tickets.add(ticket)
 	}
-
+	
+	def currentId(){
+		if(tickets.isEmpty)
+			return new Long(0)
+		tickets.maxBy[it.id].id
+	}
+	
 	def ticketIsAlreadyAdded(Ticket ticket) {
 		tickets.contains(ticket)
 	}
 
-	def clearCart() {
-		tickets.clear()
-	}
 
-	def purchaseCart() {
+	def reserveTickets() {
 		validate
 		tickets.forEach[it.buyTicket]
 	}

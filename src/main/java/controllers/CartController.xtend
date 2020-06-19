@@ -29,14 +29,14 @@ class CartController {
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(e.toJson)
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 
 	@Delete("/user/:userId/cart/item/:ticketId")
 	def Result removeFromCart() {
 		try {
-			cartService.removeItem(userId,Long.parseLong(ticketId))
+			cartService.removeItem(userId,ticketId)
 			ok(Parse.statusOkJson)
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
@@ -53,7 +53,7 @@ class CartController {
 		} catch (BusinessException e) {
 			badRequest(Parse.errorToJson(e.message))
 		} catch (Exception e) {
-			internalServerError(e.toJson)
+			internalServerError(Parse.errorToJson(e.message))
 		}
 	}
 	
