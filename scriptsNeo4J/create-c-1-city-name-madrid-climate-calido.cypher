@@ -1,0 +1,1 @@
+CREATE(c1: City {name: 'Madrid', climate: 'Calido'} )
