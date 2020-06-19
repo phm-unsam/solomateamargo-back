@@ -1,7 +1,8 @@
 package domain
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import java.time.LocalDate
+import com.google.gson.annotations.Expose
+import java.util.Calendar
+import java.util.Date
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -11,25 +12,23 @@ import org.bson.types.ObjectId
 import org.eclipse.xtend.lib.annotations.Accessors
 import repository.FlightRepository
 import serializers.BusinessException
-import java.util.Date
-import java.util.Calendar
 
 @Accessors
 @Entity(name="tickets")
 class Ticket {
-	@Id @GeneratedValue
+	@Id @GeneratedValue @Expose
 	Long id
 	@Transient
 	Flight flight
-	@Transient
+	@Transient 
 	Seat seat
 	@Column
-	@JsonIgnore double finalCost
-	@Column
+	double finalCost
+	@Column 
 	Date purchaseDate
-	@Column
+	@Column @Expose
 	ObjectId flightId
-	@Column
+	@Column @Expose
 	String seatNumber
 
 
@@ -59,7 +58,8 @@ class Ticket {
 		id=null
 		finalCost = calculateFlightCost
 		purchaseDate = Calendar.getInstance().getTime()
-		seat.reserve
+		seat.available = false
+		println("compra")
 	}
 
 	def validate() {
@@ -75,5 +75,5 @@ class Ticket {
 			return false
 		}
 	}
-
+	
 }

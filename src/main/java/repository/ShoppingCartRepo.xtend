@@ -1,13 +1,15 @@
 package repository
 
-import domain.ShoppingCart
-import java.util.HashMap
-import org.eclipse.xtend.lib.annotations.Accessors
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import domain.Ticket
+import java.lang.reflect.Type
+import java.util.ArrayList
+import java.util.List
+import redis.clients.jedis.Jedis
 
 class ShoppingCartRepo {
-	@Accessors protected HashMap<String,ShoppingCart> elements = new HashMap<String,ShoppingCart>
-	private new() {
-	}
+	Jedis jedis = new Jedis("localhost")
 
 	static ShoppingCartRepo instance
 
@@ -18,13 +20,28 @@ class ShoppingCartRepo {
 		instance
 	}
 
-	def void create(String userId) {
-		elements.put(userId,new ShoppingCart())
+	def update(String id, List<Ticket> tickets) {
+//		val gson = new GsonBuilder()
+//			.excludeFieldsWithoutExposeAnnotation
+//			.create
+		val jsonTickets = new Gson().toJson(tickets);
+		jedis.set(id, jsonTickets)
+		jedis.expire(id, 180)
 	}
 
-	def getCartByKey(String userId) {
-		elements.get(userId)
+	def clearCart(String id) {
+		jedis.del(id)
 	}
 
+	def getItemsByKey(String userId) {
+		val jsonTikcets = jedis.get(userId)
+		
+		if (jsonTikcets.isNullOrEmpty)
+			return new ArrayList<Ticket>
+			
+		val Type listType = new TypeToken<ArrayList<Ticket>>() {
+		}.getType();
+		new Gson().fromJson(jsonTikcets, listType);
+	}
 
 }
